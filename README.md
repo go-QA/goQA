@@ -23,7 +23,7 @@ go get github.com/go-QA/goQA.git
 
  A test case is part of interface `ITestCase` to run from `TestManager`
 
-`
+```go
  type iTestCase interface {
 	Name() string
 	Init(name string, parent ITestManager, params Parameters) ITestCase
@@ -31,7 +31,7 @@ go get github.com/go-QA/goQA.git
 	Run() (int, error)
 	Teardown() (int, error)
 }
-`
+```
 
 
 ####Create Test:
@@ -39,12 +39,12 @@ go get github.com/go-QA/goQA.git
 #Defining first test case:
 
   This test case will test unit test this overly complicated method:
-  `
+  ```go
  // Example method under test
 func doubleIt(d int) int {
 	return d * 2
 }
-`
+```
 
 Define a struct that has the `goQA.TestCase` struct inside.
 This struct already is part of 'ITestCase' interface and has logger, test methods, critical section,
@@ -54,23 +54,24 @@ something.
 
  Create a test case as a truct:
 
- `
+ ```go
 type Test1 struct {
 	data int
 	goQA.TestCase
 }
-`
+```
 
 First, let's override `Setup()` to initialize the param "val".
 The `tc.data` will be initialized to param value passed in or default value of 25
-`
+```go
 func (tc *Test1) Setup() (int, error) {
 	tc.data = tc.InitParam("val", 25).(int)
 	return goQA.TC_PASSED, nil
 }
-`
+```
 Next, create the run method for the test. 
-`
+
+```go
 func (tc *Test1) Run() (int, error) {
 	time.Sleep(time.Second * 1)
 
@@ -99,6 +100,6 @@ func (tc *Test1) Run() (int, error) {
 	// returns passed, failed, or error message depending on error threshold and results of run
 	return tc.ReturnFromRun()
 }
-`
+```
 
 
