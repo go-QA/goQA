@@ -48,21 +48,21 @@ func (tc *Test1) Run() (int, error) {
 
 	// longhand way to pass/fail a test
 	if doubleIt(tc.data) == 20 {
-		tc.TestCase.LogPass("doubleIt(%d) == 20", tc.data)
+		tc.LogPass("doubleIt(%d) == 20", tc.data)
 	} else {
-		tc.TestCase.LogFail("doubleIt( %d ) != 20. Actual = %d", tc.data, doubleIt(tc.data))
+		tc.LogFail("doubleIt( %d ) != 20. Actual = %d", tc.data, doubleIt(tc.data))
 	}
 
 	// Perform test in critical section.
-	// any failure will cause test to fail regardless of
-	// failure threshold
-	tc.TestCase.Critical.Start()
+	// any failure will cause test to fail and finish running
+	// regardless of failure threshold
+	tc.Critical.Start()
 	if doubleIt(tc.data) == 40 {
-		tc.TestCase.LogPass("doubleIt(%d) == 20", tc.data)
+		tc.LogPass("doubleIt(%d) == 20", tc.data)
 	} else {
-		tc.TestCase.LogFail("doubleIt( %d ) != 20. Actual = %d", tc.data, doubleIt(tc.data))
+		tc.LogFail("doubleIt( %d ) != 20. Actual = %d", tc.data, doubleIt(tc.data))
 	}
-	tc.TestCase.Critical.End()
+	tc.Critical.End()
 
 	// this will do same as above
 	tc.Verify(doubleIt(tc.data) == 20, fmt.Sprintf("doubleIt(%d) == 20", tc.data), "doubleIt( %d ) != 20. Actual = %d", tc.data, doubleIt(tc.data))
@@ -100,7 +100,7 @@ type MySuite struct {
 func (mc *MySuite) Setup() (status int, msg string, err error) {
 	// Suite setup
 	fMsg := fmt.Sprintf("SUITE(%s) Override Setup for no raisin", mc.Name())
-	mc.TestCase.LogMessage(fMsg)
+	mc.LogMessage(fMsg)
 	//g.logger.Printf("PASS::%s\n", passMsg)
 	return goQA.SUITE_OK, "My Special Message", nil
 }
@@ -134,7 +134,7 @@ func main() {
 	//   TC_ALL           launch all suites at same time
 	//   1...n            run max of n number of tests at a time
 
-	console, err := os.Create("data/console.log")
+	console, err := os.Create("console.log")
 	if err != nil {
 		panic(err)
 	}

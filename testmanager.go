@@ -344,7 +344,7 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 	for _, xmlSuite := range testPlan.Suites { 
 		suite, _ := registry.GetSuite(xmlSuite.Name, tm, Parameters{})
 		for _, xmlTest := range xmlSuite.TestCases {
-
+			
 			for _, param := range xmlTest.Params {
 				params = new(Parameters)
 				params.AddParam(param.Name, param.Value, "")

@@ -23,6 +23,9 @@ type Test1 struct {
 	goQA.TestCase
 }
 
+func (t *Test1) Run() (int, error) {
+	return 1, nil	
+}
 
 type Test2 struct {
 	data int
@@ -34,14 +37,15 @@ type Test3 struct {
 	goQA.TestCase
 }
 
+// interface object 'TestRegister' to create the test cases
 type Register int32
 
 func (r *Register) GetTestCase(testName string, tm *goQA.TestManager, params goQA.Parameters) (goQA.ITestCase, error) {
 	var test goQA.ITestCase
 	switch 	testName {
-	case "Test 1":
+	case "::ProducerSE::TestCase::Heater::HeaterTest1":
 		test = &Test1{}
-	case "Test 2":
+	case "::ProducerSE::TestCase::Heater::HeaterTest2":
 		test = &Test2{}
 	default:
 		test = &Test1{}
