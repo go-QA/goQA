@@ -12,7 +12,7 @@ Since it is written in Go. the framework is very good at running suites and test
 - Test Suites
 - Test Plan Ran From XML file
  
-### Quick Start
+## Quick Start
 
 To download, run the following command:
 
@@ -21,7 +21,11 @@ go get github.com/go-QA/goQA.git
 ~~~
 
 
- A test case is part of interface `ITestCase` to run from `TestManager`
+##Create and Run a test case in a suite:
+
+  There is a more detailed and running example of this explanation below located at `/examples/example1.go`
+
+ A test case is part of interface `ITestCase` to run from `TestManager`. 
 
 ```go
  type iTestCase interface {
@@ -33,12 +37,7 @@ go get github.com/go-QA/goQA.git
 }
 ```
 
-
-####Create Test:
-
-#Defining first test case:
-
-  This test case will test unit test this overly complicated method:
+  This example test case will unit test this overly complicated amazing method:
   ```go
  // Example method under test
 func doubleIt(d int) int {
@@ -46,13 +45,13 @@ func doubleIt(d int) int {
 }
 ```
 
-Define a struct that has the `goQA.TestCase` struct inside.
+So, let's define a struct that has the `goQA.TestCase` struct inside.
 This struct already is part of 'ITestCase' interface and has logger, test methods, critical section,
 parmeter handling, and all the good stuff you need.
 YYou need to call the `Init()` before running and should at least override `Run()` so it does
 something.
 
- Create a test case as a truct:
+ ###Create a test case struct:
 
  ```go
 type Test1 struct {
@@ -62,14 +61,16 @@ type Test1 struct {
 ```
 
 First, let's override `Setup()` to initialize the param "val".
-The `tc.data` will be initialized to param value passed in or default value of 25
+The `tc.data` will be initialized to param value passed in or
+use the default value of 25 in no parameter for "val" is specified
+
 ```go
 func (tc *Test1) Setup() (int, error) {
 	tc.data = tc.InitParam("val", 25).(int)
 	return goQA.TC_PASSED, nil
 }
 ```
-Next, create the run method for the test. 
+Next, create the `Run()` method for the test. 
 
 ```go
 func (tc *Test1) Run() (int, error) {
@@ -117,6 +118,8 @@ func main() {
   The `goQA.TextReporter` is a simple reporter that will display test results for suites and test cases as a simple text output. Need better reporting in the near future. 
 
 
+The `goQA.Parameters` is used to pass the test parameters into our test. 
+```go
 	// Create a parameter list that can be past into a test case.
 	// - The parameter named "val" is set to 10 and will be used for data variable in Test1
 	// - failureThreshold used to determine if tc.ReturnFromRun() will return pass or fail. 
@@ -127,78 +130,42 @@ func main() {
 
 ```
 
-next, a default Suite object is created 
+next, a default Suite object is created
 
 ```go
-	// create two suite objects
+	// Creates a new default Suite object. You can define your own suites as well using
+    // the goQA.ISuite interface.
 	suite1 := goQA.CreateSuite("suite1", &tm, goQA.Parameters{})
 ```
 
-	// Report Writer.
-	// Only have a TextReporter now that reports plain text to stdout
-	tr := goQA.TextReporter{}
+Now simply create an object of Test1 and call the Init() method. The object is then added to suite1 object created above.
 
-	// create the test manager object. Default logger is stdout
-	tm := goQA.CreateTestManager(os.Stdout, &tr,
-		goQA.SUITE_SERIAL, // Concurency for suites:
-		//   SUITE_SERIAL    run one suite at a time
-		//   SUITE_ALL       lunch all suites at same time
-		//   1...n           run max of n number of suites at one time
-		goQA.TC_ALL) // Concurrency for test cases per suite
-	//   TC_SERIAL        run one test case at a time
-	//   TC_ALL           launch all suites at same time
-	//   1...n            run max of n number of tests at a time
+```go
+	// create Test1 object and call Init(), The Init must be called before running test
+	test := new(Test1)
+	test.Init("test 1", &tm, paramList)
 
-	console, err := os.Create("console.log")
-	if err != nil {
-		panic(err)
-	}
-	defer console.Close()
-	tm.AddLogger("console", goQA.LOGLEVEL_ALL, console)
+	// add trst case to suite
+	suite1.AddTest(test)
+```
 
-	// create two suite objects
-	suite1 := goQA.CreateSuite("suite1", &tm, goQA.Parameters{})
-	// User defined suite
-	suite2 := MySuite{}
-	suite2.Init("suite2", &tm, goQA.Parameters{})
-
-	for i := 0; i < TEST_COUNT; i++ {
-		// create Test2 object and call Init() the Init must be called before running test
-		t2 = new(Test2)
-		t2.Init(fmt.Sprintf("test2_1_%d", i), &tm, goQA.Parameters{})
-		// add test2 object to suite1
-		suite1.AddTest(t2)
-
-		// this line creates the Test1 object, calls the Test1.Init() method, then adds test to suite1. Notice the paranList object is passed to test
-		suite1.AddTest(new(Test1).Init(fmt.Sprintf("test1_1_%d", i), &tm, paramList))
-
-		// create same tests again for suite 2 but pass the paramList object to Test2 instead (We're having fun now right?)
-		t2 = new(Test2)
-		t2.Init(fmt.Sprintf("test2_2_%d", i), &tm, paramList)
-		suite2.AddTest(t2)
-		suite2.AddTest(new(Test1).Init(fmt.Sprintf("test1_2_%d", i), &tm, goQA.Parameters{}))
-	}
-
-	// This will run the t2 test on it's own (last t2 created in the loop)
-	t2.RunTest(t2)
-
-	// here we run just suite1
-	suite1.RunSuite()
-
+ The suite is added to TestManager :
+```go
 	// Add the two suite objects to the test manager
 	tm.AddSuite(suite1)
-	tm.AddSuite(&suite2)
+```
+
+Here are three examples of ways to launch the test case manually:
+
+```go
+	// This will run the test on it's own using the TestManager reference passed in
+	test.RunTest(test)
+
+	// here we run suite1 test cases
+	suite1.RunSuite()
 
 	// This will run all suites added to tm using the concurrency level set during creation.
 	tm.RunAll()
-	//tm.RunFromXML("ChamberFunctionality.xml")
-	//console.Sync()
-	//console.Close()
-
-	endTime := time.Now()
-	totalTime := endTime.Sub(startTime).Seconds()
-	fmt.Printf("\n\ntotal runtime  = %.6f\n\n", totalTime)
-	//time.Sleep(time.Millisecond * 100)
-}
+```
 
 
