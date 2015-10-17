@@ -7,7 +7,7 @@ import (
 	"os"
 	//"io"
 	//"gitorious.org/goqa/goqa.git"
-	"../../goQA"
+	"github.com/go-QA/goQA"
 	"time"
 	//"reflect"
 	//"net"
