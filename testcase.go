@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"runtime"
 	//"error"
-	//"log"
+	"github.com/go-QA/logger"
 	//"os"
 	//"io"
 	//"time"

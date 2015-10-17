@@ -13,6 +13,7 @@ import (
 	"time"
 	"io/ioutil"
 	"encoding/xml"
+	"github.com/go-QA/logger"
 )
 
 const (

@@ -6,8 +6,7 @@ import (
 	//"log"
 	"os"
 	//"io"
-	//"gitorious.org/goqa/goqa.git"
-	"../../goQA"
+	"github.com/go-QA/logger"
 	//"runtime"
 	"time"
 )
@@ -170,8 +169,8 @@ func main() {
 	// here we run just suite1
 	suite1.RunSuite()
 
-	// Add the two suite objects to the test manager
-	tm.AddSuite(suite1)
+		// Add the two suite objects to the test manager
+		tm.AddSuite(suite1)
 	tm.AddSuite(&suite2)
 
 	// This will run all suites added to tm using the concurrency level set during creation.

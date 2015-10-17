@@ -10,6 +10,7 @@ import (
 	//"log"
 	//"os"
 	//"time"
+	"github.com/go-QA/logger"
 )
 
 type Suite interface {
