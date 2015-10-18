@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"runtime"
 	//"error"
-	"github.com/go-QA/logger"
 	//"os"
 	//"io"
 	//"time"
+	"github.com/go-QA/logger"
 )
 
 const (
@@ -199,7 +199,7 @@ type ITestManager iTestManager
 type TestCase struct {
 	name   string
 	parent iTestManager
-	logger *GoQALog
+	log *logger.GoQALog
 	//logChannel chan []byte
 	params                                 Parameters
 	failureThreshold                       int // percentage of check points that can fail for test case to passed
@@ -217,7 +217,7 @@ func (tc *TestCase) Name() string {
 func (tc *TestCase) Init(name string, parent ITestManager, params Parameters) ITestCase {
 	tc.name = name
 	tc.parent = parent
-	tc.logger = parent.GetLogger()
+	tc.log = parent.GetLogger()
 	tc.params = params
 	tc.failureThreshold = tc.InitParam("failureThreshold", 0).(int)
 	tc.Critical = Section{}
@@ -258,38 +258,38 @@ func (tc *TestCase) Verify(value bool, comment string, errMsg string, args ...in
 	return value, nil
 }
 
-func (tc *TestCase) GetLogger() *GoQALog {
-	return tc.logger // tc.logChannel
+func (tc *TestCase) GetLogger() *logger.GoQALog {
+	return tc.log // tc.logChannel
 }
 
 func (tc *TestCase) LogError(errMsg string, args ...interface{}) {
 	tc.Critical.Trigger()
 	tc.failedCount++
-	tc.logger.LogError(errMsg, args...)
+	tc.log.LogError(errMsg, args...)
 }
 
 func (tc *TestCase) LogFail(failMsg string, args ...interface{}) {
 	tc.Critical.Trigger()
 	tc.failedCount++
-	tc.logger.LogFail(failMsg, args...)
+	tc.log.LogFail(failMsg, args...)
 }
 
 func (tc *TestCase) LogWarning(warnMsg string, args ...interface{}) {
 	tc.warningCount++
-	tc.logger.LogWarning(warnMsg, args...)
+	tc.log.LogWarning(warnMsg, args...)
 }
 
 func (tc *TestCase) LogPass(passMsg string, args ...interface{}) {
 	tc.passedCount++
-	tc.logger.LogPass(passMsg, args...)
+	tc.log.LogPass(passMsg, args...)
 }
 
 func (tc *TestCase) LogMessage(msg string, args ...interface{}) {
-	tc.logger.LogMessage(msg, args...)
+	tc.log.LogMessage(msg, args...)
 }
 
 func (tc *TestCase) LogDebug(debugMsg string, args ...interface{}) {
-	tc.logger.LogDebug(debugMsg, args...)
+	tc.log.LogDebug(debugMsg, args...)
 }
 
 func (tc *TestCase) InitParam(name string, value interface{}) interface{} {

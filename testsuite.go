@@ -10,7 +10,6 @@ import (
 	//"log"
 	//"os"
 	//"time"
-	"github.com/go-QA/logger"
 )
 
 type Suite interface {
@@ -32,7 +31,7 @@ func (s *DefaultSuite) Init(name string, parent iTestManager, params Parameters)
 	s.testCases = make(map[string]iTestCase)
 	s.TestCase.Init(name, parent, Parameters{})
 	s.TestCase.name = name
-	s.TestCase.logger = parent.GetLogger()
+	s.TestCase.log = parent.GetLogger()
 	s.TestCase.parent = parent
 }
 

@@ -301,7 +301,7 @@ func (t *testResult) Name() string {
 
 type TextReporter struct {
 	name   string
-	logger *GoQALog
+	log *logger.GoQALog
 	parent ITestManager
 	stats  ReporterStatistics
 	report ManagerResult
@@ -315,7 +315,7 @@ func (t *TextReporter) Init(parent ITestManager) {
 	t.report = ManagerResult{}
 	t.report.Init("manager special")
 	t.name = "TextReporter"
-	t.logger = parent.GetLogger()
+	t.log = parent.GetLogger()
 	t.parent = parent
 
 }
@@ -326,8 +326,8 @@ func (t *TextReporter) GetSuiteResult() int {
 }
 
 func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, stats *ReporterStatistics, name, msg string, complete chan int) {
-	t.logger.LogMessage("\n\n")
-	t.logger.LogMessage(MANAGER_STATISTICS_REPORT, name, report.end.Sub(report.start).Seconds(), stats.NumberOfTestSuites,
+	t.log.LogMessage("\n\n")
+	t.log.LogMessage(MANAGER_STATISTICS_REPORT, name, report.end.Sub(report.start).Seconds(), stats.NumberOfTestSuites,
 		stats.NumberOfTestSuitesPassed, stats.NumberOfTestSuitesFailed, stats.NumberOfTestSuitesError,
 		stats.NumberOfTestSuitesSetUpFailed, stats.NumberOfTestSuitesSetUpError,
 		stats.NumberOfTestSuitesNotFound,
@@ -335,46 +335,46 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, stats *Re
 		stats.TotalNumberOfTestCasesError, stats.TotalNumberOfTestCasesSetUpFailed,
 		stats.TotalNumberOfTestCasesSetUpError, stats.TotalNumberOfTestCasesNotFound)
 
-	t.logger.LogMessage("\n\n")
+	t.log.LogMessage("\n\n")
 	for _, suite := range report.suites {
-		t.logger.LogMessage("\n\n")
-		t.logger.LogMessage(SUITE_STATISTICS_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
+		t.log.LogMessage("\n\n")
+		t.log.LogMessage(SUITE_STATISTICS_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
 			suite.NumberOfTestCasesPassed, suite.NumberOfTestCasesFailed,
 			suite.NumberOfTestCasesError, suite.NumberOfTestCasesSetUpFailed,
 			suite.NumberOfTestCasesSetUpError, suite.NumberOfTestCasesNotFound)
 
-		t.logger.LogMessage("\n")
+		t.log.LogMessage("\n")
 		switch suite.Status {
 		case SUITE_OK:
 			suiteResult := t.GetSuiteResult()
 			if suiteResult == SUITE_PASSED {
-				t.logger.LogPass(SUITE_PASSED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds())
+				t.log.LogPass(SUITE_PASSED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds())
 			} else {
-				t.logger.LogFail(SUITE_FAILED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+				t.log.LogFail(SUITE_FAILED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
 			}
 		case SUITE_ERROR:
-			t.logger.LogMessage(SUITE_ERROR_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+			t.log.LogMessage(SUITE_ERROR_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
 		case SUITE_SETUP_ERROR:
-			t.logger.LogMessage(SUITE_SETUP_ERROR_REPORT, suite.name, suite.StatusMessage)
+			t.log.LogMessage(SUITE_SETUP_ERROR_REPORT, suite.name, suite.StatusMessage)
 		}
 
-		t.logger.LogMessage("\n")
+		t.log.LogMessage("\n")
 		for _, test := range suite.tests {
 			switch test.Status {
 			case TC_PASSED:
-				t.logger.LogPass(TEST_PASSED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				t.log.LogPass(TEST_PASSED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TC_FAILED:
-				t.logger.LogFail(TEST_FAILED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				t.log.LogFail(TEST_FAILED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TC_ERROR:
-				t.logger.LogError(TEST_ERROR_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				t.log.LogError(TEST_ERROR_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TC_SETUP_FAILED:
-				t.logger.LogMessage(TEST_SETUP_FAILED_REPORT, test.name, test.StatusMessage)
+				t.log.LogMessage(TEST_SETUP_FAILED_REPORT, test.name, test.StatusMessage)
 			case TC_SETUP_ERROR:
-				t.logger.LogMessage(TEST_SETUP_ERROR_REPORT, test.name, test.StatusMessage)
+				t.log.LogMessage(TEST_SETUP_ERROR_REPORT, test.name, test.StatusMessage)
 			case TC_TEARDOWN_FAILED, TC_TEARDOWN_ERROR:
-				t.logger.LogMessage(TEST_TEARDOWN_ERROR_REPORT, test.name, test.StatusMessage)
+				t.log.LogMessage(TEST_TEARDOWN_ERROR_REPORT, test.name, test.StatusMessage)
 			case TC_SKIPPED:
-				t.logger.LogMessage(TEST_SKIPPED_REPORT, test.name)
+				t.log.LogMessage(TEST_SKIPPED_REPORT, test.name)
 
 			}
 		}

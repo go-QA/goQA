@@ -7,6 +7,7 @@ import (
 	"os"
 	//"io"
 	"github.com/go-QA/goQA"
+	"github.com/go-QA/logger"
 	//"runtime"
 	"time"
 )
@@ -138,7 +139,7 @@ func main() {
 		panic(err)
 	}
 	defer console.Close()
-	tm.AddLogger("console", goQA.LOGLEVEL_ALL, console)
+	tm.AddLogger("console", logger.LOGLEVEL_ALL, console)
 
 	// create two suite objects
 	suite1 := goQA.CreateSuite("suite1", &tm, goQA.Parameters{})

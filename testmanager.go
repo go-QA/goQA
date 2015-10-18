@@ -55,7 +55,7 @@ type iTestManager interface {
 	RunSuite(suite string, chSuiteResults chan int)
 	Run(suiteName string, tc iTestCase, chReport chan testResult)
 	AddSuite(suite Suite)
-	GetLogger() *GoQALog
+	GetLogger() *logger.GoQALog
 }
 
 type TestManager struct {
@@ -67,21 +67,21 @@ type TestManager struct {
 	reportStats ReporterStatistics
 	report      ManagerResult
 	generators  map[string]ReportWriter
-	logger      *GoQALog
+	log      *logger.GoQALog
 	suiteFlags  int
 	testFlags   int
 }
 
-func (tm *TestManager) Init(logger io.Writer, reportWriter ReportWriter) *TestManager {
+func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManager {
 	tm.suites = make(map[string]Suite)
 	tm.reportStats = ReporterStatistics{}
 	tm.report = ManagerResult{}
 	tm.generators = make(map[string]ReportWriter)
 	tm.reportStats.Init()
 	tm.report.Init("report1")
-	tm.logger = &GoQALog{}
-	tm.logger.Init()
-	tm.logger.Add("default", LOGLEVEL_ALL, logger)
+	tm.log = &logger.GoQALog{}
+	tm.log.Init()
+	tm.log.Add("default", logger.LOGLEVEL_ALL, log)
 	//tr := TextReporter{}
 	reportWriter.Init(tm)
 	tm.addGenerator(reportWriter)
@@ -89,7 +89,7 @@ func (tm *TestManager) Init(logger io.Writer, reportWriter ReportWriter) *TestMa
 }
 
 func (tm *TestManager) AddLogger(name string, level uint64, stream io.Writer) {
-	tm.logger.Add(name, level, stream)
+	tm.log.Add(name, level, stream)
 }
 
 func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testResult) {
@@ -144,19 +144,19 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 	inRunSetup = true
 	setupStatus, setupErr = tc.Setup()
 	if setupErr == nil {
-		tm.logger.LogMessage("TestManager->setup::results=%d", setupStatus)
+		tm.log.LogMessage("TestManager->setup::results=%d", setupStatus)
 	}
 	//  panic("Panicing in Setup")
 	inRunTest = true
 	runStatus, runErr = tc.Run()
 	if runErr == nil {
-		tm.logger.LogMessage("TestManager->Run::results=%d", runStatus)
+		tm.log.LogMessage("TestManager->Run::results=%d", runStatus)
 	}
 
 	inRunTeardown = true
 	teardownStatus, teardownErr = tc.Teardown()
 	if teardownErr == nil {
-		tm.logger.LogMessage("TestManager->Teardown::results=%d", teardownStatus)
+		tm.log.LogMessage("TestManager->Teardown::results=%d", teardownStatus)
 	}
 	// panic("Panicing in Teardown")
 
@@ -180,7 +180,7 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 	chReport := make(chan testResult)
 
 	suite := tm.suites[suiteName]
-	tm.logger.LogMessage("Running  Suite '%s'\n", suiteName)
+	tm.log.LogMessage("Running  Suite '%s'\n", suiteName)
 
 	length := len(tm.suites[suiteName].GetTestCases())
 	go tm.endSuiteHandler(suiteName, chReport, chComplete, length)
@@ -236,7 +236,7 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 			if count >= length {
 				//fmt.Println("LAUNCHING LAST TEST")
 			}
-			tm.logger.LogMessage("Running test '%s': tc.name=%s", name, tc.Name())
+			tm.log.LogMessage("Running test '%s': tc.name=%s", name, tc.Name())
 			if tm.testFlags == TC_ALL {
 				go tm.Run(suiteName, tc, chReport)
 			} else {
@@ -309,7 +309,7 @@ func (tm *TestManager) RunAll() {
 	length := len(tm.suites)
 	go tm.endManagerHandler(chSuiteResults, chComplete, length)
 
-	tm.logger.LogMessage("Running all suitess...")
+	tm.log.LogMessage("Running all suitess...")
 	if tm.suiteFlags != SUITE_ALL && tm.suiteFlags != SUITE_SERIAL {
 		tm.suiteRunner(chSuiteResults)
 	} else {
@@ -323,7 +323,7 @@ func (tm *TestManager) RunAll() {
 	}
 	_ = <-chComplete
 	tm.managerPassed("Test Manager", "")
-	tm.logger.Sync()
+	tm.log.Sync()
 }
 
 func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
@@ -389,7 +389,7 @@ func (tm *TestManager) suiteRunner(chSuiteResults chan int) {
 
 	for name := range tm.suites {
 		guard <- struct{}{}
-		tm.logger.LogMessage("Running Suite '%s'\n", name)
+		tm.log.LogMessage("Running Suite '%s'\n", name)
 		go tm.launchSuite(name, guard, done, chSuiteResults)
 	}
 
@@ -421,7 +421,7 @@ func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
 
 	for name, tc := range tm.suites[suiteName].GetTestCases() {
 		guard <- struct{}{}
-		tm.logger.LogMessage("Running test '%s'\n", name)
+		tm.log.LogMessage("Running test '%s'\n", name)
 		go tm.launchTest(suiteName, tc, guard, done, chReport)
 	}
 
@@ -439,8 +439,8 @@ func (tm *TestManager) AddSuite(suite Suite) {
 	tm.suites[suite.Name()] = suite
 }
 
-func (tm *TestManager) GetLogger() *GoQALog {
-	return tm.logger // g.logChannel
+func (tm *TestManager) GetLogger() *logger.GoQALog {
+	return tm.log // g.logChannel
 }
 
 //  ========= functions to call reporter interface API
@@ -653,7 +653,7 @@ func (tm *TestManager) managerTearDownFailed(name, msg string) {
 }
 
 func (tm *TestManager) managerStatistics(name, msg string) {
-	//fmt.Printf("In->managerStatistics()  %p\n", tm.logger)
+	//fmt.Printf("In->managerStatistics()  %p\n", tm.log)
 	genCount := len(tm.generators)
 	arComplete := make([]chan int, genCount)
 	index := 0
