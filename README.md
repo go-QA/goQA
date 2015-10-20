@@ -17,7 +17,7 @@ Since it is written in Go. the framework is very good at running suites and test
 To download, run the following command:
 
 ~~~
-go get github.com/go-QA/goQA.git
+go get github.com/go-QA/goQA
 ~~~
 
 
