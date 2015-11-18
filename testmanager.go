@@ -9,6 +9,7 @@ import (
 	"sync"
 	//"error"
 	//"os"
+	"strconv"
 	"io"
 	"time"
 	"io/ioutil"
@@ -26,19 +27,21 @@ type TestRegister interface {
 }
 
 type XMLParam struct {
-	Name string `xml:"Name,attr"`
-	Value string `xml:"Value,attr"`
+	Name string	 `xml:"name,attr"`
+	Type string	 `xml:"type,attr"`
+	Value string `xml:"value,attr"`
+	Comment string `xml:"comment,attr"`
 
 }
 
 type XMLTestCase struct {
-	Name string    `xml:"Class,attr"`
+	Name string    `xml:"name,attr"`
 	Params []XMLParam  `xml:"Param"`
 
 } 
 
 type XMLTestSuite struct {
-	Name string      `xml:"Class,attr"`
+	Name string      `xml:"name,attr"`
 	Params []XMLParam    `xml:"Param"`
 	TestCases []XMLTestCase  `xml:"TestCase"`
 
@@ -46,7 +49,7 @@ type XMLTestSuite struct {
 
 type XMLTestPlan struct {
 	XMLName xml.Name  `xml:"TestManager"`
-	Name string      `xml:"Class,attr"`
+	Name string      `xml:"name,attr"`
 	Suites []XMLTestSuite `xml:"TestSuite"`
 }
 
@@ -326,6 +329,21 @@ func (tm *TestManager) RunAll() {
 	tm.log.Sync()
 }
 
+func (tm *TestManager) convertToParamType(value, paramType string) interface{} {
+	var convertedVal interface{}
+	switch paramType {
+		case "int":
+			convertedVal, _ = strconv.ParseInt(value, 10, 64)
+		case "float":
+			convertedVal, _ = strconv.ParseFloat(value, 64)
+		case "string":
+			convertedVal = value
+		default:
+			convertedVal = value
+	}
+	return convertedVal
+}
+
 func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 
 	buf, err := ioutil.ReadFile(fileName) // "ChamberFunctionality.xml"
@@ -338,19 +356,21 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 	var params *Parameters
 	var test iTestCase
 
-	fmt.Println(string(buf))
+	tm.log.LogDebug(string(buf))
 	xml.Unmarshal(buf, &testPlan)
 
-	fmt.Println("%v", testPlan)
+	tm.log.LogDebug("%v", testPlan)
 	for _, xmlSuite := range testPlan.Suites { 
 		suite, _ := registry.GetSuite(xmlSuite.Name, tm, Parameters{})
 		for _, xmlTest := range xmlSuite.TestCases {
 			
 			for _, param := range xmlTest.Params {
 				params = new(Parameters)
-				params.AddParam(param.Name, param.Value, "")
-				fmt.Println(param.Value)
-				fmt.Println(param.Name)
+				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
+				tm.log.LogDebug(param.Type)
+				tm.log.LogDebug(param.Value)
+				tm.log.LogDebug(param.Name)
+				tm.log.LogDebug(param.Comment)
 			}
 			test, _ = registry.GetTestCase(xmlTest.Name, tm, *params)
 			suite.AddTest(test)

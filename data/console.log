@@ -1,0 +1,210 @@
+2015/11/17 21:32:49.853046 DEBUG::<?xml version="1.0"?>
+<TestManager name="Manager">
+   <TestSuite name="suite1">
+    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+     <TestCase name="test1">
+      <Param name='MaxTime' type='int' value='300' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='111.111' comment='float value'/>
+      <Param name='val2' type='int' value='550' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+     <TestCase name="test2">
+      <Param name='MaxTime' type='int' value='3040' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1141.111' comment='float value'/>
+      <Param name='val2' type='int' value='5504' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+      <TestCase name="test3">
+      <Param name='MaxTime' type='int' value='3005' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1151.111' comment='float value'/>
+      <Param name='val2' type='int' value='5505' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+  </TestSuite>
+   <TestSuite name="suite2">
+    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+     <TestCase name="test1">
+      <Param name='MaxTime' type='int' value='300' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='111.111' comment='float value'/>
+      <Param name='val2' type='int' value='550' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+     <TestCase name="test2">
+      <Param name='MaxTime' type='int' value='3040' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1141.111' comment='float value'/>
+      <Param name='val2' type='int' value='5504' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+      <TestCase name="test3">
+      <Param name='MaxTime' type='int' value='3005' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1151.111' comment='float value'/>
+      <Param name='val2' type='int' value='5505' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+  </TestSuite>
+</TestManager>
+2015/11/17 21:32:49.855047 DEBUG::{{ TestManager} Manager [{suite1 [{Domain string  }] [{test1 [{MaxTime int 300 Set Max Tme to run test} {val1 float 111.111 float value} {val2 int 550 val1 is integer} {val2 string hello there val2 is string}]} {test2 [{MaxTime int 3040 Set Max Tme to run test} {val1 float 1141.111 float value} {val2 int 5504 val1 is integer} {val2 string hello there val2 is string}]} {test3 [{MaxTime int 3005 Set Max Tme to run test} {val1 float 1151.111 float value} {val2 int 5505 val1 is integer} {val2 string hello there val2 is string}]}]} {suite2 [{Domain string  }] [{test1 [{MaxTime int 300 Set Max Tme to run test} {val1 float 111.111 float value} {val2 int 550 val1 is integer} {val2 string hello there val2 is string}]} {test2 [{MaxTime int 3040 Set Max Tme to run test} {val1 float 1141.111 float value} {val2 int 5504 val1 is integer} {val2 string hello there val2 is string}]} {test3 [{MaxTime int 3005 Set Max Tme to run test} {val1 float 1151.111 float value} {val2 int 5505 val1 is integer} {val2 string hello there val2 is string}]}]}]}
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::300
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::111.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::550
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::3040
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::1141.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::5504
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::3005
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::1151.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::5505
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::300
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::111.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::550
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::3040
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::1141.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::5504
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::3005
+2015/11/17 21:32:49.855047 DEBUG::MaxTime
+2015/11/17 21:32:49.855047 DEBUG::Set Max Tme to run test
+2015/11/17 21:32:49.855047 DEBUG::float
+2015/11/17 21:32:49.855047 DEBUG::1151.111
+2015/11/17 21:32:49.855047 DEBUG::val1
+2015/11/17 21:32:49.855047 DEBUG::float value
+2015/11/17 21:32:49.855047 DEBUG::int
+2015/11/17 21:32:49.855047 DEBUG::5505
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val1 is integer
+2015/11/17 21:32:49.855047 DEBUG::string
+2015/11/17 21:32:49.855047 DEBUG::hello there
+2015/11/17 21:32:49.855047 DEBUG::val2
+2015/11/17 21:32:49.855047 DEBUG::val2 is string
+2015/11/17 21:32:49.855047 MSG::Running all suitess...
+2015/11/17 21:32:49.855047 MSG::Running  Suite 'suite1'
+
+2015/11/17 21:32:49.855047 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2015/11/17 21:32:49.932755 MSG::Running test 'test3': tc.name=test3
+2015/11/17 21:32:49.957287 MSG::Running test 'test1': tc.name=test1
+2015/11/17 21:32:49.964292 MSG::Running test 'test2': tc.name=test2
+2015/11/17 21:32:49.964292 MSG::TestManager->setup::results=3
+2015/11/17 21:32:49.978416 MSG::TestManager->Run::results=3
+2015/11/17 21:32:49.978887 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:49.992102 MSG::TestManager->setup::results=3
+2015/11/17 21:32:49.993098 MSG::TestManager->Run::results=3
+2015/11/17 21:32:50.006028 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:50.006529 MSG::TestManager->setup::results=3
+2015/11/17 21:32:50.019480 MSG::TestManager->Run::results=1
+2015/11/17 21:32:50.019480 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:50.031369 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2015/11/17 21:32:50.031881 MSG::Running  Suite 'suite2'
+
+2015/11/17 21:32:50.041005 MSG::SUITE(suite2) SETUP::Status = 0::Message=
+2015/11/17 21:32:50.041524 MSG::Running test 'test2': tc.name=test2
+2015/11/17 21:32:50.053703 MSG::Running test 'test3': tc.name=test3
+2015/11/17 21:32:50.054712 MSG::Running test 'test1': tc.name=test1
+2015/11/17 21:32:50.064215 MSG::TestManager->setup::results=3
+2015/11/17 21:32:50.065216 MSG::TestManager->Run::results=1
+2015/11/17 21:32:50.073777 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:50.074762 MSG::TestManager->setup::results=3
+2015/11/17 21:32:50.084303 MSG::TestManager->Run::results=3
+2015/11/17 21:32:50.085071 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:50.093024 MSG::TestManager->setup::results=3
+2015/11/17 21:32:50.094053 MSG::TestManager->Run::results=3
+2015/11/17 21:32:50.103615 MSG::TestManager->Teardown::results=3
+2015/11/17 21:32:50.104616 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
+2015/11/17 21:32:50.113122 MSG::
+
+
+2015/11/17 21:32:50.114123 MSG::TOTAL STATISTICS     Test Manager (0.00 sec)
+Suites: Total 2, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+Tests: Total 6, Passed 4, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 2
+2015/11/17 21:32:50.121127 MSG::
+
+
+2015/11/17 21:32:50.122128 MSG::
+
+
+2015/11/17 21:32:50.130635 MSG::SUITE STATISTICS     suite1 (0.00 sec)
+Tests: Total 3, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 1
+2015/11/17 21:32:50.131135 MSG::
+
+2015/11/17 21:32:50.138640 MSG::
+
+2015/11/17 21:32:50.139641 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2015/11/17 21:32:50.147627 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2015/11/17 21:32:50.148146 PASS::TEST PASSED          test3 (0.00 sec) Test complete
+2015/11/17 21:32:50.155742 PASS::TEST PASSED          test3 (0.00 sec) Test complete
+2015/11/17 21:32:50.156226 MSG::
+
+
+2015/11/17 21:32:50.164806 MSG::SUITE STATISTICS     suite2 (0.00 sec)
+Tests: Total 3, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 1
+2015/11/17 21:32:50.165304 MSG::
+
+2015/11/17 21:32:50.172809 MSG::
+
+2015/11/17 21:32:50.173309 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2015/11/17 21:32:50.182316 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2015/11/17 21:32:50.182816 PASS::TEST PASSED          test3 (0.00 sec) Test complete
+2015/11/17 21:32:50.182816 PASS::TEST PASSED          test3 (0.00 sec) Test complete

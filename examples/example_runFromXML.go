@@ -6,10 +6,10 @@ import (
 	//"log"
 	"os"
 	//"io"
-	//"gitorious.org/goqa/goqa.git"
 	"github.com/go-QA/goQA"
+	"github.com/go-QA/logger"
 	"time"
-	//"reflect"
+	"reflect"
 	//"net"
 	//"encoding/json"
 )
@@ -37,22 +37,22 @@ type Test3 struct {
 	goQA.TestCase
 }
 
-// interface object 'TestRegister' to create the test cases
-type Register int32
+var regTests map[string]reflect.Type = map[string]reflect.Type{ "test1": reflect.TypeOf(Test1{}),
+																"test2": reflect.TypeOf(Test3{}),
+																"test3": reflect.TypeOf(Test3{})}
+
+// struct with 'goQA.TestRegister' to register the test cases with TestManager
+type Register struct {
+	Registry map[string]reflect.Type
+}
 
 func (r *Register) GetTestCase(testName string, tm *goQA.TestManager, params goQA.Parameters) (goQA.ITestCase, error) {
-	var test goQA.ITestCase
-	switch 	testName {
-	case "::ProducerSE::TestCase::Heater::HeaterTest1":
-		test = &Test1{}
-	case "::ProducerSE::TestCase::Heater::HeaterTest2":
-		test = &Test2{}
-	default:
-		test = &Test1{}
-	}
 
+	var test goQA.ITestCase
+
+	test = reflect.New(r.Registry[testName]).Interface().(goQA.ITestCase)	
 	test.Init(testName, tm, params)
-	*r++
+
 	return test, nil
 }
 
@@ -82,10 +82,11 @@ func main() {
 		panic(err)
 	}
 	defer console.Close()
-	tm.AddLogger("console", goQA.LOGLEVEL_ALL, console)
+	tm.GetLogger().SetDebug(true)
+	tm.AddLogger("console", logger.LOGLEVEL_ALL, console)
 
-	var reg Register
-	tm.RunFromXML("ChamberFunctionality.xml", &reg)
+	reg := Register{ Registry: regTests}
+	tm.RunFromXML("examples\\ExampleTestPlan.xml", &reg)
 
 	endTime := time.Now()
 	totalTime := endTime.Sub(startTime).Seconds()
