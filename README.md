@@ -170,3 +170,76 @@ Here are three examples of ways to launch the test case manually:
 ```
 
 
+##Run From XML Test Plan
+
+  A test plan can be created with an XML file and ran by the `TestManager` by calling `RunFromXML(File, Register)`
+There is a working example `goQA/Examples/example_RunFromXML.go`
+
+ This is the example XML file that creates Three test cases for a suite:
+
+```xml
+<?xml version="1.0"?>
+<TestManager name="Manager">
+   <TestSuite name="suite1">
+    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+     <TestCase name="test1">
+      <Param name='MaxTime' type='int' value='300' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='111.111' comment='float value'/>
+      <Param name='val2' type='int' value='550' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+     <TestCase name="test2">
+      <Param name='MaxTime' type='int' value='3040' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1141.111' comment='float value'/>
+      <Param name='val2' type='int' value='5504' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+      <TestCase name="test3">
+      <Param name='MaxTime' type='int' value='3005' comment='Set Max Tme to run test'/>
+      <Param name='val1' type='float' value='1151.111' comment='float value'/>
+      <Param name='val2' type='int' value='5505' comment="val1 is integer"/>
+      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+    </TestCase>
+  </TestSuite>
+</TestManager>
+```
+
+
+ To create a test plan you must have a type that implements the `goQA.Register` interface to create the concrete test cases and suite objects:
+
+```go
+	type TestRegister interface {
+		GetTestCase(testType string, tm *TestManager, params Parameters) (ITestCase, error)
+		GetSuite(testType string, tm *TestManager, params Parameters) (Suite, error)
+	}
+```
+
+this is from example file; a basic way to register your test cases:
+
+```go
+	var regTests map[string]reflect.Type = map[string]reflect.Type{ "test1": reflect.TypeOf(Test1{}),
+																	"test2": reflect.TypeOf(Test3{}),
+																	"test3": reflect.TypeOf(Test3{})}
+	
+	// struct with 'goQA.TestRegister' to register the test cases with TestManager
+	type Register struct {
+		Registry map[string]reflect.Type
+	}
+	
+	func (r *Register) GetTestCase(testName string, tm *goQA.TestManager, params goQA.Parameters) (goQA.ITestCase, error) {
+	
+		var test goQA.ITestCase
+	
+		test = reflect.New(r.Registry[testName]).Interface().(goQA.ITestCase)	
+		test.Init(testName, tm, params)
+	
+		return test, nil
+	}
+```
+
+From here you call the manager object:
+
+```go
+	tm.RunFromXML(filePath, &reg)
+```
+
