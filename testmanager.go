@@ -13,6 +13,7 @@ import (
 	"io"
 	"time"
 	"io/ioutil"
+	"reflect"
 	"encoding/xml"
 	"github.com/go-QA/logger"
 )
@@ -20,6 +21,34 @@ import (
 const (
 	MAX_TESTRUN_WAIT = 30
 )
+
+// --------------------  Default Registery  -----------------------
+
+// struct with 'goQA.TestRegister' to register the test cases with TestManager
+type DefaultRegister struct {
+	Registry map[string]reflect.Type
+}
+
+func (r *DefaultRegister) GetTestCase(testName string, tm *TestManager, params Parameters) (ITestCase, error) {
+
+	var test ITestCase
+
+	test = reflect.New(r.Registry[testName]).Interface().(ITestCase)	
+	test.Init(testName, tm, params)
+
+	return test, nil
+}
+
+func (r *DefaultRegister) GetSuite(suiteName string, tm *TestManager, params Parameters) (Suite, error) {
+	suite := DefaultSuite{}
+	suite.Init(suiteName, tm, params)
+	return &suite, nil
+}
+	
+// --------------------------------------------------------------------
+
+
+// ---------------------------  Define XML for test plans -------------------
 
 type TestRegister interface {
 	GetTestCase(testType string, tm *TestManager, params Parameters) (ITestCase, error)
@@ -52,6 +81,9 @@ type XMLTestPlan struct {
 	Name string      `xml:"name,attr"`
 	Suites []XMLTestSuite `xml:"TestSuite"`
 }
+
+// --------------------------------------------------------------
+
 
 
 type iTestManager interface {

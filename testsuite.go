@@ -6,10 +6,6 @@ package goQA
 
 import (
 	"fmt"
-	//"error"
-	//"log"
-	//"os"
-	//"time"
 )
 
 type Suite interface {
