@@ -366,8 +366,8 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 			
 			params = new(Parameters)
 			for _, param := range xmlTest.Params {
-				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment))
-				tm.log.LogDebug("name=%s, type=%s,value= %s, comment=%s" param.Name, param.Type. param.Value, param.Comment)
+				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
+				tm.log.LogDebug("name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 			}
 			test, _ = registry.GetTestCase(xmlTest.Name, tm, *params)
 			suite.AddTest(test)
