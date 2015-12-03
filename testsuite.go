@@ -10,25 +10,27 @@ import (
 
 type Suite interface {
 	//Init(name string, parent iTestManager) Suite
+	Init(name string, parent iTestManager, params Parameters)
 	Setup() (status int, msg string, err error)
 	Teardown() (status int, msg string, err error)
 	AddTest(test iTestCase)
 	Name() string
 	GetTestCase(name string) iTestCase
-	GetTestCases() map[string]iTestCase
+	GetTestCases() []iTestCase
 }
 
 type DefaultSuite struct {
 	TestCase
-	testCases map[string]iTestCase
+	testCases []iTestCase
+}
+
+func (s *DefaultSuite) GetParent() iTestManager {
+	return s.TestCase.parent
 }
 
 func (s *DefaultSuite) Init(name string, parent iTestManager, params Parameters) {
-	s.testCases = make(map[string]iTestCase)
 	s.TestCase.Init(name, parent, Parameters{})
-	s.TestCase.name = name
-	s.TestCase.log = parent.GetLogger()
-	s.TestCase.parent = parent
+	s.testCases = []iTestCase{}
 }
 
 func (s *DefaultSuite) Name() string {
@@ -37,36 +39,41 @@ func (s *DefaultSuite) Name() string {
 
 func (s *DefaultSuite) Setup() (status int, msg string, err error) {
 	// Suite setup
-	fMsg := fmt.Sprintf("SUITE(%s) SETUP::Status = %d::Message=%s", s.TestCase.name, status, msg)
-	s.TestCase.LogMessage(fMsg)
+	fMsg := fmt.Sprintf("SUITE(%s) SETUP::Status = %d::Message=%s", s.Name(), status, msg)
+	s.LogMessage(fMsg)
 	//g.logger.Printf("PASS::%s\n", passMsg)
 	return SUITE_OK, "", nil
 }
 
 func (s *DefaultSuite) Teardown() (status int, msg string, err error) {
 	// Suite teardown
-	fMsg := fmt.Sprintf("SUITE(%s) TEARDOWN::Status = %d::Message=%s", s.TestCase.name, status, msg)
-	s.TestCase.LogMessage(fMsg)
+	fMsg := fmt.Sprintf("SUITE(%s) TEARDOWN::Status = %d::Message=%s", s.Name(), status, msg)
+	s.LogMessage(fMsg)
 	return SUITE_OK, "", nil
 }
 
 func (s *DefaultSuite) AddTest(test iTestCase) {
-	newTest := test
-	s.testCases[test.Name()] = newTest
+	s.testCases = append(s.testCases, test)
+	return
 }
 
 func (s *DefaultSuite) RunSuite() {
 	chSuite := make(chan int)
-	s.TestCase.parent.AddSuite(s)
-	go s.TestCase.parent.RunSuite(s.TestCase.name, chSuite)
+	s.GetParent().AddSuite(s)
+	go s.GetParent().RunSuite(s.Name(), chSuite)
 	_ = <-chSuite
 }
 
 func (s *DefaultSuite) GetTestCase(name string) iTestCase {
-	return s.testCases[name]
+	for _, test := range s.testCases {
+		if test.Name() == name {
+			return test
+		}
+	}
+	return nil
 }
 
-func (s *DefaultSuite) GetTestCases() map[string]iTestCase {
+func (s *DefaultSuite) GetTestCases() []iTestCase {
 	return s.testCases
 }
 

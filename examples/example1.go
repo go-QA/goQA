@@ -99,9 +99,7 @@ type MySuite struct {
 // Define our own Setup method
 func (mc *MySuite) Setup() (status int, msg string, err error) {
 	// Suite setup
-	fMsg := fmt.Sprintf("SUITE(%s) Override Setup for no raisin", mc.Name())
-	mc.LogMessage(fMsg)
-	//g.logger.Printf("PASS::%s\n", passMsg)
+	mc.LogMessage("SUITE(%s) Override Setup for no raisin", mc.Name())
 	return goQA.SUITE_OK, "My Special Message", nil
 }
 
@@ -170,15 +168,12 @@ func main() {
 	// here we run just suite1
 	suite1.RunSuite()
 
-		// Add the two suite objects to the test manager
-		tm.AddSuite(suite1)
+	// Add the two suite objects to the test manager
+	tm.AddSuite(suite1)
 	tm.AddSuite(&suite2)
 
 	// This will run all suites added to tm using the concurrency level set during creation.
 	tm.RunAll()
-	//tm.RunFromXML("ChamberFunctionality.xml")
-	//console.Sync()
-	//console.Close()
 
 	endTime := time.Now()
 	totalTime := endTime.Sub(startTime).Seconds()

@@ -65,12 +65,14 @@ type XMLParam struct {
 
 type XMLTestCase struct {
 	Name string    `xml:"name,attr"`
+	Class string    `xml:"class,attr"`
 	Params []XMLParam  `xml:"Param"`
 
 } 
 
 type XMLTestSuite struct {
 	Name string      `xml:"name,attr"`
+	Class string      `xml:"class,attr"`
 	Params []XMLParam    `xml:"Param"`
 	TestCases []XMLTestCase  `xml:"TestCase"`
 
@@ -91,6 +93,7 @@ type iTestManager interface {
 	Run(suiteName string, tc iTestCase, chReport chan testResult)
 	AddSuite(suite Suite)
 	GetLogger() *logger.GoQALog
+	GetSuite(name string) Suite
 }
 
 type TestManager struct {
@@ -98,7 +101,7 @@ type TestManager struct {
 	sMu         sync.Mutex
 	tcStartMu   sync.Mutex
 	tcFinMu     sync.Mutex
-	suites      map[string]Suite
+	suites      []Suite
 	reportStats ReporterStatistics
 	report      ManagerResult
 	generators  map[string]ReportWriter
@@ -108,7 +111,7 @@ type TestManager struct {
 }
 
 func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManager {
-	tm.suites = make(map[string]Suite)
+	tm.suites = []Suite{}
 	tm.reportStats = ReporterStatistics{}
 	tm.report = ManagerResult{}
 	tm.generators = make(map[string]ReportWriter)
@@ -121,6 +124,15 @@ func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManag
 	reportWriter.Init(tm)
 	tm.addGenerator(reportWriter)
 	return tm
+}
+
+func (tm *TestManager) GetSuite(name string) Suite {
+	for _, suite := range tm.suites {
+		if suite.Name() == name {
+			return suite
+		}
+	}
+	return nil
 }
 
 func (tm *TestManager) AddLogger(name string, level uint64, stream io.Writer) {
@@ -198,7 +210,7 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 }
 
 func (tm *TestManager) RunTest(suiteName string, testName string) {
-	tc := tm.suites[suiteName].GetTestCase(testName)
+	tc := tm.GetSuite(suiteName).GetTestCase(testName)
 	tm.Run(suiteName, tc, nil)
 }
 
@@ -214,10 +226,10 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 	chComplete := make(chan int)
 	chReport := make(chan testResult)
 
-	suite := tm.suites[suiteName]
+	suite := tm.GetSuite(suiteName)
 	tm.log.LogMessage("Running  Suite '%s'\n", suiteName)
 
-	length := len(tm.suites[suiteName].GetTestCases())
+	length := len(suite.GetTestCases())
 	go tm.endSuiteHandler(suiteName, chReport, chComplete, length)
 
 	defer func() {
@@ -266,12 +278,12 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 		tm.tcRunner(suiteName, chReport)
 	} else {
 		count := 0
-		for name, tc := range tm.suites[suiteName].GetTestCases() {
+		for _, tc := range tm.GetSuite(suiteName).GetTestCases() {
 			count++
 			if count >= length {
 				//fmt.Println("LAUNCHING LAST TEST")
 			}
-			tm.log.LogMessage("Running test '%s': tc.name=%s", name, tc.Name())
+			tm.log.LogMessage("Running test '%s'", tc.Name())
 			if tm.testFlags == TC_ALL {
 				go tm.Run(suiteName, tc, chReport)
 			} else {
@@ -348,11 +360,11 @@ func (tm *TestManager) RunAll() {
 	if tm.suiteFlags != SUITE_ALL && tm.suiteFlags != SUITE_SERIAL {
 		tm.suiteRunner(chSuiteResults)
 	} else {
-		for name := range tm.suites {
+		for _, suite := range tm.suites {
 			if tm.suiteFlags == SUITE_ALL {
-				go tm.RunSuite(name, chSuiteResults)
+				go tm.RunSuite(suite.Name(), chSuiteResults)
 			} else if tm.suiteFlags == SUITE_SERIAL {
-				tm.RunSuite(name, chSuiteResults)
+				tm.RunSuite(suite.Name(), chSuiteResults)
 			}
 		}
 	}
@@ -393,7 +405,7 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 
 	tm.log.LogDebug("%v", testPlan)
 	for _, xmlSuite := range testPlan.Suites { 
-		suite, _ := registry.GetSuite(xmlSuite.Name, tm, Parameters{})
+		suite, _ := registry.GetSuite(xmlSuite.Class, tm, Parameters{})
 		for _, xmlTest := range xmlSuite.TestCases {
 			
 			params = new(Parameters)
@@ -401,7 +413,7 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
 				tm.log.LogDebug("name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 			}
-			test, _ = registry.GetTestCase(xmlTest.Name, tm, *params)
+			test, _ = registry.GetTestCase(xmlTest.Class, tm, *params)
 			suite.AddTest(test)
 		}
 		tm.AddSuite(suite)
@@ -436,10 +448,10 @@ func (tm *TestManager) suiteRunner(chSuiteResults chan int) {
 		finished <- 1
 	}()
 
-	for name := range tm.suites {
+	for _, suite := range tm.suites {
 		guard <- struct{}{}
-		tm.log.LogMessage("Running Suite '%s'\n", name)
-		go tm.launchSuite(name, guard, done, chSuiteResults)
+		tm.log.LogMessage("Running Suite '%s'\n", suite.Name())
+		go tm.launchSuite(suite.Name(), guard, done, chSuiteResults)
 	}
 
 	// wait for all remaining tests before exiting
@@ -457,7 +469,8 @@ func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
 	guard := make(chan struct{}, maxTests)
 	done := make(chan int, 5)
 	finished := make(chan int)
-	testCount := len(tm.suites[suiteName].GetTestCases())
+	suite := tm.GetSuite(suiteName)
+	testCount := len(suite.GetTestCases())
 
 	go func() {
 		completedTests := 0
@@ -468,9 +481,9 @@ func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
 		finished <- 1
 	}()
 
-	for name, tc := range tm.suites[suiteName].GetTestCases() {
+	for _, tc := range suite.GetTestCases() {
 		guard <- struct{}{}
-		tm.log.LogMessage("Running test '%s'\n", name)
+		tm.log.LogMessage("Running test '%s'\n", tc.Name())
 		go tm.launchTest(suiteName, tc, guard, done, chReport)
 	}
 
@@ -485,7 +498,7 @@ func (tm *TestManager) launchTest(suiteName string, testcase iTestCase, guard ch
 }
 
 func (tm *TestManager) AddSuite(suite Suite) {
-	tm.suites[suite.Name()] = suite
+	tm.suites = append(tm.suites, suite)
 }
 
 func (tm *TestManager) GetLogger() *logger.GoQALog {
