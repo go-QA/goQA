@@ -33,10 +33,13 @@ func (r *DefaultRegister) GetTestCase(testName string, tm *TestManager, params P
 
 	var test ITestCase
 
-	test = reflect.New(r.Registry[testName]).Interface().(ITestCase)	
-	test.Init(testName, tm, params)
+	if _, ok := r.Registry[testName]; ok {
+		test = reflect.New(r.Registry[testName]).Interface().(ITestCase)	
+		test.Init(testName, tm, params)
+		return test, nil
+	}
 
-	return test, nil
+	return nil, Create(&Parameters{}, "invalid test class '" + testName + "'")
 }
 
 func (r *DefaultRegister) GetSuite(suiteName string, tm *TestManager, params Parameters) (Suite, error) {

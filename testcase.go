@@ -60,10 +60,10 @@ func (err *TestError) Create(params *Parameters, mes string) {
 	err.message = mes
 }
 
-func Create(params *Parameters, mes string) TestError {
+func Create(params *Parameters, mes string) error {
 	err := TestError{}
 	err.Create(params, mes)
-	return err
+	return &err
 }
 
 func Throw(params *Parameters, mes string) {
