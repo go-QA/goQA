@@ -9,13 +9,13 @@ import (
 	"sync"
 	//"error"
 	//"os"
-	"strconv"
-	"io"
-	"time"
-	"io/ioutil"
-	"reflect"
 	"encoding/xml"
 	"github.com/go-QA/logger"
+	"io"
+	"io/ioutil"
+	"reflect"
+	"strconv"
+	"time"
 )
 
 const (
@@ -29,67 +29,61 @@ type DefaultRegister struct {
 	Registry map[string]reflect.Type
 }
 
-func (r *DefaultRegister) GetTestCase(testName string, tm *TestManager, params Parameters) (ITestCase, error) {
+func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *TestManager, params Parameters) (ITestCase, error) {
 
 	var test ITestCase
 
-	if _, ok := r.Registry[testName]; ok {
-		test = reflect.New(r.Registry[testName]).Interface().(ITestCase)	
+	if _, ok := r.Registry[testClass]; ok {
+		test = reflect.New(r.Registry[testClass]).Interface().(ITestCase)
 		test.Init(testName, tm, params)
 		return test, nil
 	}
 
-	return nil, Create(&Parameters{}, "invalid test class '" + testName + "'")
+	return nil, Create(&Parameters{}, "invalid test class '"+testName+"'")
 }
 
-func (r *DefaultRegister) GetSuite(suiteName string, tm *TestManager, params Parameters) (Suite, error) {
+func (r *DefaultRegister) GetSuite(suiteName string, suiteClass string, tm *TestManager, params Parameters) (Suite, error) {
 	suite := DefaultSuite{}
 	suite.Init(suiteName, tm, params)
 	return &suite, nil
 }
-	
-// --------------------------------------------------------------------
 
+// --------------------------------------------------------------------
 
 // ---------------------------  Define XML for test plans -------------------
 
 type TestRegister interface {
-	GetTestCase(testType string, tm *TestManager, params Parameters) (ITestCase, error)
-	GetSuite(testType string, tm *TestManager, params Parameters) (Suite, error)
+	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (ITestCase, error)
+	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
 }
 
 type XMLParam struct {
-	Name string	 `xml:"name,attr"`
-	Type string	 `xml:"type,attr"`
-	Value string `xml:"value,attr"`
+	Name    string `xml:"name,attr"`
+	Type    string `xml:"type,attr"`
+	Value   string `xml:"value,attr"`
 	Comment string `xml:"comment,attr"`
-
 }
 
 type XMLTestCase struct {
-	Name string    `xml:"name,attr"`
-	Class string    `xml:"class,attr"`
-	Params []XMLParam  `xml:"Param"`
-
-} 
+	Name   string     `xml:"name,attr"`
+	Class  string     `xml:"class,attr"`
+	Params []XMLParam `xml:"Param"`
+}
 
 type XMLTestSuite struct {
-	Name string      `xml:"name,attr"`
-	Class string      `xml:"class,attr"`
-	Params []XMLParam    `xml:"Param"`
-	TestCases []XMLTestCase  `xml:"TestCase"`
-
+	Name      string        `xml:"name,attr"`
+	Class     string        `xml:"class,attr"`
+	Params    []XMLParam    `xml:"Param"`
+	TestCases []XMLTestCase `xml:"TestCase"`
 }
 
 type XMLTestPlan struct {
-	XMLName xml.Name  `xml:"TestManager"`
-	Name string      `xml:"name,attr"`
-	Suites []XMLTestSuite `xml:"TestSuite"`
+	XMLName xml.Name       `xml:"TestManager"`
+	Name    string         `xml:"name,attr"`
+	Suites  []XMLTestSuite `xml:"TestSuite"`
 }
 
 // --------------------------------------------------------------
-
-
 
 type iTestManager interface {
 	RunSuite(suite string, chSuiteResults chan int)
@@ -108,7 +102,7 @@ type TestManager struct {
 	reportStats ReporterStatistics
 	report      ManagerResult
 	generators  map[string]ReportWriter
-	log      *logger.GoQALog
+	log         *logger.GoQALog
 	suiteFlags  int
 	testFlags   int
 }
@@ -379,14 +373,14 @@ func (tm *TestManager) RunAll() {
 func (tm *TestManager) convertToParamType(value, paramType string) interface{} {
 	var convertedVal interface{}
 	switch paramType {
-		case "int":
-			convertedVal, _ = strconv.ParseInt(value, 10, 64)
-		case "float":
-			convertedVal, _ = strconv.ParseFloat(value, 64)
-		case "string":
-			convertedVal = value
-		default:
-			convertedVal = value
+	case "int":
+		convertedVal, _ = strconv.ParseInt(value, 10, 64)
+	case "float":
+		convertedVal, _ = strconv.ParseFloat(value, 64)
+	case "string":
+		convertedVal = value
+	default:
+		convertedVal = value
 	}
 	return convertedVal
 }
@@ -407,16 +401,16 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 	xml.Unmarshal(buf, &testPlan)
 
 	tm.log.LogDebug("%v", testPlan)
-	for _, xmlSuite := range testPlan.Suites { 
-		suite, _ := registry.GetSuite(xmlSuite.Class, tm, Parameters{})
+	for _, xmlSuite := range testPlan.Suites {
+		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, Parameters{})
 		for _, xmlTest := range xmlSuite.TestCases {
-			
+
 			params = new(Parameters)
 			for _, param := range xmlTest.Params {
 				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
 				tm.log.LogDebug("name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 			}
-			test, _ = registry.GetTestCase(xmlTest.Class, tm, *params)
+			test, _ = registry.GetTestCase(xmlTest.Name, xmlTest.Class, tm, *params)
 			suite.AddTest(test)
 		}
 		tm.AddSuite(suite)
