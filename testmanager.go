@@ -172,7 +172,8 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 					tm.testSetupError(suiteName, result)
 				}
 			} else {
-				result.StatusMessage = fmt.Sprintf("Error caught During test run%s", r)
+				result.StatusMessage = "Test complete"
+				result.Status = runStatus
 			}
 		} else {
 			result.StatusMessage = "Test complete"

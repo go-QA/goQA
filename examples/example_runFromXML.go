@@ -24,7 +24,15 @@ type Test1 struct {
 }
 
 func (t *Test1) Run() (int, error) {
-	return 1, nil	
+	v1 := t.InitParam("val1", 0.0).(float64)
+	v2 := t.InitParam("val2", 0).(int64)
+	v3 := t.InitParam("val3", "").(string)
+
+	t.Verify(v1 == 11.11, "verify val1", "Expected 11.11 but got %f instead", v1)
+	t.Verify(v2 == 55, "verify val2", "Expected 55 but got %d instead", v2)
+	t.Verify(v3 == "hello there test1", "verify val3", "Expected 'hello there test1' but got '%s' instead", v3)
+
+	return t.ReturnFromRun()	
 }
 
 type Test2 struct {
@@ -32,36 +40,40 @@ type Test2 struct {
 	goQA.TestCase
 }
 
+func (t *Test2) Run() (int, error) {
+	v1 := t.InitParam("val1", 0.0).(float64)
+	v2 := t.InitParam("val2", 0).(int64)
+	v3 := t.InitParam("val3", "").(string)
+
+	t.Verify(v1 == 111.111, "verify val1", "Expected 111.111 but got %f instead", v1)
+	t.Verify(v2 == 550, "verify val2", "Expected 550 but got %d instead", v2)
+	t.Verify(v3 == "hello there test2", "verify val3", "Expected 'hello there test2' but got '%s' instead", v3)
+
+	return t.ReturnFromRun()	
+}
+
+
 type Test3 struct {
 	data int
 	goQA.TestCase
 }
 
+func (t *Test3) Run() (int, error) {
+	v1 := t.InitParam("val1", 0.0).(float64)
+	v2 := t.InitParam("val2", 0).(int64)
+	v3 := t.InitParam("val3", "").(string)
+
+	t.Verify(v1 == 1111.1111, "verify val1", "Expected 1111.1111 but got %f instead", v1)
+	t.Verify(v2 == 5550, "verify val2", "Expected 5550 but got %d instead", v2)
+	t.Verify(v3 == "hello there test3", "verify val3", "Expected 'hello there test3' but got '%s' instead", v3)
+
+	return t.ReturnFromRun()	
+}
+
+
 var regTests map[string]reflect.Type = map[string]reflect.Type{ "test1": reflect.TypeOf(Test1{}),
-																"test2": reflect.TypeOf(Test3{}),
+																"test2": reflect.TypeOf(Test2{}),
 																"test3": reflect.TypeOf(Test3{})}
-
-// struct with 'goQA.TestRegister' to register the test cases with TestManager
-type Register struct {
-	Registry map[string]reflect.Type
-}
-
-func (r *Register) GetTestCase(testName string, tm *goQA.TestManager, params goQA.Parameters) (goQA.ITestCase, error) {
-
-	var test goQA.ITestCase
-
-	test = reflect.New(r.Registry[testName]).Interface().(goQA.ITestCase)	
-	test.Init(testName, tm, params)
-
-	return test, nil
-}
-
-func (r *Register) GetSuite(suiteName string, tm *goQA.TestManager, params goQA.Parameters) (goQA.Suite, error) {
-	suite := goQA.DefaultSuite{}
-	suite.Init(suiteName, tm, params)
-	return &suite, nil
-}
-	
 
 func main() {
 
@@ -82,10 +94,13 @@ func main() {
 		panic(err)
 	}
 	defer console.Close()
-	tm.GetLogger().SetDebug(true)
+
+	//tm.GetLogger().SetDebug(true)
+
 	tm.AddLogger("console", logger.LOGLEVEL_ALL, console)
 
-	reg := Register{ Registry: regTests}
+	reg := goQA.DefaultRegister{ Registry: regTests}
+
 	tm.RunFromXML("examples\\ExampleTestPlan.xml", &reg)
 
 	endTime := time.Now()

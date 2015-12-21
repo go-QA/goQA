@@ -229,7 +229,7 @@ func (tc *TestCase) Setup() (int, error) {
 }
 
 func (tc *TestCase) Run() (int, error) {
-	return TC_PASSED, nil
+	return tc.ReturnFromRun()
 }
 
 func (tc *TestCase) Teardown() (int, error) {
@@ -316,11 +316,13 @@ func (tc *TestCase) ReturnFromRun() (int, error) {
 	} else {
 		calcFailThreshold = float64((float64(tc.failedCount) / float64(totalTC))) * 100.00
 	}
+
 	tc.LogMessage("test %s ran %d check points with failure rate of %.3f", tc.Name(), totalTC, calcFailThreshold)
 	if tc.Critical.Triggered() == true {
 		tc.LogError("ERROR:: Found Critical error during run!")
 		return TC_FAILED, nil
 	}
+
 	if float64(tc.failureThreshold) >= calcFailThreshold {
 		return TC_PASSED, nil
 	}
@@ -331,10 +333,6 @@ func (tc *TestCase) RunTest(test iTestCase) {
 	chReport := make(chan testResult, 1)
 	go tc.parent.Run("", test, chReport)
 	_ = <-chReport
-}
-
-func testRunner(test iTestCase) {
-	test.Setup()
 }
 
 func InitTest(name string, test iTestCase, parent iTestManager, params Parameters) iTestCase {
