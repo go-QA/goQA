@@ -137,7 +137,7 @@ func main() {
 		panic(err)
 	}
 	defer console.Close()
-	tm.AddLogger("console", logger.LOGLEVEL_ALL, console)
+	tm.AddLogger("console", logger.LOG_LEVEL_ALL, console)
 
 	// create two suite objects
 	suite1 := goQA.CreateSuite("suite1", &tm, goQA.Parameters{})

@@ -116,7 +116,7 @@ func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManag
 	tm.report.Init("report1")
 	tm.log = &logger.GoQALog{}
 	tm.log.Init()
-	tm.log.Add("default", logger.LOGLEVEL_ALL, log)
+	tm.log.Add("default", logger.LOG_LEVEL_ALL, log)
 	//tr := TextReporter{}
 	reportWriter.Init(tm)
 	tm.addGenerator(reportWriter)
