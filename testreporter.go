@@ -10,8 +10,9 @@ import (
 	//"log"
 	//"os"
 	//"io"
-	"time"
 	"github.com/go-QA/logger"
+	"sync"
+	"time"
 )
 
 const (
@@ -113,10 +114,10 @@ type ReporterStatistics struct {
 }
 
 func (s *ReporterStatistics) Init() {
-	s.resetTestManagerStatistics()
+	s.resetManagerResultStatistics()
 }
 
-func (s *ReporterStatistics) resetTestManagerStatistics() {
+func (s *ReporterStatistics) resetManagerResultStatistics() {
 	s.NumberOfTestSuites = 0
 	s.NumberOfTestSuitesPassed = 0
 	s.NumberOfTestSuitesFailed = 0
@@ -137,80 +138,6 @@ func (s *ReporterStatistics) resetTestManagerStatistics() {
 	s.TotalNumberOfTestCasesTearDownError = 0
 	s.TotalNumberOfTestCasesNotFound = 0
 	s.TotalNumberOfTestCasesSkipped = 0
-}
-
-type ManagerResult struct {
-	name       string
-	start      time.Time
-	end        time.Time
-	tempSuites map[string]suiteResult
-	suites     []suiteResult
-}
-
-func (m *ManagerResult) GetSuites() []suiteResult {
-	return m.suites
-}
-
-func (m *ManagerResult) Init(name string) {
-	m.name = name
-	m.start = time.Now()
-	m.tempSuites = make(map[string]suiteResult)
-	m.suites = make([]suiteResult, 0, 10)
-}
-
-func (m *ManagerResult) Runtime() float64 {
-	return m.end.Sub(m.start).Seconds()
-}
-
-func (m *ManagerResult) Name() string {
-	return m.name
-}
-
-func (m *ManagerResult) StartSuite(name string) {
-	//fmt.Printf("ManagerResult::StartSuite::suiteName = %s", name)
-	suite := suiteResult{}
-	suite.Init(name)
-	m.tempSuites[name] = suite
-}
-
-func (m *ManagerResult) EndSuite(name string, status int, message string) {
-	suite := m.tempSuites[name]
-	suite.Status = status
-	suite.StatusMessage = message
-	suite.end = time.Now()
-	m.AddSuiteResult(suite)
-}
-
-func (m *ManagerResult) EndManager(name string, status int, message string) {
-	m.end = time.Now()
-}
-
-func (m *ManagerResult) resetManagerStatistics() {
-	m.Init(m.name)
-}
-
-func (m *ManagerResult) AddSuiteResult(result suiteResult) {
-	if len(m.suites) >= cap(m.suites) {
-		//fmt.Printf("len=%d   cap=%d\n", len(m.suites), cap(m.suites))
-		newSlice := make([]suiteResult, len(m.suites), len(m.suites)+10)
-		copy(newSlice, m.suites)
-		m.suites = newSlice
-	}
-	//fmt.Printf("ManagerResult::AddSuiteResult::\n")
-	m.suites = append(m.suites, result)
-
-}
-
-func (m *ManagerResult) EndTest(suiteName string, result testResult) {
-	suite := m.tempSuites[suiteName]
-	suite.EndTest(result.name, result.Status, result.StatusMessage)
-	m.tempSuites[suiteName] = suite
-}
-
-func (m *ManagerResult) StartTest(suiteName string, name string) {
-	suite := m.tempSuites[suiteName]
-	suite.StartTest(name)
-	m.tempSuites[suiteName] = suite
 }
 
 type suiteResult struct {
@@ -299,9 +226,287 @@ func (t *testResult) Name() string {
 	return t.name
 }
 
+type ManagerResult struct {
+	mutex          sync.Mutex
+	name           string
+	start          time.Time
+	end            time.Time
+	activeSuites   map[string]suiteResult
+	finishedSuites []suiteResult
+	reportStats    ReporterStatistics
+}
+
+func (m *ManagerResult) GetSuites() []suiteResult {
+	return m.finishedSuites
+}
+
+func (m *ManagerResult) Init(name string) {
+	m.name = name
+	m.start = time.Now()
+	m.activeSuites = make(map[string]suiteResult)
+	m.finishedSuites = make([]suiteResult, 0, 10)
+}
+
+func (m *ManagerResult) Runtime() float64 {
+	return m.end.Sub(m.start).Seconds()
+}
+
+func (m *ManagerResult) Name() string {
+	return m.name
+}
+
+func (m *ManagerResult) StartSuite(name string) {
+	//fmt.Printf("ManagerResult::StartSuite::suiteName = %s", name)
+	suite := suiteResult{}
+	suite.Init(name)
+	m.activeSuites[name] = suite
+}
+
+func (m *ManagerResult) EndSuite(name string, status int, message string) {
+	suite := m.activeSuites[name]
+	suite.Status = status
+	suite.StatusMessage = message
+	suite.end = time.Now()
+	m.AddSuiteResult(suite)
+}
+
+func (m *ManagerResult) EndManager(name string, status int, message string) {
+	m.end = time.Now()
+}
+
+func (m *ManagerResult) resetManagerStatistics() {
+	m.Init(m.name)
+}
+
+func (m *ManagerResult) AddSuiteResult(result suiteResult) {
+	if len(m.finishedSuites) >= cap(m.finishedSuites) {
+		//fmt.Printf("len=%d   cap=%d\n", len(m.finishedSuites), cap(m.finishedSuites))
+		newSlice := make([]suiteResult, len(m.finishedSuites), len(m.finishedSuites)+10)
+		copy(newSlice, m.finishedSuites)
+		m.finishedSuites = newSlice
+	}
+	//fmt.Printf("ManagerResult::AddSuiteResult::\n")
+	m.finishedSuites = append(m.finishedSuites, result)
+
+}
+
+func (m *ManagerResult) EndTest(suiteName string, result testResult) {
+	suite := m.activeSuites[suiteName]
+	suite.EndTest(result.name, result.Status, result.StatusMessage)
+	m.activeSuites[suiteName] = suite
+}
+
+func (m *ManagerResult) StartTest(suiteName string, name string) {
+	suite := m.activeSuites[suiteName]
+	suite.StartTest(name)
+	m.activeSuites[suiteName] = suite
+}
+
+func (m *ManagerResult) testStarted(suiteName string, name string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.StartTest(suiteName, name)
+}
+
+func (m *ManagerResult) testPassed(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesPassed++
+	m.reportStats.TotalNumberOfTestCasesPassed++
+	m.reportStats.TotalNumberOfTestCases++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testError(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesError++
+	m.reportStats.TotalNumberOfTestCasesError++
+	m.reportStats.TotalNumberOfTestCases++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testFailed(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesFailed++
+	m.reportStats.TotalNumberOfTestCasesFailed++
+	m.reportStats.TotalNumberOfTestCases++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+
+}
+
+func (m *ManagerResult) testNotFound(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesNotFound++
+	m.reportStats.TotalNumberOfTestCases++
+	m.reportStats.TotalNumberOfTestCasesNotFound++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testSkipped(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesSkipped++
+	m.reportStats.TotalNumberOfTestCases++
+	m.reportStats.TotalNumberOfTestCasesSkipped++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testSetupFailed(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesSetUpFailed++
+	m.reportStats.TotalNumberOfTestCases++
+	m.reportStats.TotalNumberOfTestCasesSetUpFailed++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testSetupError(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCases++
+	s.NumberOfTestCasesSetUpFailed++
+	m.reportStats.TotalNumberOfTestCases++
+	m.reportStats.TotalNumberOfTestCasesSetUpFailed++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testTeardownFailed(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCasesTearDownFailed++
+	m.reportStats.TotalNumberOfTestCasesTearDownFailed++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) testTeardownError(suiteName string, result testResult) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := m.activeSuites[suiteName]
+	s.NumberOfTestCasesTearDownError++
+	m.reportStats.TotalNumberOfTestCasesTearDownError++
+	m.activeSuites[suiteName] = s
+	m.EndTest(suiteName, result)
+}
+
+func (m *ManagerResult) suitePassed(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_PASSED, msg)
+	m.reportStats.NumberOfTestSuites++
+	m.reportStats.NumberOfTestSuitesPassed++
+}
+
+func (m *ManagerResult) suiteStarted(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	s := suiteResult{}
+	m.activeSuites[suiteName] = s
+	m.StartSuite(suiteName)
+}
+
+func (m *ManagerResult) suiteFailed(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_FAILED, msg)
+	m.reportStats.NumberOfTestSuites++
+	m.reportStats.NumberOfTestSuitesError++
+}
+
+func (m *ManagerResult) suiteNotFound(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_NOT_FOUND, msg)
+	m.reportStats.NumberOfTestSuites++
+	m.reportStats.NumberOfTestSuitesNotFound++
+}
+
+func (m *ManagerResult) suiteSkipped(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_SKIPPED, msg)
+}
+
+func (m *ManagerResult) suiteSetupFailed(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.reportStats.NumberOfTestSuites++
+	m.reportStats.NumberOfTestSuitesSetUpFailed++
+}
+
+func (m *ManagerResult) suiteSetupError(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.reportStats.NumberOfTestSuites++
+	m.reportStats.NumberOfTestSuitesSetUpError++
+}
+
+func (m *ManagerResult) suiteTeardownFailed(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_TEARDOWN_FAILED, msg)
+	m.reportStats.NumberOfTestSuitesTearDownFailed++
+}
+
+func (m *ManagerResult) suiteTeardownError(suiteName, msg string) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+	m.EndSuite(suiteName, SUITE_TEARDOWN_ERROR, msg)
+	m.reportStats.NumberOfTestSuitesTearDownError++
+}
+
+func (m *ManagerResult) managerFinished(name string, status int, msg string) {
+	m.EndManager(name, status, msg)
+}
+
+func (m *ManagerResult) managerPassed(name, msg string) {
+	m.managerFinished(name, MANAGER_PASSED, msg)
+}
+
+func (m *ManagerResult) managerFailed(name, msg string) {
+	m.managerFinished(name, MANAGER_FAILED, msg)
+}
+
+func (m *ManagerResult) managerStarted(name string) {
+	m.reportStats.Init()
+	m.Init(name)
+}
+
+func (m *ManagerResult) managerSetUpFailed(name, msg string) {
+	m.managerFinished(name, SUITE_SETUP_FAILED, msg)
+}
+
+func (m *ManagerResult) managerTearDownFailed(name, msg string) {
+	m.managerFinished(name, SUITE_TEARDOWN_FAILED, msg)
+}
+
 type TextReporter struct {
 	name   string
-	log *logger.GoQALog
+	log    *logger.GoQALog
 	parent ITestManager
 	stats  ReporterStatistics
 	report ManagerResult
@@ -336,7 +541,7 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, stats *Re
 		stats.TotalNumberOfTestCasesSetUpError, stats.TotalNumberOfTestCasesNotFound)
 
 	t.log.LogMessage("\n\n")
-	for _, suite := range report.suites {
+	for _, suite := range report.finishedSuites {
 		t.log.LogMessage("\n\n")
 		t.log.LogMessage(SUITE_STATISTICS_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
 			suite.NumberOfTestCasesPassed, suite.NumberOfTestCasesFailed,

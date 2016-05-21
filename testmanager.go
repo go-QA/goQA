@@ -94,10 +94,10 @@ type iTestManager interface {
 }
 
 type TestManager struct {
-	mutex       sync.Mutex
-	sMu         sync.Mutex
-	tcStartMu   sync.Mutex
-	tcFinMu     sync.Mutex
+	mutex sync.Mutex
+	//sMu         sync.Mutex
+	//tcStartMu   sync.Mutex
+	//tcFinMu     sync.Mutex
 	suites      []Suite
 	reportStats ReporterStatistics
 	report      ManagerResult
@@ -160,16 +160,16 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 					//fmt.Printf("DEFERING::RECOVER::TEARDOWN=%d\n", setupStatus)
 					result.StatusMessage = fmt.Sprintf("Error caught During test Teardown::%s", r)
 					result.Status = TC_TEARDOWN_ERROR
-					tm.testTeardownError(suiteName, result)
+					tm.report.testTeardownError(suiteName, result)
 				} else if inRunTest {
 					//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
 					result.StatusMessage = fmt.Sprintf("Error caught During test run%s", r)
-					tm.testError(suiteName, result)
+					tm.report.testError(suiteName, result)
 				} else if inRunSetup {
 					//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
 					result.StatusMessage = fmt.Sprintf("Error caught During test Setup::%s", r)
 					result.Status = TC_SETUP_ERROR
-					tm.testSetupError(suiteName, result)
+					tm.report.testSetupError(suiteName, result)
 				}
 			} else {
 				result.StatusMessage = "Test complete"
@@ -183,7 +183,7 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 	}()
 
 	if suiteName != "" {
-		tm.testStarted(suiteName, tc.Name())
+		tm.report.testStarted(suiteName, tc.Name())
 	}
 
 	inRunSetup = true
@@ -234,7 +234,7 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 		if r := recover(); r != nil {
 			if inSuiteTeardown {
 				//fmt.Printf("DEFERING::RECOVER::TEARDOWN=%d\n", setupStatus)
-				tm.suiteTeardownError(suiteName, fmt.Sprintf("Error caught During Suite Teardown::%s", r))
+				tm.report.suiteTeardownError(suiteName, fmt.Sprintf("Error caught During Suite Teardown::%s", r))
 				chSuiteResults <- SUITE_TEARDOWN_ERROR
 			} else if inSuiteRuntests {
 				// TODO Need to add cancel runtests
@@ -244,30 +244,30 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 				case <-time.After(time.Second * MAX_TESTRUN_WAIT):
 					// timed out waiting for runs
 				}
-				tm.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite Run tests::%s", r))
+				tm.report.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite Run tests::%s", r))
 				chSuiteResults <- SUITE_TEARDOWN_ERROR
 
 			} else if inSuiteSetup {
 				//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
-				tm.suiteSetupError(suiteName, fmt.Sprintf("Error caught During Suite Setup::%s", r))
+				tm.report.suiteSetupError(suiteName, fmt.Sprintf("Error caught During Suite Setup::%s", r))
 				chSuiteResults <- SUITE_TEARDOWN_ERROR
 			} else {
-				tm.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite run::%s", r))
+				tm.report.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite run::%s", r))
 				chSuiteResults <- SUITE_ERROR
 			}
 		}
 	}()
 
-	tm.suiteStarted(suite.Name(), "")
+	tm.report.suiteStarted(suite.Name(), "")
 
 	// Suite Setup
 	inSuiteSetup = true
 	if status, msg, err := suite.Setup(); err == nil {
 		if status == SUITE_SETUP_FAILED {
-			tm.suiteSetupFailed(suite.Name(), msg)
+			tm.report.suiteSetupFailed(suite.Name(), msg)
 		}
 	} else {
-		tm.suiteSetupError(suite.Name(), err.Error())
+		tm.report.suiteSetupError(suite.Name(), err.Error())
 	}
 
 	// Run Tests
@@ -298,14 +298,14 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 	inSuiteTeardown = true
 	if status, msg, err := suite.Teardown(); err == nil {
 		if status == SUITE_TEARDOWN_FAILED {
-			tm.suiteTeardownFailed(suite.Name(), msg)
+			tm.report.suiteTeardownFailed(suite.Name(), msg)
 			chSuiteResults <- SUITE_TEARDOWN_FAILED
 		} else {
-			tm.suitePassed(suite.Name(), "")
+			tm.report.suitePassed(suite.Name(), "")
 			chSuiteResults <- SUITE_PASSED
 		}
 	} else {
-		tm.suiteTeardownError(suite.Name(), err.Error())
+		tm.report.suiteTeardownError(suite.Name(), err.Error())
 		chSuiteResults <- SUITE_TEARDOWN_ERROR
 	}
 }
@@ -319,23 +319,23 @@ func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResul
 
 		switch result.Status {
 		case TC_NOT_FOUND:
-			tm.testNotFound(suiteName, result)
+			tm.report.testNotFound(suiteName, result)
 		case TC_SKIPPED:
-			tm.testSkipped(suiteName, result)
+			tm.report.testSkipped(suiteName, result)
 		case TC_PASSED:
-			tm.testPassed(suiteName, result)
+			tm.report.testPassed(suiteName, result)
 		case TC_FAILED:
-			tm.testFailed(suiteName, result)
+			tm.report.testFailed(suiteName, result)
 		case TC_ERROR:
-			tm.testError(suiteName, result)
+			tm.report.testError(suiteName, result)
 		case TC_SETUP_FAILED:
-			tm.testSetupFailed(suiteName, result)
+			tm.report.testSetupFailed(suiteName, result)
 		case TC_SETUP_ERROR:
-			tm.testSetupError(suiteName, result)
+			tm.report.testSetupError(suiteName, result)
 		case TC_TEARDOWN_FAILED:
-			tm.testTeardownFailed(suiteName, result)
+			tm.report.testTeardownFailed(suiteName, result)
 		case TC_TEARDOWN_ERROR:
-			tm.testSetupError(suiteName, result)
+			tm.report.testSetupError(suiteName, result)
 		}
 
 		tm.mutex.Lock()
@@ -350,7 +350,7 @@ func (tm *TestManager) RunAll() {
 	chSuiteResults := make(chan int)
 	chComplete := make(chan int)
 
-	tm.managerStarted("Test Manager")
+	tm.report.managerStarted("Test Manager")
 	length := len(tm.suites)
 	go tm.endManagerHandler(chSuiteResults, chComplete, length)
 
@@ -367,7 +367,8 @@ func (tm *TestManager) RunAll() {
 		}
 	}
 	_ = <-chComplete
-	tm.managerPassed("Test Manager", "")
+	tm.report.managerPassed("Test Manager", "")
+	tm.managerStatistics("Test Manager", "")
 	tm.log.Sync()
 }
 
@@ -507,209 +508,6 @@ func (tm *TestManager) GetLogger() *logger.GoQALog {
 
 func (tm *TestManager) addGenerator(gen ReportWriter) {
 	tm.generators[gen.Name()] = gen
-}
-
-func (tm *TestManager) testStarted(suiteName string, name string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.StartTest(suiteName, name)
-}
-
-func (tm *TestManager) testPassed(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesPassed++
-	tm.reportStats.TotalNumberOfTestCasesPassed++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testError(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesError++
-	tm.reportStats.TotalNumberOfTestCasesError++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testFailed(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesFailed++
-	tm.reportStats.TotalNumberOfTestCasesFailed++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-
-}
-
-func (tm *TestManager) testNotFound(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesNotFound++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.reportStats.TotalNumberOfTestCasesNotFound++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testSkipped(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesSkipped++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.reportStats.TotalNumberOfTestCasesSkipped++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testSetupFailed(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesSetUpFailed++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.reportStats.TotalNumberOfTestCasesSetUpFailed++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testSetupError(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCases++
-	s.NumberOfTestCasesSetUpFailed++
-	tm.reportStats.TotalNumberOfTestCases++
-	tm.reportStats.TotalNumberOfTestCasesSetUpFailed++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testTeardownFailed(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCasesTearDownFailed++
-	tm.reportStats.TotalNumberOfTestCasesTearDownFailed++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) testTeardownError(suiteName string, result testResult) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := tm.report.tempSuites[suiteName]
-	s.NumberOfTestCasesTearDownError++
-	tm.reportStats.TotalNumberOfTestCasesTearDownError++
-	tm.report.tempSuites[suiteName] = s
-	tm.report.EndTest(suiteName, result)
-}
-
-func (tm *TestManager) suitePassed(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_PASSED, msg)
-	tm.reportStats.NumberOfTestSuites++
-	tm.reportStats.NumberOfTestSuitesPassed++
-}
-
-func (tm *TestManager) suiteStarted(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	s := suiteResult{}
-	tm.report.tempSuites[suiteName] = s
-	tm.report.StartSuite(suiteName)
-}
-
-func (tm *TestManager) suiteFailed(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_FAILED, msg)
-	tm.reportStats.NumberOfTestSuites++
-	tm.reportStats.NumberOfTestSuitesError++
-}
-
-func (tm *TestManager) suiteNotFound(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_NOT_FOUND, msg)
-	tm.reportStats.NumberOfTestSuites++
-	tm.reportStats.NumberOfTestSuitesNotFound++
-}
-
-func (tm *TestManager) suiteSkipped(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_SKIPPED, msg)
-}
-
-func (tm *TestManager) suiteSetupFailed(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.reportStats.NumberOfTestSuites++
-	tm.reportStats.NumberOfTestSuitesSetUpFailed++
-}
-
-func (tm *TestManager) suiteSetupError(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.reportStats.NumberOfTestSuites++
-	tm.reportStats.NumberOfTestSuitesSetUpError++
-}
-
-func (tm *TestManager) suiteTeardownFailed(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_TEARDOWN_FAILED, msg)
-	tm.reportStats.NumberOfTestSuitesTearDownFailed++
-}
-
-func (tm *TestManager) suiteTeardownError(suiteName, msg string) {
-	tm.mutex.Lock()
-	defer tm.mutex.Unlock()
-	tm.report.EndSuite(suiteName, SUITE_TEARDOWN_ERROR, msg)
-	tm.reportStats.NumberOfTestSuitesTearDownError++
-}
-
-func (tm *TestManager) managerFinished(name string, status int, msg string) {
-	tm.report.EndManager(name, status, msg)
-	tm.managerStatistics(name, msg)
-}
-
-func (tm *TestManager) managerPassed(name, msg string) {
-	tm.managerFinished(name, MANAGER_PASSED, msg)
-}
-
-func (tm *TestManager) managerFailed(name, msg string) {
-	tm.managerFinished(name, MANAGER_FAILED, msg)
-}
-
-func (tm *TestManager) managerStarted(name string) {
-	tm.reportStats.Init()
-	tm.report.Init(name)
-}
-
-func (tm *TestManager) managerSetUpFailed(name, msg string) {
-	tm.managerFinished(name, SUITE_SETUP_FAILED, msg)
-}
-
-func (tm *TestManager) managerTearDownFailed(name, msg string) {
-	tm.managerFinished(name, SUITE_TEARDOWN_FAILED, msg)
 }
 
 func (tm *TestManager) managerStatistics(name, msg string) {
