@@ -24,6 +24,11 @@ const (
 
 // --------------------  Default Registery  -----------------------
 
+type TestRegister interface {
+	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (ITestCase, error)
+	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
+}
+
 // struct with 'goQA.TestRegister' to register the test cases with TestManager
 type DefaultRegister struct {
 	Registry map[string]reflect.Type
@@ -51,11 +56,6 @@ func (r *DefaultRegister) GetSuite(suiteName string, suiteClass string, tm *Test
 // --------------------------------------------------------------------
 
 // ---------------------------  Define XML for test plans -------------------
-
-type TestRegister interface {
-	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (ITestCase, error)
-	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
-}
 
 type XMLParam struct {
 	Name    string `xml:"name,attr"`
@@ -387,7 +387,7 @@ func (tm *TestManager) convertToParamType(value, paramType string) interface{} {
 	return convertedVal
 }
 
-func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
+func (tm *TestManager) ParseFromXML(fileName string, registry TestRegister) {
 
 	buf, err := ioutil.ReadFile(fileName) // "ChamberFunctionality.xml"
 	if err != nil {
@@ -417,6 +417,10 @@ func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
 		}
 		tm.AddSuite(suite)
 	}
+}
+
+func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
+	tm.ParseFromXML(fileName, registry)
 	tm.RunAll()
 }
 
