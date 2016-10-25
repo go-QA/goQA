@@ -1,96 +1,90 @@
-2016/04/15 15:45:46.942603 MSG::Running all suitess...
-2016/04/15 15:45:46.942603 MSG::Running  Suite 'suite1'
+2016/10/24 22:56:24.749332 MSG::Running all suitess...
+2016/10/24 22:56:24.749846 MSG::Running  Suite 'suite1'
 
-2016/04/15 15:45:46.942603 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/04/15 15:45:46.942603 MSG::Running test 'test1'
-2016/04/15 15:45:46.942603 MSG::Running test 'test2'
-2016/04/15 15:45:46.942603 MSG::Running test 'test3'
-2016/04/15 15:45:46.942603 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.942603 PASS::verify val1
-2016/04/15 15:45:46.942603 PASS::verify val2
-2016/04/15 15:45:46.942603 PASS::verify val3
-2016/04/15 15:45:46.942603 MSG::test test3 ran 3 check points with failure rate of 0.000
-2016/04/15 15:45:46.942603 MSG::TestManager->Run::results=3
-2016/04/15 15:45:46.942603 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.943636 PASS::verify val1
-2016/04/15 15:45:46.943636 PASS::verify val2
-2016/04/15 15:45:46.943636 PASS::verify val3
-2016/04/15 15:45:46.943636 MSG::test test1 ran 3 check points with failure rate of 0.000
-2016/04/15 15:45:46.943636 MSG::TestManager->Run::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.943636 PASS::verify val1
-2016/04/15 15:45:46.943636 PASS::verify val2
-2016/04/15 15:45:46.943636 PASS::verify val3
-2016/04/15 15:45:46.943636 MSG::test test2 ran 3 check points with failure rate of 0.000
-2016/04/15 15:45:46.943636 MSG::TestManager->Run::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/04/15 15:45:46.943636 MSG::Running  Suite 'suite2'
+2016/10/24 22:56:24.749846 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/10/24 22:56:24.749846 MSG::Running test 'test1'
+2016/10/24 22:56:24.749846 MSG::Running test 'test2'
+2016/10/24 22:56:24.749846 MSG::Running test 'test3'
+2016/10/24 22:56:24.749846 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.749846 PASS::verify val1
+2016/10/24 22:56:24.749846 PASS::verify val2
+2016/10/24 22:56:24.749846 PASS::verify val3
+2016/10/24 22:56:24.749846 MSG::test test3 ran 3 check points with failure rate of 0.000
+2016/10/24 22:56:24.749846 MSG::TestManager->Run::results=3
+2016/10/24 22:56:24.749846 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.749846 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.749846 PASS::verify val1
+2016/10/24 22:56:24.749846 PASS::verify val2
+2016/10/24 22:56:24.749846 PASS::verify val3
+2016/10/24 22:56:24.749846 MSG::test test1 ran 3 check points with failure rate of 0.000
+2016/10/24 22:56:24.749846 MSG::TestManager->Run::results=3
+2016/10/24 22:56:24.750346 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.750346 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.750346 PASS::verify val1
+2016/10/24 22:56:24.750346 PASS::verify val2
+2016/10/24 22:56:24.750346 PASS::verify val3
+2016/10/24 22:56:24.750346 MSG::test test2 ran 3 check points with failure rate of 0.000
+2016/10/24 22:56:24.750346 MSG::TestManager->Run::results=3
+2016/10/24 22:56:24.750346 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.750346 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/10/24 22:56:24.750346 MSG::Running  Suite 'suite2'
 
-2016/04/15 15:45:46.943636 MSG::SUITE(suite2) SETUP::Status = 0::Message=
-2016/04/15 15:45:46.943636 MSG::Running test 'test1'
-2016/04/15 15:45:46.943636 MSG::Running test 'test2'
-2016/04/15 15:45:46.943636 MSG::Running test 'test3'
-2016/04/15 15:45:46.943636 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.943636 FAIL::Expected 1111.1111 but got 2222.222200 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 5550 but got 6660 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 'hello there test3' but got 'hello there suite2_test3' instead
-2016/04/15 15:45:46.943636 MSG::test test3 ran 3 check points with failure rate of 100.000
-2016/04/15 15:45:46.943636 MSG::TestManager->Run::results=4
-2016/04/15 15:45:46.943636 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.943636 FAIL::Expected 11.11 but got 22.220000 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 55 but got 66 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 'hello there test1' but got 'hello there suite2_test1' instead
-2016/04/15 15:45:46.943636 MSG::test test1 ran 3 check points with failure rate of 100.000
-2016/04/15 15:45:46.943636 MSG::TestManager->Run::results=4
-2016/04/15 15:45:46.943636 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::TestManager->setup::results=3
-2016/04/15 15:45:46.943636 FAIL::Expected 111.111 but got 222.222000 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 550 but got 660 instead
-2016/04/15 15:45:46.943636 FAIL::Expected 'hello there test2' but got 'hello there suite2_test2' instead
-2016/04/15 15:45:46.943636 MSG::test test2 ran 3 check points with failure rate of 100.000
-2016/04/15 15:45:46.943636 MSG::TestManager->Run::results=4
-2016/04/15 15:45:46.943636 MSG::TestManager->Teardown::results=3
-2016/04/15 15:45:46.943636 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
-2016/04/15 15:45:46.943636 MSG::
-
-
-2016/04/15 15:45:46.943636 MSG::TOTAL STATISTICS     Test Manager (0.00 sec)
-Suites: Total 0, Passed 0, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-Tests: Total 0, Passed 0, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::SUITE(suite2) SETUP::Status = 0::Message=
+2016/10/24 22:56:24.750346 MSG::Running test 'test1'
+2016/10/24 22:56:24.750346 MSG::Running test 'test2'
+2016/10/24 22:56:24.750346 MSG::Running test 'test3'
+2016/10/24 22:56:24.750346 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.750346 FAIL::Expected 1111.1111 but got 2222.222200 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 5550 but got 6660 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 'hello there test3' but got 'hello there suite2_test3' instead
+2016/10/24 22:56:24.750346 MSG::test test3 ran 3 check points with failure rate of 100.000
+2016/10/24 22:56:24.750346 MSG::TestManager->Run::results=4
+2016/10/24 22:56:24.750346 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.750346 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.750346 FAIL::Expected 11.11 but got 22.220000 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 55 but got 66 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 'hello there test1' but got 'hello there suite2_test1' instead
+2016/10/24 22:56:24.750346 MSG::test test1 ran 3 check points with failure rate of 100.000
+2016/10/24 22:56:24.750346 MSG::TestManager->Run::results=4
+2016/10/24 22:56:24.750346 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.750346 MSG::TestManager->setup::results=3
+2016/10/24 22:56:24.750346 FAIL::Expected 111.111 but got 222.222000 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 550 but got 660 instead
+2016/10/24 22:56:24.750346 FAIL::Expected 'hello there test2' but got 'hello there suite2_test2' instead
+2016/10/24 22:56:24.750346 MSG::test test2 ran 3 check points with failure rate of 100.000
+2016/10/24 22:56:24.750346 MSG::TestManager->Run::results=4
+2016/10/24 22:56:24.750346 MSG::TestManager->Teardown::results=3
+2016/10/24 22:56:24.750346 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
+2016/10/24 22:56:24.750346 MSG::
 
 
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::TOTAL STATISTICS     Test Manager (0.00 sec)
+Suites: Total 2, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+Tests: Total 6, Passed 3, Failed 3, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+2016/10/24 22:56:24.750346 MSG::
 
 
-2016/04/15 15:45:46.943636 MSG::SUITE STATISTICS     suite1 (0.00 sec)
+2016/10/24 22:56:24.750346 MSG::
+
+
+2016/10/24 22:56:24.750346 MSG::SUITE STATISTICS     suite1 (0.00 sec)
 Tests: Total 3, Passed 3, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::
 
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::
 
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test3 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test3 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test1 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test1 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test2 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 PASS::TEST PASSED          test2 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 PASS::TEST PASSED          test3 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 PASS::TEST PASSED          test1 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 MSG::
 
 
-2016/04/15 15:45:46.943636 MSG::SUITE STATISTICS     suite2 (0.00 sec)
+2016/10/24 22:56:24.750346 MSG::SUITE STATISTICS     suite2 (0.00 sec)
 Tests: Total 3, Passed 0, Failed 3, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::
 
-2016/04/15 15:45:46.943636 MSG::
+2016/10/24 22:56:24.750346 MSG::
 
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test3 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test3 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test2 (0.00 sec) Test complete
-2016/04/15 15:45:46.943636 FAIL::TEST FAILED          test2 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 FAIL::TEST FAILED          test3 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
+2016/10/24 22:56:24.750346 FAIL::TEST FAILED          test2 (0.00 sec) Test complete

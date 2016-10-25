@@ -14,27 +14,33 @@ import (
 	"github.com/go-QA/logger"
 )
 
+// Erro codes
 const (
 	_ = iota
-	ER_NONE
-	ER_NOT_INITIALIZED
-	ER_WRONG_DATA
+	ErNone
+	ErNotInitialized
+	ErWrongData
 )
+
+// Results returned codes
 const (
 	_ = iota
-	RESULT_PASS
-	RESULT_FAIL
-	RESULT_WARNNG
-	RESULT_ERROR
+	ResultPass
+	ResultFail
+	ResultWarning
+	ResultError
 )
 
+// Concurrency levels for tests and suites
 const (
-	SUITE_ALL    = -1
-	SUITE_SERIAL = 0
-	TC_ALL       = -1
-	TC_SERIAL    = 0
+	SuiteAll    = -1
+	SuiteSerial = 0
+	TcAll       = -1
+	TcSerial    = 0
 )
 
+// TestError is object returned from test errors with extra
+// information about test status and parameters used.
 type TestError struct {
 	stack   [4096]byte
 	message string
@@ -179,7 +185,6 @@ func (p *Parameters) GetParamComment(name string) (interface{}, bool) {
 	}
 }
 
-
 // the CreateParameters returns new empty Parameters object
 func CreateParametersObject() Parameters {
 	return Parameters{}
@@ -199,7 +204,7 @@ type ITestManager iTestManager
 type TestCase struct {
 	name   string
 	parent iTestManager
-	log *logger.GoQALog
+	log    *logger.GoQALog
 	//logChannel chan []byte
 	params                                 Parameters
 	failureThreshold                       int // percentage of check points that can fail for test case to passed
@@ -225,7 +230,7 @@ func (tc *TestCase) Init(name string, parent ITestManager, params Parameters) IT
 }
 
 func (tc *TestCase) Setup() (int, error) {
-	return TC_PASSED, nil
+	return TcPassed, nil
 }
 
 func (tc *TestCase) Run() (int, error) {
@@ -233,7 +238,7 @@ func (tc *TestCase) Run() (int, error) {
 }
 
 func (tc *TestCase) Teardown() (int, error) {
-	return TC_PASSED, nil
+	return TcPassed, nil
 }
 
 func (tc *TestCase) Test(value int, mes string) (int, error) {
@@ -318,15 +323,16 @@ func (tc *TestCase) ReturnFromRun() (int, error) {
 	}
 
 	tc.LogMessage("test %s ran %d check points with failure rate of %.3f", tc.Name(), totalTC, calcFailThreshold)
-	if tc.Critical.Triggered() == true {
+
+	if tc.Critical.Triggered() {
 		tc.LogError("ERROR:: Found Critical error during run!")
-		return TC_FAILED, nil
+		return TcCriticalError, nil
 	}
 
 	if float64(tc.failureThreshold) >= calcFailThreshold {
-		return TC_PASSED, nil
+		return TcPassed, nil
 	}
-	return TC_FAILED, nil
+	return TcFailed, nil
 }
 
 func (tc *TestCase) RunTest(test iTestCase) {

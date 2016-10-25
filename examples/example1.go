@@ -40,7 +40,7 @@ func (tc *Test1) Init(name string, parent goQA.ITestManager, params goQA.Paramet
 //  it will use that value for data; else it will use default value 25
 func (tc *Test1) Setup() (int, error) {
 	tc.data = tc.InitParam("val", 25).(int)
-	return goQA.TC_PASSED, nil
+	return goQA.TcPassed, nil
 }
 
 func (tc *Test1) Run() (int, error) {
@@ -73,7 +73,7 @@ func (tc *Test1) Run() (int, error) {
 }
 
 func (tc *Test1) Teardown() (int, error) {
-	return goQA.TC_PASSED, nil
+	return goQA.TcPassed, nil
 }
 
 // Test2 will only override the Run()
@@ -91,16 +91,16 @@ func (tc *Test2) Run() (int, error) {
 	return tc.ReturnFromRun()
 }
 
-// new struct to create Suite Contains DefaultSuite struct
+// MySuite Contains DefaultSuite struct
 type MySuite struct {
 	goQA.DefaultSuite
 }
 
-// Define our own Setup method
+// Setup method for suite
 func (mc *MySuite) Setup() (status int, msg string, err error) {
 	// Suite setup
 	mc.LogMessage("SUITE(%s) Override Setup for no raisin", mc.Name())
-	return goQA.SUITE_OK, "My Special Message", nil
+	return goQA.SuiteOk, "My Special Message", nil
 }
 
 func main() {
@@ -123,11 +123,11 @@ func main() {
 
 	// create the test manager object. Default logger is stdout
 	tm := goQA.CreateTestManager(os.Stdout, &tr,
-		goQA.SUITE_SERIAL, // Concurency for suites:
+		goQA.SuiteSerial, // Concurency for suites:
 		//   SUITE_SERIAL    run one suite at a time
 		//   SUITE_ALL       lunch all suites at same time
 		//   1...n           run max of n number of suites at one time
-		goQA.TC_ALL) // Concurrency for test cases per suite
+		goQA.TcAll) // Concurrency for test cases per suite
 	//   TC_SERIAL        run one test case at a time
 	//   TC_ALL           launch all suites at same time
 	//   1...n            run max of n number of tests at a time

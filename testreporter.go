@@ -10,9 +10,10 @@ import (
 	//"log"
 	//"os"
 	//"io"
-	"github.com/go-QA/logger"
 	"sync"
 	"time"
+
+	"github.com/go-QA/logger"
 )
 
 const (
@@ -22,69 +23,75 @@ const (
 type ReportWriter interface {
 	Name() string
 	Init(parent ITestManager)
-	PerformManagerStatistics(report *ManagerResult, stats *ReporterStatistics, name, msg string, complete chan int)
+	PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int)
 }
 
+// Status codes returned for Test Cases
 const (
 	_ = iota
-	TC_NOT_FOUND
-	TC_SKIPPED
-	TC_PASSED
-	TC_FAILED
-	TC_ERROR
-	TC_SETUP_FAILED
-	TC_SETUP_ERROR
-	TC_TEARDOWN_FAILED
-	TC_TEARDOWN_ERROR
+	TcNotFound
+	TcSkipped
+	TcPassed
+	TcFailed
+	TcError
+	TcCriticalError
+	TcSetupFailed
+	TcSetupError
+	TcTeardownFailed
+	TcTeardownError
 )
 
+// Status codes retuned for suites
 const (
 	_ = iota
-	SUITE_OK
-	SUITE_NOT_FOUND
-	SUITE_SKIPPED
-	SUITE_PASSED
-	SUITE_FAILED
-	SUITE_ERROR
-	SUITE_SETUP_FAILED
-	SUITE_SETUP_ERROR
-	SUITE_TEARDOWN_FAILED
-	SUITE_TEARDOWN_ERROR
+	SuiteOk
+	SuiteNotFound
+	SuiteSkipped
+	SuitePassed
+	SuiteFailed
+	SuiteError
+	SuiteCriticalError
+	SuiteSetupFailed
+	SuiteSetupError
+	SuiteTeardownFailed
+	SuiteTeardownError
 )
 
+// Status codes returned for manager
 const (
 	_ = iota
-	MANAGER_PASSED
-	MANAGER_FAILED
-	MANAGER_SETUP_FAILED
-	MANAGER_SETUP_ERROR
-	MANAGER_TEARDOWN_FAILED
-	MANAGER_TEARDOWN_ERROR
+	ManagerPassed
+	ManagerFailed
+	ManagerSetupFailed
+	ManagerSetupError
+	ManagerTeardownFailed
+	ManagerTeardownError
 )
 
+// Text Formating for TextReporter
 const (
-	TEST_PASSED_REPORT            = "TEST PASSED          %s (%.2f sec) %s"
-	TEST_FAILED_REPORT            = "TEST FAILED          %s (%.2f sec) %s"
-	TEST_ERROR_REPORT             = "TEST ERROR           %s (%.2f sec) %s"
-	TEST_SETUP_FAILED_REPORT      = "TEST SETUP FAILED    %s %s"
-	TEST_SETUP_ERROR_REPORT       = "TEST SETUP ERROR     %s %s"
-	TEST_TEARDOWN_ERROR_REPORT    = "TEST TEARDOWN ERROR  %s %s"
-	TEST_NOT_FOUND_REPORT         = "TEST NOT FOUND       %s"
-	TEST_SKIPPED_REPORT           = "TEST SKIPPED         %s"
-	SUITE_STARTED_REPORT          = "SUITE STARTED        %s"
-	SUITE_PASSED_REPORT           = "SUITE PASSED         %s (%.2f sec)"
-	SUITE_FAILED_REPORT           = "SUITE FAILED         %s (%.2f sec) %s"
-	SUITE_ERROR_REPORT            = "SUITE ERROR          %s (%.2f sec) %s"
-	SUITE_SETUP_FAILED_REPORT     = "SUITE SETUP FAILED   %s %s"
-	SUITE_SETUP_ERROR_REPORT      = "SUITE SETUP ERROR    %s %s"
-	SUITE_TEARDOWN_ERROR_REPORT   = "SUITE TEARDOWN ERROR %s %s"
-	SUITE_NOT_FOUND_REPORT        = "SUITE NOT FOUND      %s"
-	MANAGER_STARTED_REPORT        = "MNGR STARTED         %s"
-	MANAGER_SETUP_FAILED_REPORT   = "MNGR SETUP FAILED    %s %s"
-	MANAGER_SETUP_ERROR_REPORT    = "MNGR SETUP ERROR     %s %s"
-	MANAGER_TEARDOWN_ERROR_REPORT = "MNGR TEARDOWN ERROR  %s %s"
-	SUITE_STATISTICS_REPORT       = "SUITE STATISTICS     %s (%.2f sec)\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
-	MANAGER_STATISTICS_REPORT     = "TOTAL STATISTICS     %s (%.2f sec)\nSuites: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
+	TestPassedReport           = "TEST PASSED          %s (%.2f sec) %s"
+	TestFailedReport           = "TEST FAILED          %s (%.2f sec) %s"
+	TestErrorReport            = "TEST ERROR           %s (%.2f sec) %s"
+	TestSetupFailedReport      = "TEST SETUP FAILED    %s %s"
+	TestSetupErrorReport       = "TEST SETUP ERROR     %s %s"
+	TestTeardownErrorReport    = "TEST TEARDOWN ERROR  %s %s"
+	TestNotFondReport          = "TEST NOT FOUND       %s"
+	TestSkippedReport          = "TEST SKIPPED         %s"
+	SuiteStartedReport         = "SUITE STARTED        %s"
+	SuitePassedReport          = "SUITE PASSED         %s (%.2f sec)"
+	SuiteFailedReport          = "SUITE FAILED         %s (%.2f sec) %s"
+	SuiteErrorReport           = "SUITE ERROR          %s (%.2f sec) %s"
+	SuiteSetupFailedReport     = "SUITE SETUP FAILED   %s %s"
+	SuiteSetupErrorReport      = "SUITE SETUP ERROR    %s %s"
+	SuiteTeardownErrorReport   = "SUITE TEARDOWN ERROR %s %s"
+	SuiteNotFoundReport        = "SUITE NOT FOUND      %s"
+	ManagerStartedReport       = "MNGR STARTED         %s"
+	ManagerSetupFailedReport   = "MNGR SETUP FAILED    %s %s"
+	ManagerSetupErrorReport    = "MNGR SETUP ERROR     %s %s"
+	ManagerTeardownErrorReport = "MNGR TEARDOWN ERROR  %s %s"
+	SuiteStatisticsReport      = "SUITE STATISTICS     %s (%.2f sec)\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
+	ManagerStatisticsReport    = "TOTAL STATISTICS     %s (%.2f sec)\nSuites: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
 )
 
 type ReporterStatistics struct {
@@ -416,9 +423,9 @@ func (m *ManagerResult) testTeardownError(suiteName string, result testResult) {
 func (m *ManagerResult) suitePassed(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_PASSED, msg)
 	m.reportStats.NumberOfTestSuites++
 	m.reportStats.NumberOfTestSuitesPassed++
+	m.EndSuite(suiteName, SuitePassed, msg)
 }
 
 func (m *ManagerResult) suiteStarted(suiteName, msg string) {
@@ -432,23 +439,24 @@ func (m *ManagerResult) suiteStarted(suiteName, msg string) {
 func (m *ManagerResult) suiteFailed(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_FAILED, msg)
 	m.reportStats.NumberOfTestSuites++
 	m.reportStats.NumberOfTestSuitesError++
+	m.EndSuite(suiteName, SuiteFailed, msg)
 }
 
 func (m *ManagerResult) suiteNotFound(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_NOT_FOUND, msg)
 	m.reportStats.NumberOfTestSuites++
 	m.reportStats.NumberOfTestSuitesNotFound++
+	m.EndSuite(suiteName, SuiteNotFound, msg)
 }
 
 func (m *ManagerResult) suiteSkipped(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_SKIPPED, msg)
+	m.EndSuite(suiteName, SuiteSkipped, msg)
+	m.EndSuite(suiteName, SuiteSkipped, msg)
 }
 
 func (m *ManagerResult) suiteSetupFailed(suiteName, msg string) {
@@ -468,14 +476,14 @@ func (m *ManagerResult) suiteSetupError(suiteName, msg string) {
 func (m *ManagerResult) suiteTeardownFailed(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_TEARDOWN_FAILED, msg)
+	m.EndSuite(suiteName, SuiteTeardownFailed, msg)
 	m.reportStats.NumberOfTestSuitesTearDownFailed++
 }
 
 func (m *ManagerResult) suiteTeardownError(suiteName, msg string) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
-	m.EndSuite(suiteName, SUITE_TEARDOWN_ERROR, msg)
+	m.EndSuite(suiteName, SuiteTeardownError, msg)
 	m.reportStats.NumberOfTestSuitesTearDownError++
 }
 
@@ -484,11 +492,11 @@ func (m *ManagerResult) managerFinished(name string, status int, msg string) {
 }
 
 func (m *ManagerResult) managerPassed(name, msg string) {
-	m.managerFinished(name, MANAGER_PASSED, msg)
+	m.managerFinished(name, ManagerPassed, msg)
 }
 
 func (m *ManagerResult) managerFailed(name, msg string) {
-	m.managerFinished(name, MANAGER_FAILED, msg)
+	m.managerFinished(name, ManagerFailed, msg)
 }
 
 func (m *ManagerResult) managerStarted(name string) {
@@ -497,11 +505,11 @@ func (m *ManagerResult) managerStarted(name string) {
 }
 
 func (m *ManagerResult) managerSetUpFailed(name, msg string) {
-	m.managerFinished(name, SUITE_SETUP_FAILED, msg)
+	m.managerFinished(name, SuiteSetupFailed, msg)
 }
 
 func (m *ManagerResult) managerTearDownFailed(name, msg string) {
-	m.managerFinished(name, SUITE_TEARDOWN_FAILED, msg)
+	m.managerFinished(name, SuiteTeardownFailed, msg)
 }
 
 type TextReporter struct {
@@ -527,59 +535,59 @@ func (t *TextReporter) Init(parent ITestManager) {
 
 func (t *TextReporter) GetSuiteResult() int {
 	// TODO calc pass or fail for suite
-	return SUITE_PASSED
+	return SuitePassed
 }
 
-func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, stats *ReporterStatistics, name, msg string, complete chan int) {
+func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int) {
 	t.log.LogMessage("\n\n")
-	t.log.LogMessage(MANAGER_STATISTICS_REPORT, name, report.end.Sub(report.start).Seconds(), stats.NumberOfTestSuites,
-		stats.NumberOfTestSuitesPassed, stats.NumberOfTestSuitesFailed, stats.NumberOfTestSuitesError,
-		stats.NumberOfTestSuitesSetUpFailed, stats.NumberOfTestSuitesSetUpError,
-		stats.NumberOfTestSuitesNotFound,
-		stats.TotalNumberOfTestCases, stats.TotalNumberOfTestCasesPassed, stats.TotalNumberOfTestCasesFailed,
-		stats.TotalNumberOfTestCasesError, stats.TotalNumberOfTestCasesSetUpFailed,
-		stats.TotalNumberOfTestCasesSetUpError, stats.TotalNumberOfTestCasesNotFound)
+	t.log.LogMessage(ManagerStatisticsReport, name, report.end.Sub(report.start).Seconds(), report.reportStats.NumberOfTestSuites,
+		report.reportStats.NumberOfTestSuitesPassed, report.reportStats.NumberOfTestSuitesFailed, report.reportStats.NumberOfTestSuitesError,
+		report.reportStats.NumberOfTestSuitesSetUpFailed, report.reportStats.NumberOfTestSuitesSetUpError,
+		report.reportStats.NumberOfTestSuitesNotFound,
+		report.reportStats.TotalNumberOfTestCases, report.reportStats.TotalNumberOfTestCasesPassed, report.reportStats.TotalNumberOfTestCasesFailed,
+		report.reportStats.TotalNumberOfTestCasesError, report.reportStats.TotalNumberOfTestCasesSetUpFailed,
+		report.reportStats.TotalNumberOfTestCasesSetUpError, report.reportStats.TotalNumberOfTestCasesNotFound)
 
 	t.log.LogMessage("\n\n")
 	for _, suite := range report.finishedSuites {
 		t.log.LogMessage("\n\n")
-		t.log.LogMessage(SUITE_STATISTICS_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
+		t.log.LogMessage(SuiteStatisticsReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
 			suite.NumberOfTestCasesPassed, suite.NumberOfTestCasesFailed,
 			suite.NumberOfTestCasesError, suite.NumberOfTestCasesSetUpFailed,
 			suite.NumberOfTestCasesSetUpError, suite.NumberOfTestCasesNotFound)
 
 		t.log.LogMessage("\n")
 		switch suite.Status {
-		case SUITE_OK:
+		case SuiteOk:
 			suiteResult := t.GetSuiteResult()
-			if suiteResult == SUITE_PASSED {
-				t.log.LogPass(SUITE_PASSED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds())
+			if suiteResult == SuitePassed {
+				t.log.LogPass(SuitePassedReport, suite.name, suite.end.Sub(suite.start).Seconds())
 			} else {
-				t.log.LogFail(SUITE_FAILED_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+				t.log.LogFail(SuiteFailedReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
 			}
-		case SUITE_ERROR:
-			t.log.LogMessage(SUITE_ERROR_REPORT, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
-		case SUITE_SETUP_ERROR:
-			t.log.LogMessage(SUITE_SETUP_ERROR_REPORT, suite.name, suite.StatusMessage)
+		case SuiteError:
+			t.log.LogMessage(SuiteErrorReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+		case SuiteSetupError:
+			t.log.LogMessage(SuiteSetupErrorReport, suite.name, suite.StatusMessage)
 		}
 
 		t.log.LogMessage("\n")
 		for _, test := range suite.tests {
 			switch test.Status {
-			case TC_PASSED:
-				t.log.LogPass(TEST_PASSED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
-			case TC_FAILED:
-				t.log.LogFail(TEST_FAILED_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
-			case TC_ERROR:
-				t.log.LogError(TEST_ERROR_REPORT, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
-			case TC_SETUP_FAILED:
-				t.log.LogMessage(TEST_SETUP_FAILED_REPORT, test.name, test.StatusMessage)
-			case TC_SETUP_ERROR:
-				t.log.LogMessage(TEST_SETUP_ERROR_REPORT, test.name, test.StatusMessage)
-			case TC_TEARDOWN_FAILED, TC_TEARDOWN_ERROR:
-				t.log.LogMessage(TEST_TEARDOWN_ERROR_REPORT, test.name, test.StatusMessage)
-			case TC_SKIPPED:
-				t.log.LogMessage(TEST_SKIPPED_REPORT, test.name)
+			case TcPassed:
+				t.log.LogPass(TestPassedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+			case TcFailed:
+				t.log.LogFail(TestFailedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+			case TcError:
+				t.log.LogError(TestErrorReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+			case TcSetupFailed:
+				t.log.LogMessage(TestSetupFailedReport, test.name, test.StatusMessage)
+			case TcSetupError:
+				t.log.LogMessage(TestSetupErrorReport, test.name, test.StatusMessage)
+			case TcTeardownFailed, TcTeardownError:
+				t.log.LogMessage(TestTeardownErrorReport, test.name, test.StatusMessage)
+			case TcSkipped:
+				t.log.LogMessage(TestSkippedReport, test.name)
 
 			}
 		}

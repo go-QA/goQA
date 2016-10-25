@@ -42,14 +42,14 @@ func (s *DefaultSuite) Setup() (status int, msg string, err error) {
 	fMsg := fmt.Sprintf("SUITE(%s) SETUP::Status = %d::Message=%s", s.Name(), status, msg)
 	s.LogMessage(fMsg)
 	//g.logger.Printf("PASS::%s\n", passMsg)
-	return SUITE_OK, "", nil
+	return SuiteOk, "", nil
 }
 
 func (s *DefaultSuite) Teardown() (status int, msg string, err error) {
 	// Suite teardown
 	fMsg := fmt.Sprintf("SUITE(%s) TEARDOWN::Status = %d::Message=%s", s.Name(), status, msg)
 	s.LogMessage(fMsg)
-	return SUITE_OK, "", nil
+	return SuiteOk, "", nil
 }
 
 func (s *DefaultSuite) AddTest(test iTestCase) {

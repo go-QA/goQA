@@ -10,16 +10,18 @@ import (
 	//"error"
 	//"os"
 	"encoding/xml"
-	"github.com/go-QA/logger"
 	"io"
 	"io/ioutil"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/go-QA/logger"
 )
 
+// control test timing
 const (
-	MAX_TESTRUN_WAIT = 30
+	MaxTestrunWaitime = 30
 )
 
 // --------------------  Default Registery  -----------------------
@@ -154,12 +156,12 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 		result.name = tc.Name()
 		result.end = time.Now()
 		if r := recover(); r != nil {
-			result.Status = TC_ERROR
+			result.Status = TcError
 			if suiteName != "" {
 				if inRunTeardown {
 					//fmt.Printf("DEFERING::RECOVER::TEARDOWN=%d\n", setupStatus)
 					result.StatusMessage = fmt.Sprintf("Error caught During test Teardown::%s", r)
-					result.Status = TC_TEARDOWN_ERROR
+					result.Status = TcTeardownError
 					tm.report.testTeardownError(suiteName, result)
 				} else if inRunTest {
 					//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
@@ -168,7 +170,7 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 				} else if inRunSetup {
 					//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
 					result.StatusMessage = fmt.Sprintf("Error caught During test Setup::%s", r)
-					result.Status = TC_SETUP_ERROR
+					result.Status = TcSetupError
 					tm.report.testSetupError(suiteName, result)
 				}
 			} else {
@@ -235,25 +237,25 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 			if inSuiteTeardown {
 				//fmt.Printf("DEFERING::RECOVER::TEARDOWN=%d\n", setupStatus)
 				tm.report.suiteTeardownError(suiteName, fmt.Sprintf("Error caught During Suite Teardown::%s", r))
-				chSuiteResults <- SUITE_TEARDOWN_ERROR
+				chSuiteResults <- SuiteTeardownError
 			} else if inSuiteRuntests {
 				// TODO Need to add cancel runtests
 				select {
 				case _ = <-chComplete:
 					// all ok now
-				case <-time.After(time.Second * MAX_TESTRUN_WAIT):
+				case <-time.After(time.Second * MaxTestrunWaitime):
 					// timed out waiting for runs
 				}
 				tm.report.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite Run tests::%s", r))
-				chSuiteResults <- SUITE_TEARDOWN_ERROR
+				chSuiteResults <- SuiteTeardownError
 
 			} else if inSuiteSetup {
 				//fmt.Printf("DEFERING::RECOVER::SETUP=%d\n", setupStatus)
 				tm.report.suiteSetupError(suiteName, fmt.Sprintf("Error caught During Suite Setup::%s", r))
-				chSuiteResults <- SUITE_TEARDOWN_ERROR
+				chSuiteResults <- SuiteTeardownError
 			} else {
 				tm.report.suiteFailed(suiteName, fmt.Sprintf("Error caught During Suite run::%s", r))
-				chSuiteResults <- SUITE_ERROR
+				chSuiteResults <- SuiteError
 			}
 		}
 	}()
@@ -263,7 +265,7 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 	// Suite Setup
 	inSuiteSetup = true
 	if status, msg, err := suite.Setup(); err == nil {
-		if status == SUITE_SETUP_FAILED {
+		if status == SuiteSetupFailed {
 			tm.report.suiteSetupFailed(suite.Name(), msg)
 		}
 	} else {
@@ -272,7 +274,7 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 
 	// Run Tests
 	inSuiteRuntests = true
-	if tm.testFlags != TC_ALL && tm.testFlags != TC_SERIAL {
+	if tm.testFlags != TcAll && tm.testFlags != TcSerial {
 		tm.tcRunner(suiteName, chReport)
 	} else {
 		count := 0
@@ -282,13 +284,13 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 				//fmt.Println("LAUNCHING LAST TEST")
 			}
 			tm.log.LogMessage("Running test '%s'", tc.Name())
-			if tm.testFlags == TC_ALL {
+			if tm.testFlags == TcAll {
 				go tm.Run(suiteName, tc, chReport)
 			} else {
 				tm.Run(suiteName, tc, chReport)
 			}
 		}
-		if tm.testFlags == TC_ALL {
+		if tm.testFlags == TcAll {
 		}
 	}
 
@@ -297,16 +299,16 @@ func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
 	// Suite Teardown()
 	inSuiteTeardown = true
 	if status, msg, err := suite.Teardown(); err == nil {
-		if status == SUITE_TEARDOWN_FAILED {
+		if status == SuiteTeardownFailed {
 			tm.report.suiteTeardownFailed(suite.Name(), msg)
-			chSuiteResults <- SUITE_TEARDOWN_FAILED
+			chSuiteResults <- SuiteTeardownFailed
 		} else {
 			tm.report.suitePassed(suite.Name(), "")
-			chSuiteResults <- SUITE_PASSED
+			chSuiteResults <- SuitePassed
 		}
 	} else {
 		tm.report.suiteTeardownError(suite.Name(), err.Error())
-		chSuiteResults <- SUITE_TEARDOWN_ERROR
+		chSuiteResults <- SuiteTeardownError
 	}
 }
 
@@ -318,29 +320,29 @@ func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResul
 		result = <-chResult
 
 		switch result.Status {
-		case TC_NOT_FOUND:
+		case TcNotFound:
 			tm.report.testNotFound(suiteName, result)
-		case TC_SKIPPED:
+		case TcSkipped:
 			tm.report.testSkipped(suiteName, result)
-		case TC_PASSED:
+		case TcPassed:
 			tm.report.testPassed(suiteName, result)
-		case TC_FAILED:
+		case TcFailed:
 			tm.report.testFailed(suiteName, result)
-		case TC_ERROR:
+		case TcError:
 			tm.report.testError(suiteName, result)
-		case TC_SETUP_FAILED:
+		case TcSetupFailed:
 			tm.report.testSetupFailed(suiteName, result)
-		case TC_SETUP_ERROR:
+		case TcSetupError:
 			tm.report.testSetupError(suiteName, result)
-		case TC_TEARDOWN_FAILED:
+		case TcTeardownFailed:
 			tm.report.testTeardownFailed(suiteName, result)
-		case TC_TEARDOWN_ERROR:
+		case TcTeardownError:
 			tm.report.testSetupError(suiteName, result)
 		}
 
-		tm.mutex.Lock()
-		tm.report.EndTest(suiteName, result)
-		tm.mutex.Unlock()
+		//tm.mutex.Lock()
+		//tm.report.EndTest(suiteName, result)
+		//tm.mutex.Unlock()
 	}
 
 	chComplete <- 1
@@ -355,13 +357,13 @@ func (tm *TestManager) RunAll() {
 	go tm.endManagerHandler(chSuiteResults, chComplete, length)
 
 	tm.log.LogMessage("Running all suitess...")
-	if tm.suiteFlags != SUITE_ALL && tm.suiteFlags != SUITE_SERIAL {
+	if tm.suiteFlags != SuiteAll && tm.suiteFlags != SuiteSerial {
 		tm.suiteRunner(chSuiteResults)
 	} else {
 		for _, suite := range tm.suites {
-			if tm.suiteFlags == SUITE_ALL {
+			if tm.suiteFlags == SuiteAll {
 				go tm.RunSuite(suite.Name(), chSuiteResults)
-			} else if tm.suiteFlags == SUITE_SERIAL {
+			} else if tm.suiteFlags == SuiteSerial {
 				tm.RunSuite(suite.Name(), chSuiteResults)
 			}
 		}
@@ -521,7 +523,7 @@ func (tm *TestManager) managerStatistics(name, msg string) {
 	index := 0
 	for _, generator := range tm.generators {
 		arComplete[index] = make(chan int)
-		go generator.PerformManagerStatistics(&tm.report, &tm.reportStats, name, msg, arComplete[index])
+		go generator.PerformManagerStatistics(&tm.report, name, msg, arComplete[index])
 		index++
 	}
 	for i := 0; i < genCount; i++ {

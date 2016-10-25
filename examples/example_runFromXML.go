@@ -6,10 +6,11 @@ import (
 	//"log"
 	"os"
 	//"io"
-	"github.com/go-QA/goQA"
-	"github.com/go-QA/logger"
 	"reflect"
 	"time"
+
+	"github.com/go-QA/goQA"
+	"github.com/go-QA/logger"
 	//"net"
 	//"encoding/json"
 )
@@ -84,8 +85,8 @@ func main() {
 
 	// create the test manager object. Default logger is stdout
 	tm := goQA.CreateTestManager(os.Stdout, &tr,
-		goQA.SUITE_SERIAL, // Concurency for suites:
-		goQA.TC_ALL)       // Concurrency for test cases per suite
+		goQA.SuiteSerial, // Concurency for suites:
+		goQA.TcAll)       // Concurrency for test cases per suite
 
 	console, err := os.Create("data/console.log")
 	if err != nil {
