@@ -26,16 +26,29 @@ const (
 
 // --------------------  Default Registery  -----------------------
 
+// TestRegister interface is passed to TestManager in APIs like RunFromXML()
+// Used to provide Manager with Test cases and Suites available to From Test Plans
 type TestRegister interface {
 	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (ITestCase, error)
 	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
 }
 
-// struct with 'goQA.TestRegister' to register the test cases with TestManager
+// DefaultRegister stores TypeOf(<testCase>) in a map:
+//  var registry map[string]reflect.Type
+//
+// Example Of seting up map with two test cases:
+//    var regTests map[string]reflect.Type = map[string]reflect.Type{
+//        "test1": reflect.TypeOf(Test1{}),
+//	      "test2": reflect.TypeOf(Test2{}),
+//	      "test3": reflect.TypeOf(Test3{})}
+//
 type DefaultRegister struct {
 	Registry map[string]reflect.Type
 }
 
+// GetTestCase Creates the TestCase object and calls Init()
+// ITestCase interface is returned
+// error return testError
 func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *TestManager, params Parameters) (ITestCase, error) {
 
 	var test ITestCase
@@ -49,6 +62,9 @@ func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *Tes
 	return nil, Create(&Parameters{}, "invalid test class '"+testName+"'")
 }
 
+// GetSuite Creates DefaultSuite  object and calls Init()
+// Suite interface is returned
+// error return testError
 func (r *DefaultRegister) GetSuite(suiteName string, suiteClass string, tm *TestManager, params Parameters) (Suite, error) {
 	suite := DefaultSuite{}
 	suite.Init(suiteName, tm, params)
@@ -109,6 +125,7 @@ type TestManager struct {
 	testFlags   int
 }
 
+// Init iTestManager interface method to do setup of Test Manager
 func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManager {
 	tm.suites = []Suite{}
 	tm.reportStats = ReporterStatistics{}
@@ -125,6 +142,7 @@ func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManag
 	return tm
 }
 
+// GetSuite returns interface Suite based on suite name or nil if not found
 func (tm *TestManager) GetSuite(name string) Suite {
 	for _, suite := range tm.suites {
 		if suite.Name() == name {
@@ -134,10 +152,13 @@ func (tm *TestManager) GetSuite(name string) Suite {
 	return nil
 }
 
+// AddLogger creates a new log based on parameters and adds to goQA.goQALog list.
+//
 func (tm *TestManager) AddLogger(name string, level uint64, stream io.Writer) {
 	tm.log.Add(name, level, stream)
 }
 
+// run will execute the TestCase and log test results to chReport
 func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testResult) {
 	var (
 		runStatus, setupStatus, teardownStatus int
@@ -389,21 +410,28 @@ func (tm *TestManager) convertToParamType(value, paramType string) interface{} {
 	return convertedVal
 }
 
-func (tm *TestManager) ParseFromXML(fileName string, registry TestRegister) {
-
+// ParseTestPlanFromXML tries to read a test plan from XML fileName
+// and return *XMLTestPlan.
+func (tm *TestManager) ParseTestPlanFromXML(fileName string, testPlan *XMLTestPlan) error {
 	buf, err := ioutil.ReadFile(fileName) // "ChamberFunctionality.xml"
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		testPlan = nil
+		return err
 	}
 
-	var testPlan XMLTestPlan
-	var params *Parameters
-	var test iTestCase
-
 	tm.log.LogDebug(string(buf))
-	xml.Unmarshal(buf, &testPlan)
+	err = xml.Unmarshal(buf, &testPlan)
+	if err != nil {
+		testPlan = nil
+	}
+	return err
+}
 
+func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister) error {
+
+	var test iTestCase
+	var params *Parameters
 	tm.log.LogDebug("%v", testPlan)
 	for _, xmlSuite := range testPlan.Suites {
 		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, Parameters{})
@@ -419,11 +447,25 @@ func (tm *TestManager) ParseFromXML(fileName string, registry TestRegister) {
 		}
 		tm.AddSuite(suite)
 	}
+	return nil
 }
 
-func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) {
-	tm.ParseFromXML(fileName, registry)
+func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) error {
+	var testPlan XMLTestPlan
+	err := tm.ParseTestPlanFromXML(fileName, &testPlan)
+	if err != nil {
+		tm.log.LogError("Unable to parse XML file %s: error=%s", fileName, err.Error())
+		return err
+	}
+
+	err = tm.AddTestPlan(&testPlan, registry)
+	if err != nil {
+		tm.log.LogError("Unable to add test plan::error=%s", err.Error())
+		return err
+	}
 	tm.RunAll()
+
+	return nil
 }
 
 func (tm *TestManager) endManagerHandler(chSuiteResult chan int, chComplete chan int, length int) {
