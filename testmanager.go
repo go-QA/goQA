@@ -71,10 +71,9 @@ func (r *DefaultRegister) GetSuite(suiteName string, suiteClass string, tm *Test
 	return &suite, nil
 }
 
-// --------------------------------------------------------------------
-
 // ---------------------------  Define XML for test plans -------------------
 
+// XMLParam can be TestCase, Suite, or Manager parameter
 type XMLParam struct {
 	Name    string `xml:"name,attr"`
 	Type    string `xml:"type,attr"`
@@ -82,12 +81,15 @@ type XMLParam struct {
 	Comment string `xml:"comment,attr"`
 }
 
+// XMLTestCase defines test case
 type XMLTestCase struct {
 	Name   string     `xml:"name,attr"`
 	Class  string     `xml:"class,attr"`
 	Params []XMLParam `xml:"Param"`
 }
 
+// XMLTestSuite Defines Suite object with list of XMLTestCase and
+// suite params
 type XMLTestSuite struct {
 	Name      string        `xml:"name,attr"`
 	Class     string        `xml:"class,attr"`
@@ -95,6 +97,7 @@ type XMLTestSuite struct {
 	TestCases []XMLTestCase `xml:"TestCase"`
 }
 
+// XMLTestPlan hold XMLSuite list
 type XMLTestPlan struct {
 	XMLName xml.Name       `xml:"TestManager"`
 	Name    string         `xml:"name,attr"`
@@ -103,35 +106,34 @@ type XMLTestPlan struct {
 
 // --------------------------------------------------------------
 
-type iTestManager interface {
-	RunSuite(suite string, chSuiteResults chan int)
+type ITestManager interface {
+	RunSuite(suite string) int
 	Run(suiteName string, tc iTestCase, chReport chan testResult)
 	AddSuite(suite Suite)
 	GetLogger() *logger.GoQALog
 	GetSuite(name string) Suite
 }
 
+// TestManager runs Suites of tests and uses Reporter interface objects to created
+// detailed report(s) for results
 type TestManager struct {
 	mutex sync.Mutex
 	//sMu         sync.Mutex
 	//tcStartMu   sync.Mutex
 	//tcFinMu     sync.Mutex
-	suites      []Suite
-	reportStats ReporterStatistics
-	report      ManagerResult
-	generators  map[string]ReportWriter
-	log         *logger.GoQALog
-	suiteFlags  int
-	testFlags   int
+	suites     []Suite
+	report     ManagerResult
+	generators map[string]ReportWriter
+	log        *logger.GoQALog
+	suiteFlags int
+	testFlags  int
 }
 
 // Init iTestManager interface method to do setup of Test Manager
 func (tm *TestManager) Init(log io.Writer, reportWriter ReportWriter) *TestManager {
 	tm.suites = []Suite{}
-	tm.reportStats = ReporterStatistics{}
 	tm.report = ManagerResult{}
 	tm.generators = make(map[string]ReportWriter)
-	tm.reportStats.Init()
 	tm.report.Init("report1")
 	tm.log = &logger.GoQALog{}
 	tm.log.Init()
@@ -158,7 +160,7 @@ func (tm *TestManager) AddLogger(name string, level uint64, stream io.Writer) {
 	tm.log.Add(name, level, stream)
 }
 
-// run will execute the TestCase and log test results to chReport
+// Run will execute the TestCase and log test results to chReport
 func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testResult) {
 	var (
 		runStatus, setupStatus, teardownStatus int
@@ -230,12 +232,20 @@ func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testRes
 
 }
 
+// RunTest is same as Run() but takes Suite name and TestCase name as arguments
 func (tm *TestManager) RunTest(suiteName string, testName string) {
 	tc := tm.GetSuite(suiteName).GetTestCase(testName)
 	tm.Run(suiteName, tc, nil)
 }
 
-func (tm *TestManager) RunSuite(suiteName string, chSuiteResults chan int) {
+func (tm *TestManager) RunSuite(suiteName string) int {
+	chSuiteResult := make(chan int)
+	go tm.runSuite(suiteName, chSuiteResult)
+	result := <-chSuiteResult
+	return result
+}
+
+func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	var (
 		// runStatus, setupStatus, teardownStatus int
 		//runErr, setupErr, teardownErr          error
@@ -383,9 +393,9 @@ func (tm *TestManager) RunAll() {
 	} else {
 		for _, suite := range tm.suites {
 			if tm.suiteFlags == SuiteAll {
-				go tm.RunSuite(suite.Name(), chSuiteResults)
+				go tm.runSuite(suite.Name(), chSuiteResults)
 			} else if tm.suiteFlags == SuiteSerial {
-				tm.RunSuite(suite.Name(), chSuiteResults)
+				tm.runSuite(suite.Name(), chSuiteResults)
 			}
 		}
 	}
@@ -428,6 +438,9 @@ func (tm *TestManager) ParseTestPlanFromXML(fileName string, testPlan *XMLTestPl
 	return err
 }
 
+// AddTestPlan takes data stored in XMLTestPlan object and adds new suites with tests to Manager
+// Suite objects and Test Cases created from TestRegistry interface object
+// return nil on success or error
 func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister) error {
 
 	var test iTestCase
@@ -450,6 +463,7 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 	return nil
 }
 
+// RunFromXML takes XML runplan file runs the suites with test cases by calling RunAll()
 func (tm *TestManager) RunFromXML(fileName string, registry TestRegister) error {
 	var testPlan XMLTestPlan
 	err := tm.ParseTestPlanFromXML(fileName, &testPlan)
@@ -506,7 +520,7 @@ func (tm *TestManager) suiteRunner(chSuiteResults chan int) {
 }
 
 func (tm *TestManager) launchSuite(name string, guard chan struct{}, done chan int, chSuiteResults chan int) {
-	tm.RunSuite(name, chSuiteResults)
+	tm.runSuite(name, chSuiteResults)
 	<-guard
 	done <- 1
 }

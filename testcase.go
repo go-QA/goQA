@@ -199,11 +199,10 @@ type iTestCase interface {
 }
 
 type ITestCase iTestCase
-type ITestManager iTestManager
 
 type TestCase struct {
 	name   string
-	parent iTestManager
+	parent ITestManager
 	log    *logger.GoQALog
 	//logChannel chan []byte
 	params                                 Parameters
@@ -341,7 +340,7 @@ func (tc *TestCase) RunTest(test iTestCase) {
 	_ = <-chReport
 }
 
-func InitTest(name string, test iTestCase, parent iTestManager, params Parameters) iTestCase {
+func InitTest(name string, test iTestCase, parent ITestManager, params Parameters) iTestCase {
 	tc := test
 	tc.Init(name, parent, params)
 	return tc

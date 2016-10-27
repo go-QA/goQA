@@ -10,7 +10,7 @@ import (
 
 type Suite interface {
 	//Init(name string, parent iTestManager) Suite
-	Init(name string, parent iTestManager, params Parameters)
+	Init(name string, parent ITestManager, params Parameters)
 	Setup() (status int, msg string, err error)
 	Teardown() (status int, msg string, err error)
 	AddTest(test iTestCase)
@@ -24,11 +24,11 @@ type DefaultSuite struct {
 	testCases []iTestCase
 }
 
-func (s *DefaultSuite) GetParent() iTestManager {
+func (s *DefaultSuite) GetParent() ITestManager {
 	return s.TestCase.parent
 }
 
-func (s *DefaultSuite) Init(name string, parent iTestManager, params Parameters) {
+func (s *DefaultSuite) Init(name string, parent ITestManager, params Parameters) {
 	s.TestCase.Init(name, parent, Parameters{})
 	s.testCases = []iTestCase{}
 }
@@ -58,10 +58,8 @@ func (s *DefaultSuite) AddTest(test iTestCase) {
 }
 
 func (s *DefaultSuite) RunSuite() {
-	chSuite := make(chan int)
 	s.GetParent().AddSuite(s)
-	go s.GetParent().RunSuite(s.Name(), chSuite)
-	_ = <-chSuite
+	s.GetParent().RunSuite(s.Name())
 }
 
 func (s *DefaultSuite) GetTestCase(name string) iTestCase {
@@ -78,7 +76,7 @@ func (s *DefaultSuite) GetTestCases() []iTestCase {
 }
 
 // create the default suite object that has basic functionality to run a suite.
-func CreateSuite(name string, parent iTestManager, params Parameters) *DefaultSuite {
+func CreateSuite(name string, parent ITestManager, params Parameters) *DefaultSuite {
 	suite := DefaultSuite{}
 	suite.Init(name, parent, Parameters{})
 	return &suite

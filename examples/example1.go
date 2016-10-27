@@ -172,6 +172,9 @@ func main() {
 	tm.AddSuite(suite1)
 	tm.AddSuite(&suite2)
 
+	tm.RunSuite("suite1")
+	tm.RunSuite("suite2")
+
 	// This will run all suites added to tm using the concurrency level set during creation.
 	tm.RunAll()
 
