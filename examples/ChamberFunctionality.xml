@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<TestManager name="Manager">
+   <TestSuite name="suite1">
+    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+     <TestCase name="test1">
+      <Param name='MaxTime' type='int'>300</Param>
+      <Param name='val1' type='float'>100.00</Param>
+      <Param name='val2' type='int'>550</Param>
+    </TestCase>
+     <TestCase name="test2">
+      <Param name='MaxTime' type='int'>300</Param>
+      <Param name='val1' type='float'>100.00</Param>
+      <Param name='val2' type='int'>550</Param>
+    </TestCase>
+   </TestSuite>
+   <TestSuite name="suite2">
+    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+     <TestCase name="test1">
+      <Param name='MaxTime' type='int'>3000</Param>
+      <Param name='val1' type='float'>1000.00</Param>
+      <Param name='val2' type='int'>5500</Param>
+    </TestCase>
+     <TestCase name="test2">
+      <Param name='MaxTime' type='int'>3000</Param>
+      <Param name='val1' type='float'>1000.00</Param>
+      <Param name='val2' type='int'>5500</Param>
+    </TestCase>
+   </TestSuite>
+</TestManager>

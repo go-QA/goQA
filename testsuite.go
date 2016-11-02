@@ -9,7 +9,6 @@ import (
 )
 
 type Suite interface {
-	//Init(name string, parent iTestManager) Suite
 	Init(name string, parent ITestManager, params Parameters)
 	Setup() (status int, msg string, err error)
 	Teardown() (status int, msg string, err error)
@@ -75,7 +74,7 @@ func (s *DefaultSuite) GetTestCases() []iTestCase {
 	return s.testCases
 }
 
-// create the default suite object that has basic functionality to run a suite.
+// CreateSuite the default suite object that has basic functionality to run a suite.
 func CreateSuite(name string, parent ITestManager, params Parameters) *DefaultSuite {
 	suite := DefaultSuite{}
 	suite.Init(name, parent, Parameters{})
