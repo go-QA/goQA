@@ -1,4 +1,4 @@
-2016/11/03 14:34:53.916121 DEBUG::<?xml version="1.0"?>
+2016/11/03 16:36:52.412478 DEBUG::<?xml version="1.0"?>
 <TestManager name="Manager">
     <Param name='Domain' type='string' value='github.com/go-QA/goQA' comment='Running in Domain'/>
     <Param name='OS' type='string' value='Win64' comment='Operating System'/>
@@ -48,122 +48,122 @@
 
   </TestSuite>
 </TestManager>
-2016/11/03 14:34:53.918121 DEBUG::&{{ TestManager} Manager [{Domain string github.com/go-QA/goQA Running in Domain} {OS string Win64 Operating System}] [{suite1 DefaultSuite [{SuiteMaxTime int 100 Max time for suite to run before timeout expires}] [{test1 test1 [{val1 float 11.11 val1 is float} {val2 int 55 val2 is integer} {val3 string hello there test1 val3 is string}]} {test2 test2 [{val1 float 111.111 val1 is float} {val2 int 550 val2 is integer} {val3 string hello there test2 val3 is string}]} {test3 test3 [{val1 float 1111.1111 val1 is float} {val2 int 5550 val2 is integer} {val3 string hello there test3 val3 is string}]}]} {suite2 DefaultSuite [{SuiteMaxTime int 200 Max time for suite to run before timeout expires}] [{test1 test1 [{val1 float 22.22 val1 is float} {val2 int 66 val2 is integer} {val3 string hello there suite2_test1 val3 is string}]} {test2 test2 [{val1 float 222.222 val1 is float} {val2 int 660 val2 is integer} {val3 string hello there suite2_test2 val3 is string}]} {test3 test3 [{val1 float 2222.2222 val1 is float} {val2 int 6660 val2 is integer} {val3 string hello there suite2_test3 val3 is string}]}]}]}
-2016/11/03 14:34:53.918121 DEBUG::MANAGERPARAM name=Domain, type=string,value= github.com/go-QA/goQA, comment=Running in Domain
-2016/11/03 14:34:53.918121 DEBUG::MANAGERPARAM name=OS, type=string,value= Win64, comment=Operating System
-2016/11/03 14:34:53.918121 DEBUG::SUITEPARAM name=SuiteMaxTime, type=int,value= 100, comment=Max time for suite to run before timeout expires
-2016/11/03 14:34:53.918121 DEBUG::TESTPARAM name=val1, type=float,value= 11.11, comment=val1 is float
-2016/11/03 14:34:53.918121 DEBUG::TESTPARAM name=val2, type=int,value= 55, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there test1, comment=val3 is string
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val1, type=float,value= 111.111, comment=val1 is float
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val2, type=int,value= 550, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there test2, comment=val3 is string
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val1, type=float,value= 1111.1111, comment=val1 is float
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val2, type=int,value= 5550, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there test3, comment=val3 is string
-2016/11/03 14:34:53.919121 DEBUG::SUITEPARAM name=SuiteMaxTime, type=int,value= 200, comment=Max time for suite to run before timeout expires
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val1, type=float,value= 22.22, comment=val1 is float
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val2, type=int,value= 66, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test1, comment=val3 is string
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val1, type=float,value= 222.222, comment=val1 is float
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val2, type=int,value= 660, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test2, comment=val3 is string
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val1, type=float,value= 2222.2222, comment=val1 is float
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val2, type=int,value= 6660, comment=val2 is integer
-2016/11/03 14:34:53.919121 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test3, comment=val3 is string
-2016/11/03 14:34:53.919121 MSG::Running all suitess...
-2016/11/03 14:34:53.919121 MSG::Running  Suite 'suite1'
+2016/11/03 16:36:52.414478 DEBUG::&{{ TestManager} Manager [{Domain string github.com/go-QA/goQA Running in Domain} {OS string Win64 Operating System}] [{suite1 DefaultSuite [{SuiteMaxTime int 100 Max time for suite to run before timeout expires}] [{test1 test1 [{val1 float 11.11 val1 is float} {val2 int 55 val2 is integer} {val3 string hello there test1 val3 is string}]} {test2 test2 [{val1 float 111.111 val1 is float} {val2 int 550 val2 is integer} {val3 string hello there test2 val3 is string}]} {test3 test3 [{val1 float 1111.1111 val1 is float} {val2 int 5550 val2 is integer} {val3 string hello there test3 val3 is string}]}]} {suite2 DefaultSuite [{SuiteMaxTime int 200 Max time for suite to run before timeout expires}] [{test1 test1 [{val1 float 22.22 val1 is float} {val2 int 66 val2 is integer} {val3 string hello there suite2_test1 val3 is string}]} {test2 test2 [{val1 float 222.222 val1 is float} {val2 int 660 val2 is integer} {val3 string hello there suite2_test2 val3 is string}]} {test3 test3 [{val1 float 2222.2222 val1 is float} {val2 int 6660 val2 is integer} {val3 string hello there suite2_test3 val3 is string}]}]}]}
+2016/11/03 16:36:52.414478 DEBUG::MANAGERPARAM name=Domain, type=string,value= github.com/go-QA/goQA, comment=Running in Domain
+2016/11/03 16:36:52.414478 DEBUG::MANAGERPARAM name=OS, type=string,value= Win64, comment=Operating System
+2016/11/03 16:36:52.414478 DEBUG::SUITEPARAM name=SuiteMaxTime, type=int,value= 100, comment=Max time for suite to run before timeout expires
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 11.11, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 55, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there test1, comment=val3 is string
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 111.111, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 550, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there test2, comment=val3 is string
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 1111.1111, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 5550, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there test3, comment=val3 is string
+2016/11/03 16:36:52.414478 DEBUG::SUITEPARAM name=SuiteMaxTime, type=int,value= 200, comment=Max time for suite to run before timeout expires
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 22.22, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 66, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test1, comment=val3 is string
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 222.222, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 660, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test2, comment=val3 is string
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val1, type=float,value= 2222.2222, comment=val1 is float
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val2, type=int,value= 6660, comment=val2 is integer
+2016/11/03 16:36:52.414478 DEBUG::TESTPARAM name=val3, type=string,value= hello there suite2_test3, comment=val3 is string
+2016/11/03 16:36:52.414478 MSG::Running all suitess...
+2016/11/03 16:36:52.414478 MSG::Running  Suite 'suite1'
 
-2016/11/03 14:34:53.919121 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/11/03 14:34:53.919121 MSG::Running test 'test1'
-2016/11/03 14:34:53.919121 MSG::Running test 'test2'
-2016/11/03 14:34:53.919121 MSG::Running test 'test3'
-2016/11/03 14:34:53.919121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.919121 FAIL::Expected 1111.1111 but got 2222.222200 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 5550 but got 6660 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 'hello there test3' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.919121 MSG::test test3 ran 3 check points with failure rate of 100.000
-2016/11/03 14:34:53.919121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.919121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.919121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.919121 PASS::Verify Operating System passed by Test Manager
-2016/11/03 14:34:53.919121 PASS::Verify Operating System passed by Test Manager
-2016/11/03 14:34:53.919121 PASS::Verify Suite passes parameters to test
-2016/11/03 14:34:53.919121 FAIL::Expected 11.11 but got 2222.222200 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 55 but got 6660 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 'hello there test1' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.919121 MSG::test test1 ran 6 check points with failure rate of 50.000
-2016/11/03 14:34:53.919121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.919121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.919121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.919121 FAIL::Expected 111.111 but got 2222.222200 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 550 but got 6660 instead
-2016/11/03 14:34:53.919121 FAIL::Expected 'hello there test2' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.919121 MSG::test test2 ran 3 check points with failure rate of 100.000
-2016/11/03 14:34:53.919121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.919121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.919121 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/11/03 14:34:53.919121 MSG::Running  Suite 'suite2'
+2016/11/03 16:36:52.414478 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/11/03 16:36:52.414478 MSG::Running test 'test1'
+2016/11/03 16:36:52.414478 MSG::Running test 'test2'
+2016/11/03 16:36:52.414478 MSG::Running test 'test3'
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.414478 PASS::verify val1
+2016/11/03 16:36:52.414478 PASS::verify val2
+2016/11/03 16:36:52.414478 PASS::verify val3
+2016/11/03 16:36:52.414478 MSG::test test3 ran 3 check points with failure rate of 0.000
+2016/11/03 16:36:52.414478 MSG::TestManager->Run::results=3
+2016/11/03 16:36:52.414478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.414478 PASS::Verify Operating System passed by Test Manager
+2016/11/03 16:36:52.414478 PASS::Verify Operating System passed by Test Manager
+2016/11/03 16:36:52.414478 PASS::Verify Suite passes parameters to test
+2016/11/03 16:36:52.414478 PASS::verify val1
+2016/11/03 16:36:52.414478 PASS::verify val2
+2016/11/03 16:36:52.414478 PASS::verify val3
+2016/11/03 16:36:52.414478 MSG::test test1 ran 6 check points with failure rate of 0.000
+2016/11/03 16:36:52.414478 MSG::TestManager->Run::results=3
+2016/11/03 16:36:52.414478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.414478 PASS::verify val1
+2016/11/03 16:36:52.414478 PASS::verify val2
+2016/11/03 16:36:52.414478 PASS::verify val3
+2016/11/03 16:36:52.414478 MSG::test test2 ran 3 check points with failure rate of 0.000
+2016/11/03 16:36:52.414478 MSG::TestManager->Run::results=3
+2016/11/03 16:36:52.414478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.414478 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/11/03 16:36:52.414478 MSG::Running  Suite 'suite2'
 
-2016/11/03 14:34:53.919121 MSG::SUITE(suite2) SETUP::Status = 0::Message=
-2016/11/03 14:34:53.919121 MSG::Running test 'test1'
-2016/11/03 14:34:53.920121 MSG::Running test 'test2'
-2016/11/03 14:34:53.920121 MSG::Running test 'test3'
-2016/11/03 14:34:53.920121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.920121 FAIL::Expected 1111.1111 but got 2222.222200 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 5550 but got 6660 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 'hello there test3' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.920121 MSG::test test3 ran 3 check points with failure rate of 100.000
-2016/11/03 14:34:53.920121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.920121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.920121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.920121 PASS::Verify Operating System passed by Test Manager
-2016/11/03 14:34:53.920121 PASS::Verify Operating System passed by Test Manager
-2016/11/03 14:34:53.920121 PASS::Verify Suite passes parameters to test
-2016/11/03 14:34:53.920121 FAIL::Expected 11.11 but got 2222.222200 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 55 but got 6660 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 'hello there test1' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.920121 MSG::test test1 ran 6 check points with failure rate of 50.000
-2016/11/03 14:34:53.920121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.920121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.920121 MSG::TestManager->setup::results=3
-2016/11/03 14:34:53.920121 FAIL::Expected 111.111 but got 2222.222200 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 550 but got 6660 instead
-2016/11/03 14:34:53.920121 FAIL::Expected 'hello there test2' but got 'hello there suite2_test3' instead
-2016/11/03 14:34:53.920121 MSG::test test2 ran 3 check points with failure rate of 100.000
-2016/11/03 14:34:53.920121 MSG::TestManager->Run::results=4
-2016/11/03 14:34:53.920121 MSG::TestManager->Teardown::results=3
-2016/11/03 14:34:53.920121 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
-2016/11/03 14:34:53.920121 MSG::
+2016/11/03 16:36:52.414478 MSG::SUITE(suite2) SETUP::Status = 0::Message=
+2016/11/03 16:36:52.414478 MSG::Running test 'test1'
+2016/11/03 16:36:52.414478 MSG::Running test 'test2'
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.414478 PASS::Verify Operating System passed by Test Manager
+2016/11/03 16:36:52.414478 PASS::Verify Operating System passed by Test Manager
+2016/11/03 16:36:52.414478 PASS::Verify Suite passes parameters to test
+2016/11/03 16:36:52.414478 FAIL::Expected 11.11 but got 22.220000 instead
+2016/11/03 16:36:52.414478 FAIL::Expected 55 but got 66 instead
+2016/11/03 16:36:52.414478 FAIL::Expected 'hello there test1' but got 'hello there suite2_test1' instead
+2016/11/03 16:36:52.414478 MSG::test test1 ran 6 check points with failure rate of 50.000
+2016/11/03 16:36:52.414478 MSG::TestManager->Run::results=4
+2016/11/03 16:36:52.414478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.414478 MSG::Running test 'test3'
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.414478 FAIL::Expected 111.111 but got 222.222000 instead
+2016/11/03 16:36:52.414478 FAIL::Expected 550 but got 660 instead
+2016/11/03 16:36:52.414478 FAIL::Expected 'hello there test2' but got 'hello there suite2_test2' instead
+2016/11/03 16:36:52.414478 MSG::TestManager->setup::results=3
+2016/11/03 16:36:52.415478 MSG::test test2 ran 3 check points with failure rate of 100.000
+2016/11/03 16:36:52.415478 MSG::TestManager->Run::results=4
+2016/11/03 16:36:52.415478 FAIL::Expected 1111.1111 but got 2222.222200 instead
+2016/11/03 16:36:52.415478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.415478 FAIL::Expected 5550 but got 6660 instead
+2016/11/03 16:36:52.415478 FAIL::Expected 'hello there test3' but got 'hello there suite2_test3' instead
+2016/11/03 16:36:52.415478 MSG::test test3 ran 3 check points with failure rate of 100.000
+2016/11/03 16:36:52.415478 MSG::TestManager->Run::results=4
+2016/11/03 16:36:52.415478 MSG::TestManager->Teardown::results=3
+2016/11/03 16:36:52.415478 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
+2016/11/03 16:36:52.415478 MSG::
 
 
-2016/11/03 14:34:53.920121 MSG::TOTAL STATISTICS     Test Manager (0.00 sec)
+2016/11/03 16:36:52.415478 MSG::TOTAL STATISTICS     Test Manager (0.00 sec)
 Suites: Total 2, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-Tests: Total 6, Passed 0, Failed 6, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/11/03 14:34:53.920121 MSG::
+Tests: Total 6, Passed 3, Failed 3, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+2016/11/03 16:36:52.415478 MSG::
 
 
-2016/11/03 14:34:53.920121 MSG::
+2016/11/03 16:36:52.415478 MSG::
 
 
-2016/11/03 14:34:53.920121 MSG::SUITE STATISTICS     suite1 (0.00 sec)
+2016/11/03 16:36:52.415478 MSG::SUITE STATISTICS     suite1 (0.00 sec)
+Tests: Total 3, Passed 3, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+2016/11/03 16:36:52.415478 MSG::
+
+2016/11/03 16:36:52.415478 MSG::
+
+2016/11/03 16:36:52.415478 PASS::TEST PASSED          test3 (0.00 sec) Test complete
+2016/11/03 16:36:52.415478 PASS::TEST PASSED          test1 (0.00 sec) Test complete
+2016/11/03 16:36:52.415478 PASS::TEST PASSED          test2 (0.00 sec) Test complete
+2016/11/03 16:36:52.415478 MSG::
+
+
+2016/11/03 16:36:52.415478 MSG::SUITE STATISTICS     suite2 (0.00 sec)
 Tests: Total 3, Passed 0, Failed 3, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/11/03 14:34:53.920121 MSG::
+2016/11/03 16:36:52.415478 MSG::
 
-2016/11/03 14:34:53.920121 MSG::
+2016/11/03 16:36:52.415478 MSG::
 
-2016/11/03 14:34:53.920121 FAIL::TEST FAILED          test3 (0.00 sec) Test complete
-2016/11/03 14:34:53.920121 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
-2016/11/03 14:34:53.920121 FAIL::TEST FAILED          test2 (0.00 sec) Test complete
-2016/11/03 14:34:53.920121 MSG::
-
-
-2016/11/03 14:34:53.920121 MSG::SUITE STATISTICS     suite2 (0.00 sec)
-Tests: Total 3, Passed 0, Failed 3, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
-2016/11/03 14:34:53.920121 MSG::
-
-2016/11/03 14:34:53.920121 MSG::
-
-2016/11/03 14:34:53.920121 FAIL::TEST FAILED          test3 (0.00 sec) Test complete
-2016/11/03 14:34:53.920121 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
-2016/11/03 14:34:53.921121 FAIL::TEST FAILED          test2 (0.00 sec) Test complete
+2016/11/03 16:36:52.415478 FAIL::TEST FAILED          test1 (0.00 sec) Test complete
+2016/11/03 16:36:52.415478 FAIL::TEST FAILED          test2 (0.00 sec) Test complete
+2016/11/03 16:36:52.416479 FAIL::TEST FAILED          test3 (0.00 sec) Test complete

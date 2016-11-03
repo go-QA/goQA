@@ -446,10 +446,10 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 
 	var test iTestCase
 	tm.log.LogDebug("%v", testPlan)
-	testParams := new(Parameters)
-	suiteParams := new(Parameters)
-	MngrParams := new(Parameters)
+	var testParams, suiteParams, MngrParams *Parameters
 
+	MngrParams = new(Parameters)
+	MngrParams.Init()
 	for _, param := range testPlan.Params {
 		MngrParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
 		tm.log.LogDebug("MANAGERPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
@@ -457,6 +457,8 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 
 	for _, xmlSuite := range testPlan.Suites {
 
+		suiteParams = new(Parameters)
+		suiteParams.Init()
 		for _, param := range xmlSuite.Params {
 			suiteParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
 			tm.log.LogDebug("SUITEPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
@@ -468,7 +470,8 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, *suiteParams)
 
 		for _, xmlTest := range xmlSuite.TestCases {
-
+			testParams = new(Parameters)
+			testParams.Init()
 			for _, param := range xmlTest.Params {
 				testParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
 				tm.log.LogDebug("TESTPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
