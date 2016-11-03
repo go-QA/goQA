@@ -101,6 +101,7 @@ type XMLTestSuite struct {
 type XMLTestPlan struct {
 	XMLName xml.Name       `xml:"TestManager"`
 	Name    string         `xml:"name,attr"`
+	Params  []XMLParam     `xml:"Param"`
 	Suites  []XMLTestSuite `xml:"TestSuite"`
 }
 
@@ -444,18 +445,39 @@ func (tm *TestManager) ParseTestPlanFromXML(fileName string, testPlan *XMLTestPl
 func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister) error {
 
 	var test iTestCase
-	var params *Parameters
 	tm.log.LogDebug("%v", testPlan)
+	testParams := new(Parameters)
+	suiteParams := new(Parameters)
+	MngrParams := new(Parameters)
+
+	for _, param := range testPlan.Params {
+		MngrParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
+		tm.log.LogDebug("MANAGERPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
+	}
+
 	for _, xmlSuite := range testPlan.Suites {
-		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, Parameters{})
+
+		for _, param := range xmlSuite.Params {
+			suiteParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
+			tm.log.LogDebug("SUITEPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
+		}
+		for k, v := range MngrParams.params {
+			suiteParams.params[k] = v
+		}
+
+		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, *suiteParams)
+
 		for _, xmlTest := range xmlSuite.TestCases {
 
-			params = new(Parameters)
 			for _, param := range xmlTest.Params {
-				params.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
-				tm.log.LogDebug("name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
+				testParams.AddParam(param.Name, tm.convertToParamType(param.Value, param.Type), param.Comment)
+				tm.log.LogDebug("TESTPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 			}
-			test, _ = registry.GetTestCase(xmlTest.Name, xmlTest.Class, tm, *params)
+			for k, v := range suiteParams.params {
+				testParams.params[k] = v
+			}
+
+			test, _ = registry.GetTestCase(xmlTest.Name, xmlTest.Class, tm, *testParams)
 			suite.AddTest(test)
 		}
 		tm.AddSuite(suite)
