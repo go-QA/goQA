@@ -118,7 +118,7 @@ type Parameters struct {
 	params map[string]Parameter
 }
 
-func (p *Parameters) init() {
+func (p *Parameters) Init() {
 	if p.params == nil {
 		p.params = make(map[string]Parameter)
 	}
@@ -132,7 +132,7 @@ func (p *Parameters) Count() int {
 }
 
 func (p *Parameters) updateValue(name string, value interface{}) interface{} {
-	p.init()
+	p.Init()
 	if _, ok := p.params[name]; ok {
 		p.params[name] = Parameter{name, value, p.params[name].comment}
 	}
@@ -140,7 +140,7 @@ func (p *Parameters) updateValue(name string, value interface{}) interface{} {
 }
 
 func (p *Parameters) InitParam(name string, value interface{}) interface{} {
-	p.init()
+	p.Init()
 	if _, present := p.params[name]; !present {
 		p.params[name] = Parameter{name, value, ""}
 	} else {
@@ -151,10 +151,10 @@ func (p *Parameters) InitParam(name string, value interface{}) interface{} {
 	return p.params[name].value
 }
 
-// Add Param to the list of parameters. Will overwrite if already exists
+// AddParam to the list of parameters. Will overwrite if already exists
 // returns the value that is added as interface{}
 func (p *Parameters) AddParam(name string, value interface{}, comment string) interface{} {
-	p.init()
+	p.Init()
 	p.params[name] = Parameter{name, value, comment}
 	return p.params[name].value
 }
@@ -162,27 +162,27 @@ func (p *Parameters) AddParam(name string, value interface{}, comment string) in
 // GetParam will return a Param object based on the param name passed in
 // ok is True if the param exists. False if the param doesn't exist
 func (p *Parameters) GetParam(name string) (Parameter, bool) {
-	p.init()
+	p.Init()
 	val, ok := p.params[name]
 	return val, ok
 }
 
 func (p *Parameters) GetParamValue(name string) (interface{}, bool) {
-	p.init()
-	if param, ok := p.params[name]; !ok {
+	p.Init()
+	param, ok := p.params[name]
+	if !ok {
 		return nil, false
-	} else {
-		return param.value, true
 	}
+	return param.value, true
 }
 
 func (p *Parameters) GetParamComment(name string) (interface{}, bool) {
-	p.init()
-	if param, ok := p.params[name]; !ok {
+	p.Init()
+	param, ok := p.params[name]
+	if !ok {
 		return nil, false
-	} else {
-		return param.comment, true
 	}
+	return param.comment, true
 }
 
 // the CreateParameters returns new empty Parameters object

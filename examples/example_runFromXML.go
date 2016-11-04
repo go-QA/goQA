@@ -28,6 +28,18 @@ func (t *Test1) Run() (int, error) {
 	v1 := t.InitParam("val1", 0.0).(float64)
 	v2 := t.InitParam("val2", 0).(int64)
 	v3 := t.InitParam("val3", "").(string)
+	os := t.InitParam("OS", "Unknown").(string)
+	domain := t.InitParam("Domain", "Unknown")
+	suiteMaxTime := t.InitParam("SuiteMaxTime", int64(0)).(int64)
+
+	t.Verify(domain == "github.com/go-QA/goQA",
+		"Verify Operating System passed by Test Manager",
+		"Test Manager parameters not passed to Test Case")
+	t.Verify(os == "Win64", "Verify Operating System passed by Test Manager",
+		"Test Manager parameters not passed to Test Case")
+	t.Verify((suiteMaxTime == 100 || suiteMaxTime == 200),
+		"Verify Suite passes parameters to test",
+		"Suite parameters not passed to Test Case as expected")
 
 	t.Verify(v1 == 11.11, "verify val1", "Expected 11.11 but got %f instead", v1)
 	t.Verify(v2 == 55, "verify val2", "Expected 55 but got %d instead", v2)
@@ -87,6 +99,8 @@ func main() {
 	tm := goQA.CreateTestManager(os.Stdout, &tr,
 		goQA.SuiteSerial, // Concurency for suites:
 		goQA.TcAll)       // Concurrency for test cases per suite
+
+	tm.GetLogger().SetDebug(true)
 
 	console, err := os.Create("data/console.log")
 	if err != nil {

@@ -1,39 +1,50 @@
 <?xml version="1.0"?>
 <TestManager name="Manager">
+    <Param name='Domain' type='string' value='github.com/go-QA/goQA' comment='Running in Domain'/>
+    <Param name='OS' type='string' value='Win64' comment='Operating System'/>
+
    <TestSuite name="suite1" class="DefaultSuite">
-    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+    <Param name='SuiteMaxTime' type='int' value='100' comment='Max time for suite to run before timeout expires'/>
+
      <TestCase name="test1" class="test1">
       <Param name='val1' type='float' value='11.11' comment='val1 is float'/>
       <Param name='val2' type='int' value='55' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there test1' comment='val3 is string'/>
     </TestCase>
+
      <TestCase name="test2" class="test2">
       <Param name='val1' type='float' value='111.111' comment='val1 is float'/>
       <Param name='val2' type='int' value='550' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there test2' comment='val3 is string'/>
     </TestCase>
+
       <TestCase name="test3" class="test3">
       <Param name='val1' type='float' value='1111.1111' comment='val1 is float'/>
       <Param name='val2' type='int' value='5550' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there test3' comment='val3 is string'/>
     </TestCase>
   </TestSuite>
+
    <TestSuite name="suite2" class="DefaultSuite">
-    <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
+    <Param name='SuiteMaxTime' type='int' value='200' comment='Max time for suite to run before timeout expires'/>
+
      <TestCase name="test1" class="test1">
       <Param name='val1' type='float' value='22.22' comment='val1 is float'/>
       <Param name='val2' type='int' value='66' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there suite2_test1' comment='val3 is string'/>
     </TestCase>
+
      <TestCase name="test2" class="test2">
       <Param name='val1' type='float' value='222.222' comment='val1 is float'/>
       <Param name='val2' type='int' value='660' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there suite2_test2' comment='val3 is string'/>
     </TestCase>
+
       <TestCase name="test3" class="test3">
       <Param name='val1' type='float' value='2222.2222' comment='val1 is float'/>
       <Param name='val2' type='int' value='6660' comment="val2 is integer"/>
       <Param name='val3' type='string' value='hello there suite2_test3' comment='val3 is string'/>
     </TestCase>
+
   </TestSuite>
 </TestManager>
