@@ -540,6 +540,13 @@ func (t *TextReporter) GetSuiteResult() int {
 
 func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int) {
 	t.log.LogMessage("\n\n")
+	t.log.LogMessage("-----------------------------------------------------------------------")
+	t.log.LogMessage("\n")
+	t.log.LogMessage("                        Test Run Report '%s'", name)
+	t.log.LogMessage("                             <Date>")
+	t.log.LogMessage("\n\n")
+	t.log.LogMessage("            Summary Report:")
+	t.log.LogMessage("\n")
 	t.log.LogMessage(ManagerStatisticsReport, name, report.end.Sub(report.start).Seconds(), report.reportStats.NumberOfTestSuites,
 		report.reportStats.NumberOfTestSuitesPassed, report.reportStats.NumberOfTestSuitesFailed, report.reportStats.NumberOfTestSuitesError,
 		report.reportStats.NumberOfTestSuitesSetUpFailed, report.reportStats.NumberOfTestSuitesSetUpError,
@@ -549,6 +556,7 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 		report.reportStats.TotalNumberOfTestCasesSetUpError, report.reportStats.TotalNumberOfTestCasesNotFound)
 
 	t.log.LogMessage("\n\n")
+	t.log.LogMessage("            Suite Summary:")
 	for _, suite := range report.finishedSuites {
 		t.log.LogMessage("\n\n")
 		t.log.LogMessage(SuiteStatisticsReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
@@ -571,6 +579,8 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 			t.log.LogMessage(SuiteSetupErrorReport, suite.name, suite.StatusMessage)
 		}
 
+		t.log.LogMessage("\n\n")
+		t.log.LogMessage("               Test Summary suite %s", suite.name)
 		t.log.LogMessage("\n")
 		for _, test := range suite.tests {
 			switch test.Status {
@@ -591,6 +601,8 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 
 			}
 		}
+		t.log.LogMessage("\n\n")
+		t.log.LogMessage("-----------------------------------------------------------------------")
 
 	}
 	complete <- 1
