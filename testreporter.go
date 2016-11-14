@@ -5,11 +5,12 @@
 package goQA
 
 import (
-	//"fmt"
+	"fmt"
 	//"error"
 	//"log"
 	//"os"
 	//"io"
+	"bytes"
 	"sync"
 	"time"
 
@@ -22,7 +23,7 @@ const (
 
 type ReportWriter interface {
 	Name() string
-	Init(parent ITestManager)
+	Init(parent Manager)
 	PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int)
 }
 
@@ -91,7 +92,7 @@ const (
 	ManagerSetupErrorReport    = "MNGR SETUP ERROR     %s %s"
 	ManagerTeardownErrorReport = "MNGR TEARDOWN ERROR  %s %s"
 	SuiteStatisticsReport      = "SUITE STATISTICS     %s (%.2f sec)\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
-	ManagerStatisticsReport    = "TOTAL STATISTICS     %s (%.2f sec)\nSuites: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
+	ManagerStatisticsReport    = "TOTAL STATISTICS     %s (%.2f sec)\nSuites: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d\n Tests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
 )
 
 type ReporterStatistics struct {
@@ -515,7 +516,7 @@ func (m *ManagerResult) managerTearDownFailed(name, msg string) {
 type TextReporter struct {
 	name   string
 	log    *logger.GoQALog
-	parent ITestManager
+	parent Manager
 	stats  ReporterStatistics
 	report ManagerResult
 }
@@ -524,7 +525,7 @@ func (t *TextReporter) Name() string {
 	return t.name
 }
 
-func (t *TextReporter) Init(parent ITestManager) {
+func (t *TextReporter) Init(parent Manager) {
 	t.report = ManagerResult{}
 	t.report.Init("manager special")
 	t.name = "TextReporter"
@@ -539,15 +540,16 @@ func (t *TextReporter) GetSuiteResult() int {
 }
 
 func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int) {
-	t.log.LogMessage("\n\n")
-	t.log.LogMessage("-----------------------------------------------------------------------")
-	t.log.LogMessage("\n")
-	t.log.LogMessage("                        Test Run Report '%s'", name)
-	t.log.LogMessage("                             <Date>")
-	t.log.LogMessage("\n\n")
-	t.log.LogMessage("            Summary Report:")
-	t.log.LogMessage("\n")
-	t.log.LogMessage(ManagerStatisticsReport, name, report.end.Sub(report.start).Seconds(), report.reportStats.NumberOfTestSuites,
+	var rep bytes.Buffer
+	fmt.Fprintf(&rep, "\n\n")
+	fmt.Fprintf(&rep, "-----------------------------------------------------------------------\n")
+	fmt.Fprintf(&rep, "\n")
+	fmt.Fprintf(&rep, "                        Test Run Report '%s'\n", name)
+	fmt.Fprintf(&rep, "                             <Date>\n")
+	fmt.Fprintf(&rep, "\n\n\n")
+	fmt.Fprintf(&rep, "            Summary Report:\n")
+	fmt.Fprintf(&rep, "\n")
+	fmt.Fprintf(&rep, ManagerStatisticsReport, name, report.end.Sub(report.start).Seconds(), report.reportStats.NumberOfTestSuites,
 		report.reportStats.NumberOfTestSuitesPassed, report.reportStats.NumberOfTestSuitesFailed, report.reportStats.NumberOfTestSuitesError,
 		report.reportStats.NumberOfTestSuitesSetUpFailed, report.reportStats.NumberOfTestSuitesSetUpError,
 		report.reportStats.NumberOfTestSuitesNotFound,
@@ -555,55 +557,57 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 		report.reportStats.TotalNumberOfTestCasesError, report.reportStats.TotalNumberOfTestCasesSetUpFailed,
 		report.reportStats.TotalNumberOfTestCasesSetUpError, report.reportStats.TotalNumberOfTestCasesNotFound)
 
-	t.log.LogMessage("\n\n")
-	t.log.LogMessage("            Suite Summary:")
+	fmt.Fprintf(&rep, "\n\n\n")
+	fmt.Fprintf(&rep, "            Suite Summary:\n")
 	for _, suite := range report.finishedSuites {
-		t.log.LogMessage("\n\n")
-		t.log.LogMessage(SuiteStatisticsReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
+		fmt.Fprintf(&rep, "\n")
+		fmt.Fprintf(&rep, SuiteStatisticsReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.NumberOfTestCases,
 			suite.NumberOfTestCasesPassed, suite.NumberOfTestCasesFailed,
 			suite.NumberOfTestCasesError, suite.NumberOfTestCasesSetUpFailed,
 			suite.NumberOfTestCasesSetUpError, suite.NumberOfTestCasesNotFound)
 
-		t.log.LogMessage("\n")
+		fmt.Fprintf(&rep, "\n")
 		switch suite.Status {
 		case SuiteOk:
 			suiteResult := t.GetSuiteResult()
 			if suiteResult == SuitePassed {
-				t.log.LogPass(SuitePassedReport, suite.name, suite.end.Sub(suite.start).Seconds())
+				fmt.Fprintf(&rep, SuitePassedReport, suite.name, suite.end.Sub(suite.start).Seconds())
 			} else {
-				t.log.LogFail(SuiteFailedReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+				fmt.Fprintf(&rep, SuiteFailedReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
 			}
 		case SuiteError:
-			t.log.LogMessage(SuiteErrorReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
+			fmt.Fprintf(&rep, SuiteErrorReport, suite.name, suite.end.Sub(suite.start).Seconds(), suite.StatusMessage)
 		case SuiteSetupError:
-			t.log.LogMessage(SuiteSetupErrorReport, suite.name, suite.StatusMessage)
+			fmt.Fprintf(&rep, SuiteSetupErrorReport, suite.name, suite.StatusMessage)
 		}
 
-		t.log.LogMessage("\n\n")
-		t.log.LogMessage("               Test Summary suite %s", suite.name)
-		t.log.LogMessage("\n")
+		fmt.Fprintf(&rep, "\n\n")
+		fmt.Fprintf(&rep, "               Test Results %s\n", suite.name)
+		fmt.Fprintf(&rep, "\n")
 		for _, test := range suite.tests {
 			switch test.Status {
 			case TcPassed:
-				t.log.LogPass(TestPassedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				fmt.Fprintf(&rep, TestPassedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TcFailed:
-				t.log.LogFail(TestFailedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				fmt.Fprintf(&rep, TestFailedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TcError:
-				t.log.LogError(TestErrorReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
+				fmt.Fprintf(&rep, TestErrorReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TcSetupFailed:
-				t.log.LogMessage(TestSetupFailedReport, test.name, test.StatusMessage)
+				fmt.Fprintf(&rep, TestSetupFailedReport, test.name, test.StatusMessage)
 			case TcSetupError:
-				t.log.LogMessage(TestSetupErrorReport, test.name, test.StatusMessage)
+				fmt.Fprintf(&rep, TestSetupErrorReport, test.name, test.StatusMessage)
 			case TcTeardownFailed, TcTeardownError:
-				t.log.LogMessage(TestTeardownErrorReport, test.name, test.StatusMessage)
+				fmt.Fprintf(&rep, TestTeardownErrorReport, test.name, test.StatusMessage)
 			case TcSkipped:
-				t.log.LogMessage(TestSkippedReport, test.name)
+				fmt.Fprintf(&rep, TestSkippedReport, test.name)
 
 			}
+			fmt.Fprintf(&rep, "\n")
 		}
-		t.log.LogMessage("\n\n")
-		t.log.LogMessage("-----------------------------------------------------------------------")
+		fmt.Fprintf(&rep, "\n\n")
+		fmt.Fprintf(&rep, "-----------------------------------------------------------------------")
 
 	}
+	t.log.LogMessage(rep.String())
 	complete <- 1
 }

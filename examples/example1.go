@@ -31,7 +31,7 @@ type Test1 struct {
 }
 
 // Init function defined in Test1 so it can be created and initialized at same time (will see below)
-func (tc *Test1) Init(name string, parent goQA.ITestManager, params goQA.Parameters) goQA.ITestCase {
+func (tc *Test1) Init(name string, parent goQA.Manager, params goQA.Parameters) goQA.Tester {
 	tc.TestCase.Init(name, parent, params)
 	return tc
 }
@@ -112,7 +112,7 @@ func main() {
 	// Create a parameter list that can be past into a test case.
 	// The parameter named "val" is set to 10 and will be used for data variable in Test1
 	// failureThreshold used to determine if tc.ReturnFromRun() will return pass or fail. It is exceptable failure threshold in percent
-	paramList := goQA.CreateParametersObject()
+	paramList := goQA.NewParameters()
 	paramList.AddParam("one", "this is one", "First defined parameter")
 	paramList.AddParam("val", 10, "value used in test")
 	paramList.AddParam("failureThreshold", 60, "Set failure Threshold to 10% for all checks in test case")
@@ -122,7 +122,7 @@ func main() {
 	tr := goQA.TextReporter{}
 
 	// create the test manager object. Default logger is stdout
-	tm := goQA.CreateTestManager(os.Stdout, &tr,
+	tm := goQA.NewManager(os.Stdout, &tr,
 		goQA.SuiteSerial, // Concurency for suites:
 		//   SUITE_SERIAL    run one suite at a time
 		//   SUITE_ALL       lunch all suites at same time
@@ -140,10 +140,8 @@ func main() {
 	tm.AddLogger("console", logger.LOG_LEVEL_ALL, console)
 
 	// create two suite objects
-	suite1 := goQA.CreateSuite("suite1", &tm, goQA.Parameters{})
-	// User defined suite
-	suite2 := MySuite{}
-	suite2.Init("suite2", &tm, goQA.Parameters{})
+	suite1 := goQA.NewSuite("suite1", &tm, goQA.Parameters{})
+	suite2 := goQA.NewSuite("suite2", &tm, goQA.Parameters{})
 
 	for i := 0; i < TEST_COUNT; i++ {
 		// create Test2 object and call Init() the Init must be called before running test
@@ -163,14 +161,14 @@ func main() {
 	}
 
 	// This will run the t2 test on it's own (last t2 created in the loop)
-	t2.RunTest(t2)
+	t2.RunTest()
 
 	// here we run just suite1
 	suite1.RunSuite()
 
 	// Add the two suite objects to the test manager
 	tm.AddSuite(suite1)
-	tm.AddSuite(&suite2)
+	tm.AddSuite(suite2)
 
 	tm.RunSuite("suite1")
 	tm.RunSuite("suite2")

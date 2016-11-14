@@ -9,27 +9,27 @@ import (
 )
 
 type Suite interface {
-	Init(name string, parent ITestManager, params Parameters)
+	Init(name string, parent Manager, params Parameters)
 	Setup() (status int, msg string, err error)
 	Teardown() (status int, msg string, err error)
-	AddTest(test iTestCase)
+	AddTest(test Tester)
 	Name() string
-	GetTestCase(name string) iTestCase
-	GetTestCases() []iTestCase
+	GetTestCase(name string) Tester
+	GetTestCases() []Tester
 }
 
 type DefaultSuite struct {
 	TestCase
-	testCases []iTestCase
+	testCases []Tester
 }
 
-func (s *DefaultSuite) GetParent() ITestManager {
+func (s *DefaultSuite) GetParent() Manager {
 	return s.TestCase.parent
 }
 
-func (s *DefaultSuite) Init(name string, parent ITestManager, params Parameters) {
+func (s *DefaultSuite) Init(name string, parent Manager, params Parameters) {
 	s.TestCase.Init(name, parent, Parameters{})
-	s.testCases = []iTestCase{}
+	s.testCases = []Tester{}
 }
 
 func (s *DefaultSuite) Name() string {
@@ -51,7 +51,7 @@ func (s *DefaultSuite) Teardown() (status int, msg string, err error) {
 	return SuiteOk, "", nil
 }
 
-func (s *DefaultSuite) AddTest(test iTestCase) {
+func (s *DefaultSuite) AddTest(test Tester) {
 	s.testCases = append(s.testCases, test)
 	return
 }
@@ -61,7 +61,7 @@ func (s *DefaultSuite) RunSuite() {
 	s.GetParent().RunSuite(s.Name())
 }
 
-func (s *DefaultSuite) GetTestCase(name string) iTestCase {
+func (s *DefaultSuite) GetTestCase(name string) Tester {
 	for _, test := range s.testCases {
 		if test.Name() == name {
 			return test
@@ -70,12 +70,12 @@ func (s *DefaultSuite) GetTestCase(name string) iTestCase {
 	return nil
 }
 
-func (s *DefaultSuite) GetTestCases() []iTestCase {
+func (s *DefaultSuite) GetTestCases() []Tester {
 	return s.testCases
 }
 
 // CreateSuite the default suite object that has basic functionality to run a suite.
-func CreateSuite(name string, parent ITestManager, params Parameters) *DefaultSuite {
+func NewSuite(name string, parent Manager, params Parameters) *DefaultSuite {
 	suite := DefaultSuite{}
 	suite.Init(name, parent, Parameters{})
 	return &suite

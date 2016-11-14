@@ -82,7 +82,8 @@ func (t *Test3) Run() (int, error) {
 	return t.ReturnFromRun()
 }
 
-var regTests map[string]reflect.Type = map[string]reflect.Type{"test1": reflect.TypeOf(Test1{}),
+var regTests = map[string]reflect.Type{
+	"test1": reflect.TypeOf(Test1{}),
 	"test2": reflect.TypeOf(Test2{}),
 	"test3": reflect.TypeOf(Test3{})}
 
@@ -96,7 +97,7 @@ func main() {
 	tr := goQA.TextReporter{}
 
 	// create the test manager object. Default logger is stdout
-	tm := goQA.CreateTestManager(os.Stdout, &tr,
+	tm := goQA.NewManager(os.Stdout, &tr,
 		goQA.SuiteSerial, // Concurency for suites:
 		goQA.TcAll)       // Concurrency for test cases per suite
 

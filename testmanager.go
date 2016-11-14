@@ -29,7 +29,7 @@ const (
 // TestRegister interface is passed to TestManager in APIs like RunFromXML()
 // Used to provide Manager with Test cases and Suites available to From Test Plans
 type TestRegister interface {
-	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (ITestCase, error)
+	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (Tester, error)
 	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
 }
 
@@ -47,14 +47,14 @@ type DefaultRegister struct {
 }
 
 // GetTestCase Creates the TestCase object and calls Init()
-// ITestCase interface is returned
+// Tester interface is returned
 // error return testError
-func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *TestManager, params Parameters) (ITestCase, error) {
+func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *TestManager, params Parameters) (Tester, error) {
 
-	var test ITestCase
+	var test Tester
 
 	if _, ok := r.Registry[testClass]; ok {
-		test = reflect.New(r.Registry[testClass]).Interface().(ITestCase)
+		test = reflect.New(r.Registry[testClass]).Interface().(Tester)
 		test.Init(testName, tm, params)
 		return test, nil
 	}
@@ -107,9 +107,9 @@ type XMLTestPlan struct {
 
 // --------------------------------------------------------------
 
-type ITestManager interface {
+type Manager interface {
 	RunSuite(suite string) int
-	Run(suiteName string, tc iTestCase, chReport chan testResult)
+	Run(suiteName string, tc Tester, chReport chan testResult)
 	AddSuite(suite Suite)
 	GetLogger() *logger.GoQALog
 	GetSuite(name string) Suite
@@ -162,7 +162,7 @@ func (tm *TestManager) AddLogger(name string, level uint64, stream io.Writer) {
 }
 
 // Run will execute the TestCase and log test results to chReport
-func (tm *TestManager) Run(suiteName string, tc iTestCase, chReport chan testResult) {
+func (tm *TestManager) Run(suiteName string, tc Tester, chReport chan testResult) {
 	var (
 		runStatus, setupStatus, teardownStatus int
 		runErr, setupErr, teardownErr          error
@@ -444,7 +444,7 @@ func (tm *TestManager) ParseTestPlanFromXML(fileName string, testPlan *XMLTestPl
 // return nil on success or error
 func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister) error {
 
-	var test iTestCase
+	var test Tester
 	tm.log.LogDebug("%v", testPlan)
 	var testParams, suiteParams, MngrParams *Parameters
 
@@ -577,7 +577,7 @@ func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
 	_ = <-finished
 }
 
-func (tm *TestManager) launchTest(suiteName string, testcase iTestCase, guard chan struct{}, done chan int, chReport chan testResult) {
+func (tm *TestManager) launchTest(suiteName string, testcase Tester, guard chan struct{}, done chan int, chReport chan testResult) {
 	tm.Run(suiteName, testcase, chReport)
 	<-guard
 	done <- 1
@@ -612,7 +612,7 @@ func (tm *TestManager) managerStatistics(name, msg string) {
 	}
 }
 
-func CreateTestManager(stream io.Writer, reporter ReportWriter, suiteFlags int, testFlags int) (tm TestManager) {
+func NewManager(stream io.Writer, reporter ReportWriter, suiteFlags int, testFlags int) (tm TestManager) {
 	tm = TestManager{}
 	tm.suiteFlags = suiteFlags
 	tm.testFlags = testFlags

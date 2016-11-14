@@ -186,23 +186,21 @@ func (p *Parameters) GetParamComment(name string) (interface{}, bool) {
 }
 
 // the CreateParameters returns new empty Parameters object
-func CreateParametersObject() Parameters {
+func NewParameters() Parameters {
 	return Parameters{}
 }
 
-type iTestCase interface {
+type Tester interface {
 	Name() string
-	Init(name string, parent ITestManager, params Parameters) ITestCase
+	Init(name string, parent Manager, params Parameters) Tester
 	Setup() (int, error)
 	Run() (int, error)
 	Teardown() (int, error)
 }
 
-type ITestCase iTestCase
-
 type TestCase struct {
 	name   string
-	parent ITestManager
+	parent Manager
 	log    *logger.GoQALog
 	//logChannel chan []byte
 	params                                 Parameters
@@ -218,7 +216,7 @@ func (tc *TestCase) Name() string {
 	return tc.name
 }
 
-func (tc *TestCase) Init(name string, parent ITestManager, params Parameters) ITestCase {
+func (tc *TestCase) Init(name string, parent Manager, params Parameters) Tester {
 	tc.name = name
 	tc.parent = parent
 	tc.log = parent.GetLogger()
@@ -334,13 +332,13 @@ func (tc *TestCase) ReturnFromRun() (int, error) {
 	return TcFailed, nil
 }
 
-func (tc *TestCase) RunTest(test iTestCase) {
+func (tc *TestCase) RunTest() {
 	chReport := make(chan testResult, 1)
-	go tc.parent.Run("", test, chReport)
+	go tc.parent.Run("", tc, chReport)
 	_ = <-chReport
 }
 
-func InitTest(name string, test iTestCase, parent ITestManager, params Parameters) iTestCase {
+func InitTest(name string, test Tester, parent Manager, params Parameters) Tester {
 	tc := test
 	tc.Init(name, parent, params)
 	return tc
