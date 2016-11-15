@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-const TEST_COUNT = 2
+const TEST_COUNT = 3
 
 // ----------  sample test cases
 
@@ -44,7 +44,7 @@ func (tc *Test1) Setup() (int, error) {
 }
 
 func (tc *Test1) Run() (int, error) {
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Millisecond * 100)
 
 	// longhand way to pass/fail a test
 	if doubleIt(tc.data) == 20 {
@@ -83,7 +83,7 @@ type Test2 struct {
 }
 
 func (tc *Test2) Run() (int, error) {
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Millisecond * 100)
 	tc.data = 10
 	doubled := doubleIt(tc.data)
 	tc.Verify(doubled == 20, fmt.Sprintf("doubleIt(%d) == 20", tc.data), "doubleIt( %d ) != 20. Actual = %d", tc.data, doubled)
@@ -137,7 +137,7 @@ func main() {
 		panic(err)
 	}
 	defer console.Close()
-	tm.AddLogger("console", logger.LOG_LEVEL_ALL, console)
+	tm.AddLogger("console", logger.LogLevelAll, console)
 
 	// create two suite objects
 	suite1 := goQA.NewSuite("suite1", &tm, goQA.Parameters{})

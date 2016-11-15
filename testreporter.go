@@ -91,8 +91,8 @@ const (
 	ManagerSetupFailedReport   = "MNGR SETUP FAILED    %s %s"
 	ManagerSetupErrorReport    = "MNGR SETUP ERROR     %s %s"
 	ManagerTeardownErrorReport = "MNGR TEARDOWN ERROR  %s %s"
-	SuiteStatisticsReport      = "SUITE STATISTICS     %s (%.2f sec)\nTests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
-	ManagerStatisticsReport    = "TOTAL STATISTICS     %s (%.2f sec)\nSuites: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d\n Tests: Total %d, Passed %d, Failed %d, Error %d, SetUp failed %d, SetUp error %d, Not Found %d"
+	SuiteStatisticsReport      = "SUITE STATISTICS     %s (%.2f sec)\n\nTests: Total %3d, Passed %3d, Failed %3d, Error %3d, SetUp failed %3d, SetUp error %3d, Not Found %3d"
+	ManagerStatisticsReport    = "TOTAL STATISTICS     %s (%.2f sec)\n\nSuites: Total %3d, Passed %3d, Failed %3d, Error %3d, SetUp failed %3d, SetUp error %3d, Not Found %3d\n Tests: Total %3d, Passed %3d, Failed %3d, Error %3d, SetUp failed %3d, SetUp error %3d, Not Found %3d"
 )
 
 type ReporterStatistics struct {
@@ -541,11 +541,12 @@ func (t *TextReporter) GetSuiteResult() int {
 
 func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg string, complete chan int) {
 	var rep bytes.Buffer
+	td := time.Now()
 	fmt.Fprintf(&rep, "\n\n")
-	fmt.Fprintf(&rep, "-----------------------------------------------------------------------\n")
+	fmt.Fprintf(&rep, "-----------------------------------------------------------------------\n\n")
 	fmt.Fprintf(&rep, "\n")
-	fmt.Fprintf(&rep, "                        Test Run Report '%s'\n", name)
-	fmt.Fprintf(&rep, "                             <Date>\n")
+	fmt.Fprintf(&rep, "                        Test Run Report '%s'\n\n", name)
+	fmt.Fprintf(&rep, "                             %s\n\n", td.Format("2006-01-02 15:04:05"))
 	fmt.Fprintf(&rep, "\n\n\n")
 	fmt.Fprintf(&rep, "            Summary Report:\n")
 	fmt.Fprintf(&rep, "\n")
@@ -605,7 +606,7 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 			fmt.Fprintf(&rep, "\n")
 		}
 		fmt.Fprintf(&rep, "\n\n")
-		fmt.Fprintf(&rep, "-----------------------------------------------------------------------")
+		fmt.Fprintf(&rep, "-----------------------------------------------------------------------\n\n")
 
 	}
 	t.log.LogMessage(rep.String())

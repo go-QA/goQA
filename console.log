@@ -1,284 +1,402 @@
-2016/11/13 10:06:34.251985 MSG::TestManager->setup::results=3
-2016/11/13 10:06:34.252986 MSG::test test2_2_1 ran 0 check points with failure rate of 0.000
-2016/11/13 10:06:34.252986 MSG::TestManager->Run::results=3
-2016/11/13 10:06:34.252986 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:34.252986 MSG::Running  Suite 'suite1'
+2016/11/14 23:55:14.088392 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::test test2_2_2 ran 0 check points with failure rate of 0.000
+2016/11/14 23:55:14.088893 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.088893 MSG::Running  Suite 'suite1'
 
-2016/11/13 10:06:34.252986 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/11/13 10:06:34.252986 MSG::Running test 'test2_1_0'
-2016/11/13 10:06:34.252986 MSG::Running test 'test1_1_0'
-2016/11/13 10:06:34.252986 MSG::Running test 'test2_1_1'
-2016/11/13 10:06:34.252986 MSG::Running test 'test1_1_1'
-2016/11/13 10:06:34.252986 MSG::TestManager->setup::results=3
-2016/11/13 10:06:34.252986 MSG::TestManager->setup::results=3
-2016/11/13 10:06:34.252986 MSG::TestManager->setup::results=3
-2016/11/13 10:06:34.252986 MSG::TestManager->setup::results=3
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:35.252017 MSG::test test2_1_0 ran 2 check points with failure rate of 50.000
-2016/11/13 10:06:35.252017 MSG::TestManager->Run::results=4
-2016/11/13 10:06:35.252017 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:35.252017 MSG::test test1_1_0 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:35.252017 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:35.252017 MSG::TestManager->Run::results=6
-2016/11/13 10:06:35.252017 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:35.252017 PASS::doubleIt(10) == 20
-2016/11/13 10:06:35.252017 MSG::test test1_1_1 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:35.252017 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:35.252017 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:35.252017 MSG::test test2_1_1 ran 2 check points with failure rate of 50.000
-2016/11/13 10:06:35.252017 MSG::TestManager->Run::results=6
-2016/11/13 10:06:35.252017 MSG::TestManager->Run::results=4
-2016/11/13 10:06:35.252017 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:35.252017 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:35.252017 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:35.252017 MSG::Running  Suite 'suite1'
+2016/11/14 23:55:14.088893 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.088893 MSG::Running test 'test2_1_0'
+2016/11/14 23:55:14.088893 MSG::Running test 'test1_1_0'
+2016/11/14 23:55:14.088893 MSG::Running test 'test2_1_1'
+2016/11/14 23:55:14.088893 MSG::Running test 'test1_1_1'
+2016/11/14 23:55:14.088893 MSG::Running test 'test2_1_2'
+2016/11/14 23:55:14.088893 MSG::Running test 'test1_1_2'
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.088893 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.188480 MSG::test test1_1_0 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 MSG::test test2_1_1 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.188480 MSG::test test1_1_1 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.188480 MSG::test test2_1_2 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.188480 MSG::test test1_1_2 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.188480 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.188480 MSG::test test2_1_0 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.188480 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.188480 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.188480 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.188480 MSG::Running  Suite 'suite1'
 
-2016/11/13 10:06:35.252017 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/11/13 10:06:35.252017 MSG::Running test 'test2_1_0'
-2016/11/13 10:06:35.252017 MSG::Running test 'test1_1_0'
-2016/11/13 10:06:35.252017 MSG::Running test 'test2_1_1'
-2016/11/13 10:06:35.252017 MSG::Running test 'test1_1_1'
-2016/11/13 10:06:35.252017 MSG::TestManager->setup::results=3
-2016/11/13 10:06:35.253023 MSG::TestManager->setup::results=3
-2016/11/13 10:06:35.253023 MSG::TestManager->setup::results=3
-2016/11/13 10:06:35.253023 MSG::TestManager->setup::results=3
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:36.252994 MSG::test test1_1_0 ran 9 check points with failure rate of 55.556
-2016/11/13 10:06:36.252994 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:36.252994 MSG::TestManager->Run::results=6
-2016/11/13 10:06:36.252994 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:36.252994 MSG::test test1_1_1 ran 9 check points with failure rate of 55.556
-2016/11/13 10:06:36.252994 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:36.252994 MSG::TestManager->Run::results=6
-2016/11/13 10:06:36.252994 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 PASS::doubleIt(10) == 20
-2016/11/13 10:06:36.252994 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:36.252994 MSG::test test2_1_0 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:36.252994 MSG::TestManager->Run::results=4
-2016/11/13 10:06:36.252994 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:36.252994 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:36.252994 MSG::test test2_1_1 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:36.252994 MSG::TestManager->Run::results=4
-2016/11/13 10:06:36.252994 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:36.252994 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:36.252994 MSG::Running  Suite 'suite2'
+2016/11/14 23:55:14.188480 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.188480 MSG::Running test 'test2_1_0'
+2016/11/14 23:55:14.188480 MSG::Running test 'test1_1_0'
+2016/11/14 23:55:14.188480 MSG::Running test 'test2_1_1'
+2016/11/14 23:55:14.188982 MSG::Running test 'test1_1_1'
+2016/11/14 23:55:14.188982 MSG::Running test 'test2_1_2'
+2016/11/14 23:55:14.188982 MSG::Running test 'test1_1_2'
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.188982 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.288551 MSG::test test1_1_0 ran 9 check points with failure rate of 55.556
+2016/11/14 23:55:14.288551 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.288551 MSG::test test2_1_0 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.288551 MSG::test test1_1_1 ran 9 check points with failure rate of 55.556
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.288551 MSG::test test2_1_1 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.288551 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.288551 MSG::test test2_1_2 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.288551 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.288551 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 MSG::test test1_1_2 ran 9 check points with failure rate of 55.556
+2016/11/14 23:55:14.288551 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.288551 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.288551 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.288551 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.288551 MSG::Running  Suite 'suite2'
 
-2016/11/13 10:06:36.252994 MSG::SUITE(suite2) SETUP::Status = 0::Message=
-2016/11/13 10:06:36.252994 MSG::Running test 'test2_2_0'
-2016/11/13 10:06:36.252994 MSG::Running test 'test1_2_0'
-2016/11/13 10:06:36.252994 MSG::Running test 'test2_2_1'
-2016/11/13 10:06:36.252994 MSG::Running test 'test1_2_1'
-2016/11/13 10:06:36.252994 MSG::TestManager->setup::results=3
-2016/11/13 10:06:36.252994 MSG::TestManager->setup::results=3
-2016/11/13 10:06:36.252994 MSG::TestManager->setup::results=3
-2016/11/13 10:06:36.252994 MSG::TestManager->setup::results=3
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 FAIL::doubleIt was not 30! returned 50 instead
-2016/11/13 10:06:37.253481 MSG::test test1_2_1 ran 4 check points with failure rate of 100.000
-2016/11/13 10:06:37.253481 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:37.253481 MSG::TestManager->Run::results=6
-2016/11/13 10:06:37.253481 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 PASS::doubleIt(10) == 20
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:37.253481 MSG::test test2_2_1 ran 2 check points with failure rate of 50.000
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:37.253481 MSG::TestManager->Run::results=3
-2016/11/13 10:06:37.253481 FAIL::doubleIt was not 30! returned 50 instead
-2016/11/13 10:06:37.253481 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:37.253481 MSG::test test1_2_0 ran 4 check points with failure rate of 100.000
-2016/11/13 10:06:37.253481 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:37.253481 MSG::TestManager->Run::results=6
-2016/11/13 10:06:37.253481 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:37.253481 PASS::doubleIt(10) == 20
-2016/11/13 10:06:37.253481 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:37.253481 MSG::test test2_2_0 ran 2 check points with failure rate of 50.000
-2016/11/13 10:06:37.253481 MSG::TestManager->Run::results=3
-2016/11/13 10:06:37.253481 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:37.253481 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:37.253481 MSG::Running all suitess...
-2016/11/13 10:06:37.253481 MSG::Running  Suite 'suite1'
+2016/11/14 23:55:14.288551 MSG::SUITE(suite2) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.288551 MSG::Running test 'test2_2_0'
+2016/11/14 23:55:14.288551 MSG::Running test 'test1_2_0'
+2016/11/14 23:55:14.288551 MSG::Running test 'test2_2_1'
+2016/11/14 23:55:14.288551 MSG::Running test 'test1_2_1'
+2016/11/14 23:55:14.288551 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.288551 MSG::Running test 'test2_2_2'
+2016/11/14 23:55:14.288551 MSG::Running test 'test1_2_2'
+2016/11/14 23:55:14.288551 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.288551 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.288551 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.288551 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.289053 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.388622 MSG::test test1_2_0 ran 4 check points with failure rate of 100.000
+2016/11/14 23:55:14.388622 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.388622 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.388622 MSG::test test2_2_2 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 MSG::test test2_2_1 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.388622 MSG::test test1_2_2 ran 4 check points with failure rate of 100.000
+2016/11/14 23:55:14.388622 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.388622 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 MSG::test test2_2_0 ran 2 check points with failure rate of 50.000
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.388622 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.388622 MSG::test test1_2_1 ran 4 check points with failure rate of 100.000
+2016/11/14 23:55:14.388622 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.388622 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.388622 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.388622 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.388622 MSG::Running all suitess...
+2016/11/14 23:55:14.388622 MSG::Running  Suite 'suite1'
 
-2016/11/13 10:06:37.253481 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/11/13 10:06:37.253481 MSG::Running test 'test2_1_0'
-2016/11/13 10:06:37.253481 MSG::Running test 'test1_1_0'
-2016/11/13 10:06:37.253481 MSG::Running test 'test2_1_1'
-2016/11/13 10:06:37.253481 MSG::Running test 'test1_1_1'
-2016/11/13 10:06:37.253481 MSG::TestManager->setup::results=3
-2016/11/13 10:06:37.253481 MSG::TestManager->setup::results=3
-2016/11/13 10:06:37.253481 MSG::TestManager->setup::results=3
-2016/11/13 10:06:37.253481 MSG::TestManager->setup::results=3
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:38.253706 MSG::test test1_1_0 ran 14 check points with failure rate of 57.143
-2016/11/13 10:06:38.253706 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:38.253706 MSG::TestManager->Run::results=6
-2016/11/13 10:06:38.253706 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:38.253706 MSG::test test2_1_1 ran 6 check points with failure rate of 50.000
-2016/11/13 10:06:38.253706 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:38.253706 MSG::TestManager->Run::results=4
-2016/11/13 10:06:38.253706 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:38.253706 MSG::test test2_1_0 ran 6 check points with failure rate of 50.000
-2016/11/13 10:06:38.253706 MSG::TestManager->Run::results=4
-2016/11/13 10:06:38.253706 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:38.253706 PASS::doubleIt(10) == 20
-2016/11/13 10:06:38.253706 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:38.253706 MSG::test test1_1_1 ran 14 check points with failure rate of 57.143
-2016/11/13 10:06:38.253706 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:38.253706 MSG::TestManager->Run::results=6
-2016/11/13 10:06:38.253706 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:38.253706 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:38.253706 MSG::Running  Suite 'suite1'
+2016/11/14 23:55:14.388622 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.388622 MSG::Running test 'test2_1_0'
+2016/11/14 23:55:14.388622 MSG::Running test 'test1_1_0'
+2016/11/14 23:55:14.388622 MSG::Running test 'test2_1_1'
+2016/11/14 23:55:14.388622 MSG::Running test 'test1_1_1'
+2016/11/14 23:55:14.388622 MSG::Running test 'test2_1_2'
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 MSG::Running test 'test1_1_2'
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.388622 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.488692 MSG::test test2_1_0 ran 6 check points with failure rate of 50.000
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.488692 MSG::test test1_1_0 ran 14 check points with failure rate of 57.143
+2016/11/14 23:55:14.488692 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.488692 MSG::test test2_1_1 ran 6 check points with failure rate of 50.000
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.488692 MSG::test test2_1_2 ran 6 check points with failure rate of 50.000
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.488692 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.488692 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.488692 MSG::test test1_1_1 ran 14 check points with failure rate of 57.143
+2016/11/14 23:55:14.488692 MSG::test test1_1_2 ran 14 check points with failure rate of 57.143
+2016/11/14 23:55:14.488692 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.488692 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.488692 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.488692 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.488692 MSG::Running  Suite 'suite1'
 
-2016/11/13 10:06:38.253706 MSG::SUITE(suite1) SETUP::Status = 0::Message=
-2016/11/13 10:06:38.253706 MSG::Running test 'test2_1_0'
-2016/11/13 10:06:38.253706 MSG::Running test 'test1_1_0'
-2016/11/13 10:06:38.253706 MSG::Running test 'test2_1_1'
-2016/11/13 10:06:38.253706 MSG::Running test 'test1_1_1'
-2016/11/13 10:06:38.253706 MSG::TestManager->setup::results=3
-2016/11/13 10:06:38.253706 MSG::TestManager->setup::results=3
-2016/11/13 10:06:38.253706 MSG::TestManager->setup::results=3
-2016/11/13 10:06:38.253706 MSG::TestManager->setup::results=3
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:39.254339 MSG::test test2_1_0 ran 8 check points with failure rate of 50.000
-2016/11/13 10:06:39.254339 MSG::test test2_1_1 ran 8 check points with failure rate of 50.000
-2016/11/13 10:06:39.254339 MSG::TestManager->Run::results=4
-2016/11/13 10:06:39.254339 MSG::TestManager->Run::results=4
-2016/11/13 10:06:39.254339 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:39.254339 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt( 10 ) != 20. Actual = 20
-2016/11/13 10:06:39.254339 PASS::doubleIt(10) == 20
-2016/11/13 10:06:39.254339 FAIL::doubleIt was not 30! returned 20 instead
-2016/11/13 10:06:39.254339 MSG::test test1_1_1 ran 19 check points with failure rate of 57.895
-2016/11/13 10:06:39.254339 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:39.254339 MSG::TestManager->Run::results=6
-2016/11/13 10:06:39.254339 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:39.254339 MSG::test test1_1_0 ran 19 check points with failure rate of 57.895
-2016/11/13 10:06:39.254339 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:39.254339 MSG::TestManager->Run::results=6
-2016/11/13 10:06:39.254339 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:39.254339 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:39.254339 MSG::Running  Suite 'suite2'
+2016/11/14 23:55:14.488692 MSG::SUITE(suite1) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.488692 MSG::Running test 'test2_1_0'
+2016/11/14 23:55:14.488692 MSG::Running test 'test1_1_0'
+2016/11/14 23:55:14.488692 MSG::Running test 'test2_1_1'
+2016/11/14 23:55:14.488692 MSG::Running test 'test1_1_1'
+2016/11/14 23:55:14.488692 MSG::Running test 'test2_1_2'
+2016/11/14 23:55:14.488692 MSG::Running test 'test1_1_2'
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.488692 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.588763 MSG::test test1_1_1 ran 19 check points with failure rate of 57.895
+2016/11/14 23:55:14.588763 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.588763 MSG::test test2_1_2 ran 8 check points with failure rate of 50.000
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.588763 MSG::test test1_1_0 ran 19 check points with failure rate of 57.895
+2016/11/14 23:55:14.588763 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 20. Actual = 20
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.588763 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.588763 FAIL::doubleIt was not 30! returned 20 instead
+2016/11/14 23:55:14.588763 MSG::test test2_1_0 ran 8 check points with failure rate of 50.000
+2016/11/14 23:55:14.588763 MSG::test test2_1_1 ran 8 check points with failure rate of 50.000
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.588763 MSG::test test1_1_2 ran 19 check points with failure rate of 57.895
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=4
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.588763 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.588763 MSG::SUITE(suite1) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.588763 MSG::Running  Suite 'suite2'
 
-2016/11/13 10:06:39.255283 MSG::SUITE(suite2) SETUP::Status = 0::Message=
-2016/11/13 10:06:39.255283 MSG::Running test 'test2_2_0'
-2016/11/13 10:06:39.255283 MSG::Running test 'test1_2_0'
-2016/11/13 10:06:39.255283 MSG::Running test 'test2_2_1'
-2016/11/13 10:06:39.255283 MSG::Running test 'test1_2_1'
-2016/11/13 10:06:39.255283 MSG::TestManager->setup::results=3
-2016/11/13 10:06:39.255283 MSG::TestManager->setup::results=3
-2016/11/13 10:06:39.255283 MSG::TestManager->setup::results=3
-2016/11/13 10:06:39.255283 MSG::TestManager->setup::results=3
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 FAIL::doubleIt was not 30! returned 50 instead
-2016/11/13 10:06:40.255379 MSG::test test1_2_0 ran 9 check points with failure rate of 100.000
-2016/11/13 10:06:40.255379 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:40.255379 MSG::TestManager->Run::results=6
-2016/11/13 10:06:40.255379 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 PASS::doubleIt(10) == 20
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 25 ) != 20. Actual = 50
-2016/11/13 10:06:40.255379 MSG::test test2_2_0 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:40.255379 MSG::TestManager->Run::results=3
-2016/11/13 10:06:40.255379 FAIL::doubleIt was not 30! returned 50 instead
-2016/11/13 10:06:40.255379 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:40.255379 MSG::test test1_2_1 ran 9 check points with failure rate of 100.000
-2016/11/13 10:06:40.255379 ERROR::ERROR:: Found Critical error during run!
-2016/11/13 10:06:40.255379 MSG::TestManager->Run::results=6
-2016/11/13 10:06:40.255379 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:40.255379 PASS::doubleIt(10) == 20
-2016/11/13 10:06:40.255379 FAIL::doubleIt( 10 ) != 30. Actual = 20
-2016/11/13 10:06:40.255379 MSG::test test2_2_1 ran 4 check points with failure rate of 50.000
-2016/11/13 10:06:40.255379 MSG::TestManager->Run::results=3
-2016/11/13 10:06:40.255379 MSG::TestManager->Teardown::results=3
-2016/11/13 10:06:40.255379 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
-2016/11/13 10:06:40.255379 MSG::
+2016/11/14 23:55:14.588763 MSG::SUITE(suite2) SETUP::Status = 0::Message=
+2016/11/14 23:55:14.588763 MSG::Running test 'test2_2_0'
+2016/11/14 23:55:14.588763 MSG::Running test 'test1_2_0'
+2016/11/14 23:55:14.588763 MSG::Running test 'test2_2_1'
+2016/11/14 23:55:14.588763 MSG::Running test 'test1_2_1'
+2016/11/14 23:55:14.588763 MSG::Running test 'test2_2_2'
+2016/11/14 23:55:14.588763 MSG::Running test 'test1_2_2'
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.588763 MSG::TestManager->setup::results=3
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.688829 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.688829 MSG::test test1_2_2 ran 9 check points with failure rate of 100.000
+2016/11/14 23:55:14.688829 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 MSG::test test2_2_0 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.688829 MSG::test test1_2_1 ran 9 check points with failure rate of 100.000
+2016/11/14 23:55:14.688829 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.688829 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 25 ) != 20. Actual = 50
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.688829 FAIL::doubleIt was not 30! returned 50 instead
+2016/11/14 23:55:14.688829 MSG::test test2_2_2 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.688829 MSG::test test1_2_0 ran 9 check points with failure rate of 100.000
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 ERROR::ERROR:: Found Critical error during run!
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=6
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 PASS::doubleIt(10) == 20
+2016/11/14 23:55:14.688829 FAIL::doubleIt( 10 ) != 30. Actual = 20
+2016/11/14 23:55:14.688829 MSG::test test2_2_1 ran 4 check points with failure rate of 50.000
+2016/11/14 23:55:14.688829 MSG::TestManager->Run::results=3
+2016/11/14 23:55:14.688829 MSG::TestManager->Teardown::results=3
+2016/11/14 23:55:14.688829 MSG::SUITE(suite2) TEARDOWN::Status = 0::Message=
+2016/11/14 23:55:14.688829 MSG::
 
 -----------------------------------------------------------------------
 
+
                         Test Run Report 'Test Manager'
-                             <Date>
+
+                             2016-11-14 23:55:14
+
 
 
 
             Summary Report:
 
-TOTAL STATISTICS     Test Manager (3.00 sec)
-Suites: Total 3, Passed 3, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
- Tests: Total 6, Passed 2, Failed 4, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+TOTAL STATISTICS     Test Manager (0.30 sec)
+
+Suites: Total   3, Passed   3, Failed   0, Error   0, SetUp failed   0, SetUp error   0, Not Found   0
+ Tests: Total   9, Passed   3, Failed   6, Error   0, SetUp failed   0, SetUp error   0, Not Found   0
 
 
             Suite Summary:
 
-SUITE STATISTICS     suite1 (1.00 sec)
-Tests: Total 2, Passed 0, Failed 2, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+SUITE STATISTICS     suite1 (0.10 sec)
+
+Tests: Total   3, Passed   0, Failed   3, Error   0, SetUp failed   0, SetUp error   0, Not Found   0
 
 
                Test Results suite1
 
-TEST FAILED          test2_1_1 (1.00 sec) Test complete
-TEST FAILED          test2_1_0 (1.00 sec) Test complete
+TEST FAILED          test2_1_0 (0.10 sec) Test complete
+TEST FAILED          test2_1_1 (0.10 sec) Test complete
+TEST FAILED          test2_1_2 (0.10 sec) Test complete
 
 
 -----------------------------------------------------------------------
-SUITE STATISTICS     suite1 (1.00 sec)
-Tests: Total 2, Passed 0, Failed 2, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+
+
+SUITE STATISTICS     suite1 (0.10 sec)
+
+Tests: Total   3, Passed   0, Failed   3, Error   0, SetUp failed   0, SetUp error   0, Not Found   0
 
 
                Test Results suite1
 
-TEST FAILED          test2_1_1 (1.00 sec) Test complete
-TEST FAILED          test2_1_0 (1.00 sec) Test complete
+TEST FAILED          test2_1_2 (0.10 sec) Test complete
+TEST FAILED          test2_1_1 (0.10 sec) Test complete
+TEST FAILED          test2_1_0 (0.10 sec) Test complete
 
 
 -----------------------------------------------------------------------
-SUITE STATISTICS     suite2 (1.00 sec)
-Tests: Total 2, Passed 2, Failed 0, Error 0, SetUp failed 0, SetUp error 0, Not Found 0
+
+
+SUITE STATISTICS     suite2 (0.10 sec)
+
+Tests: Total   3, Passed   3, Failed   0, Error   0, SetUp failed   0, SetUp error   0, Not Found   0
 
 
                Test Results suite2
 
-TEST PASSED          test2_2_0 (1.00 sec) Test complete
-TEST PASSED          test2_2_1 (1.00 sec) Test complete
+TEST PASSED          test2_2_0 (0.10 sec) Test complete
+TEST PASSED          test2_2_2 (0.10 sec) Test complete
+TEST PASSED          test2_2_1 (0.10 sec) Test complete
 
 
 -----------------------------------------------------------------------
+
+

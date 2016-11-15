@@ -15,10 +15,6 @@ import (
 	//"encoding/json"
 )
 
-const (
-	TEST_COUNT = 3
-)
-
 type Test1 struct {
 	data int
 	goQA.TestCase
@@ -111,7 +107,7 @@ func main() {
 
 	//tm.GetLogger().SetDebug(true)
 
-	tm.AddLogger("console", logger.LOG_LEVEL_ALL, console)
+	tm.AddLogger("console", logger.LogLevelAll, console)
 
 	reg := goQA.DefaultRegister{Registry: regTests}
 
