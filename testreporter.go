@@ -589,7 +589,7 @@ func (t *TextReporter) PerformManagerStatistics(report *ManagerResult, name, msg
 			switch test.Status {
 			case TcPassed:
 				fmt.Fprintf(&rep, TestPassedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
-			case TcFailed:
+			case TcFailed, TcCriticalError:
 				fmt.Fprintf(&rep, TestFailedReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)
 			case TcError:
 				fmt.Fprintf(&rep, TestErrorReport, test.name, test.end.Sub(test.start).Seconds(), test.StatusMessage)

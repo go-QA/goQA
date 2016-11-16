@@ -12,7 +12,7 @@ type Suite interface {
 	Init(name string, parent Manager, params Parameters)
 	Setup() (status int, msg string, err error)
 	Teardown() (status int, msg string, err error)
-	AddTest(test Tester)
+	AddTest(test Tester, name string, params Parameters) Suite
 	Name() string
 	GetTestCase(name string) Tester
 	GetTestCases() []Tester
@@ -51,9 +51,10 @@ func (s *DefaultSuite) Teardown() (status int, msg string, err error) {
 	return SuiteOk, "", nil
 }
 
-func (s *DefaultSuite) AddTest(test Tester) {
+func (s *DefaultSuite) AddTest(test Tester, name string, params Parameters) Suite {
+	test.Init(name, s.GetParent(), params)
 	s.testCases = append(s.testCases, test)
-	return
+	return s
 }
 
 func (s *DefaultSuite) RunSuite() {

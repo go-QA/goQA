@@ -29,7 +29,7 @@ const (
 // TestRegister interface is passed to TestManager in APIs like RunFromXML()
 // Used to provide Manager with Test cases and Suites available to From Test Plans
 type TestRegister interface {
-	GetTestCase(testName string, testType string, tm *TestManager, params Parameters) (Tester, error)
+	GetTestCase(testCaseName string) (Tester, error)
 	GetSuite(suiteName string, suiteType string, tm *TestManager, params Parameters) (Suite, error)
 }
 
@@ -49,17 +49,16 @@ type DefaultRegister struct {
 // GetTestCase Creates the TestCase object and calls Init()
 // Tester interface is returned
 // error return testError
-func (r *DefaultRegister) GetTestCase(testName string, testClass string, tm *TestManager, params Parameters) (Tester, error) {
+func (r *DefaultRegister) GetTestCase(testCaseName string) (Tester, error) {
 
 	var test Tester
 
-	if _, ok := r.Registry[testClass]; ok {
-		test = reflect.New(r.Registry[testClass]).Interface().(Tester)
-		test.Init(testName, tm, params)
+	if _, ok := r.Registry[testCaseName]; ok {
+		test = reflect.New(r.Registry[testCaseName]).Interface().(Tester)
 		return test, nil
 	}
 
-	return nil, Create(&Parameters{}, "invalid test class '"+testName+"'")
+	return nil, Create(&Parameters{}, "invalid test class '"+testCaseName+"'")
 }
 
 // GetSuite Creates DefaultSuite  object and calls Init()
@@ -346,9 +345,9 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 
 func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResult, chComplete chan int, length int) {
 	var result testResult
-	//fmt.Printf("LENGTH=%d\n", length)
+	fmt.Printf("LENGTH=%d\n", length)
 	for count := 0; count < length; count++ {
-		//fmt.Printf("COUNT=%d\n", count)
+		fmt.Printf("COUNT=%d\n", count)
 		result = <-chResult
 
 		switch result.Status {
@@ -358,7 +357,7 @@ func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResul
 			tm.report.testSkipped(suiteName, result)
 		case TcPassed:
 			tm.report.testPassed(suiteName, result)
-		case TcFailed:
+		case TcFailed, TcCriticalError:
 			tm.report.testFailed(suiteName, result)
 		case TcError:
 			tm.report.testError(suiteName, result)
@@ -464,7 +463,9 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 			tm.log.LogDebug("SUITEPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 		}
 		for k, v := range MngrParams.params {
-			suiteParams.params[k] = v
+			if _, ok := suiteParams.params[k]; !ok {
+				suiteParams.params[k] = v
+			}
 		}
 
 		suite, _ := registry.GetSuite(xmlSuite.Name, xmlSuite.Class, tm, *suiteParams)
@@ -477,11 +478,13 @@ func (tm *TestManager) AddTestPlan(testPlan *XMLTestPlan, registry TestRegister)
 				tm.log.LogDebug("TESTPARAM name=%s, type=%s,value= %s, comment=%s", param.Name, param.Type, param.Value, param.Comment)
 			}
 			for k, v := range suiteParams.params {
-				testParams.params[k] = v
+				if _, ok := testParams.params[k]; !ok {
+					testParams.params[k] = v
+				}
 			}
 
-			test, _ = registry.GetTestCase(xmlTest.Name, xmlTest.Class, tm, *testParams)
-			suite.AddTest(test)
+			test, _ = registry.GetTestCase(xmlTest.Class)
+			suite.AddTest(test, xmlTest.Name, *testParams)
 		}
 		tm.AddSuite(suite)
 	}

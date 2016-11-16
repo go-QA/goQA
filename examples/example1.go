@@ -12,16 +12,17 @@ import (
 	"time"
 )
 
-const TEST_COUNT = 3
+// Number is Number of Test cases used per Suite
+const TestCount = 3
 
 // ----------  sample test cases
 
-// Example method under test
+// doubleIt Example method under test
 func doubleIt(d int) int {
 	return d * 2
 }
 
-// Defining first test case
+// Test1 first test case
 // Define a struct that has the goQA.TestCase struct inside.
 //You can then add any of the Init(), Run(), and Teardown() methods
 //defined in the iTestCase interface
@@ -36,13 +37,14 @@ func (tc *Test1) Init(name string, parent goQA.Manager, params goQA.Parameters) 
 	return tc
 }
 
-// if parameter "val" is defined and passed into the object as a paramList,
-//  it will use that value for data; else it will use default value 25
+// Setup has parameter "val" passed into the object as part of paramList,
+//  it will use that value for data if defined or it will use default value of 25
 func (tc *Test1) Setup() (int, error) {
 	tc.data = tc.InitParam("val", 25).(int)
 	return goQA.TcPassed, nil
 }
 
+// Run will test Double() function in different ways
 func (tc *Test1) Run() (int, error) {
 	time.Sleep(time.Millisecond * 100)
 
@@ -72,6 +74,8 @@ func (tc *Test1) Run() (int, error) {
 	return tc.ReturnFromRun()
 }
 
+// Teardown used if needed to cleanup after the test.
+// will always be called
 func (tc *Test1) Teardown() (int, error) {
 	return goQA.TcPassed, nil
 }
@@ -82,6 +86,7 @@ type Test2 struct {
 	goQA.TestCase
 }
 
+// Run will perform a few example tests
 func (tc *Test2) Run() (int, error) {
 	time.Sleep(time.Millisecond * 100)
 	tc.data = 10
@@ -91,7 +96,8 @@ func (tc *Test2) Run() (int, error) {
 	return tc.ReturnFromRun()
 }
 
-// MySuite Contains DefaultSuite struct
+// MySuite is example of creating user defined Suite
+//
 type MySuite struct {
 	goQA.DefaultSuite
 }
@@ -139,39 +145,45 @@ func main() {
 	defer console.Close()
 	tm.AddLogger("console", logger.LogLevelAll, console)
 
-	// create two suite objects
+	// create two default suite objects
 	suite1 := goQA.NewSuite("suite1", &tm, goQA.Parameters{})
 	suite2 := goQA.NewSuite("suite2", &tm, goQA.Parameters{})
 
-	for i := 0; i < TEST_COUNT; i++ {
-		// create Test2 object and call Init() the Init must be called before running test
-		t2 = new(Test2)
-		t2.Init(fmt.Sprintf("test2_1_%d", i), &tm, goQA.Parameters{})
-		// add test2 object to suite1
-		suite1.AddTest(t2)
+	// Create custome suite object
+	suite3 := MySuite{}
+	suite3.Init("Suite 3", &tm, goQA.Parameters{})
 
-		// this line creates the Test1 object, calls the Test1.Init() method, then adds test to suite1. Notice the paranList object is passed to test
-		suite1.AddTest(new(Test1).Init(fmt.Sprintf("test1_1_%d", i), &tm, paramList))
+	for i := 0; i < TestCount; i++ {
 
-		// create same tests again for suite 2 but pass the paramList object to Test2 instead (We're having fun now right?)
+		// this line creates the Test1 object and adds to Suite1 with paramList object
+		suite1.AddTest(&Test1{}, fmt.Sprintf("test1_1_%d", i), paramList)
+
+		// Create a new Test2 object and add it to Suite
+		suite1.AddTest(&Test2{}, fmt.Sprintf("test2_1_%d", i), goQA.Parameters{})
+
+		// create same tests again for Suite2
 		t2 = new(Test2)
-		t2.Init(fmt.Sprintf("test2_2_%d", i), &tm, paramList)
-		suite2.AddTest(t2)
-		suite2.AddTest(new(Test1).Init(fmt.Sprintf("test1_2_%d", i), &tm, goQA.Parameters{}))
+		suite2.AddTest(&Test1{}, fmt.Sprintf("test1_2_%d", i), goQA.Parameters{})
+		suite2.AddTest(t2, fmt.Sprintf("test2_2_%d", i), paramList)
+
+		suite3.AddTest(&Test1{}, fmt.Sprintf("test1_3_%d", i), goQA.Parameters{}).AddTest(&Test2{}, fmt.Sprintf("test2_3_%d", i), goQA.Parameters{})
+
 	}
 
 	// This will run the t2 test on it's own (last t2 created in the loop)
-	t2.RunTest()
+	// t2.RunTest()
 
 	// here we run just suite1
-	suite1.RunSuite()
+	//suite1.RunSuite()
 
 	// Add the two suite objects to the test manager
 	tm.AddSuite(suite1)
 	tm.AddSuite(suite2)
+	tm.AddSuite(&suite3)
 
-	tm.RunSuite("suite1")
-	tm.RunSuite("suite2")
+	//tm.RunSuite("suite1")
+	//tm.RunSuite("suite2")
+	//tm.RunSuite("suite3")
 
 	// This will run all suites added to tm using the concurrency level set during creation.
 	tm.RunAll()
