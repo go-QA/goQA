@@ -12,8 +12,8 @@ import (
 	"time"
 )
 
-// Number is Number of Test cases used per Suite
-const TestCount = 3
+// TestCount Number is Number of Test cases used per Suite
+const TestCount = 5
 
 // ----------  sample test cases
 

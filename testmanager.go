@@ -261,7 +261,7 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	tm.log.LogMessage("Running  Suite '%s'\n", suiteName)
 
 	length := len(suite.GetTestCases())
-	go tm.endSuiteHandler(suiteName, chReport, chComplete, length)
+	go tm.endTestHandler(suiteName, chReport, chComplete, length)
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -321,8 +321,6 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 				tm.Run(suiteName, tc, chReport)
 			}
 		}
-		if tm.testFlags == TcAll {
-		}
 	}
 
 	// wait for all tests complete
@@ -343,12 +341,28 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	}
 }
 
-func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResult, chComplete chan int, length int) {
+func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
+	maxTests := tm.testFlags
+	guard := make(chan struct{}, maxTests)
+	suite := tm.GetSuite(suiteName)
+	for _, tc := range suite.GetTestCases() {
+		guard <- struct{}{}
+		tm.log.LogMessage("Running test '%s'\n", tc.Name())
+		go tm.launchTest(suiteName, tc, guard, chReport)
+	}
+}
+
+func (tm *TestManager) launchTest(suiteName string, testcase Tester, guard chan struct{}, chReport chan testResult) {
+	tm.Run(suiteName, testcase, chReport)
+	<-guard
+}
+
+func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult, chComplete chan int, length int) {
 	var result testResult
-	fmt.Printf("LENGTH=%d\n", length)
-	for count := 0; count < length; count++ {
-		fmt.Printf("COUNT=%d\n", count)
-		result = <-chResult
+	//fmt.Printf("LENGTH=%d\n", length)
+	count := 0
+	for result = range chResult {
+		//fmt.Printf("COUNT=%d\n", count)
 
 		switch result.Status {
 		case TcNotFound:
@@ -371,9 +385,10 @@ func (tm *TestManager) endSuiteHandler(suiteName string, chResult chan testResul
 			tm.report.testSetupError(suiteName, result)
 		}
 
-		//tm.mutex.Lock()
-		//tm.report.EndTest(suiteName, result)
-		//tm.mutex.Unlock()
+		count++
+		if count >= length {
+			break
+		}
 	}
 
 	chComplete <- 1
@@ -524,66 +539,17 @@ func (tm *TestManager) endManagerHandler(chSuiteResult chan int, chComplete chan
 func (tm *TestManager) suiteRunner(chSuiteResults chan int) {
 	maxSuites := tm.suiteFlags
 	guard := make(chan struct{}, maxSuites)
-	done := make(chan int, 5)
-	finished := make(chan int)
-	suiteCount := len(tm.suites)
-
-	go func() {
-		completedSuites := 0
-		for completedSuites < suiteCount {
-			_ = <-done
-			completedSuites++
-		}
-		finished <- 1
-	}()
 
 	for _, suite := range tm.suites {
 		guard <- struct{}{}
 		tm.log.LogMessage("Running Suite '%s'\n", suite.Name())
-		go tm.launchSuite(suite.Name(), guard, done, chSuiteResults)
+		go tm.launchSuite(suite.Name(), guard, chSuiteResults)
 	}
-
-	// wait for all remaining tests before exiting
-	_ = <-finished
 }
 
-func (tm *TestManager) launchSuite(name string, guard chan struct{}, done chan int, chSuiteResults chan int) {
+func (tm *TestManager) launchSuite(name string, guard chan struct{}, chSuiteResults chan int) {
 	tm.runSuite(name, chSuiteResults)
 	<-guard
-	done <- 1
-}
-
-func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
-	maxTests := tm.testFlags
-	guard := make(chan struct{}, maxTests)
-	done := make(chan int, 5)
-	finished := make(chan int)
-	suite := tm.GetSuite(suiteName)
-	testCount := len(suite.GetTestCases())
-
-	go func() {
-		completedTests := 0
-		for completedTests < testCount {
-			_ = <-done
-			completedTests++
-		}
-		finished <- 1
-	}()
-
-	for _, tc := range suite.GetTestCases() {
-		guard <- struct{}{}
-		tm.log.LogMessage("Running test '%s'\n", tc.Name())
-		go tm.launchTest(suiteName, tc, guard, done, chReport)
-	}
-
-	// wait for all remaining tests before exiting
-	_ = <-finished
-}
-
-func (tm *TestManager) launchTest(suiteName string, testcase Tester, guard chan struct{}, done chan int, chReport chan testResult) {
-	tm.Run(suiteName, testcase, chReport)
-	<-guard
-	done <- 1
 }
 
 func (tm *TestManager) AddSuite(suite Suite) {
