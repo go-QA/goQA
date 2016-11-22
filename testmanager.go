@@ -247,9 +247,8 @@ func (tm *TestManager) RunSuite(suiteName string) int {
 
 func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	var (
-		// runStatus, setupStatus, teardownStatus int
-		//runErr, setupErr, teardownErr          error
 		inSuiteSetup, inSuiteTeardown, inSuiteRuntests bool
+		guard                                          chan struct{}
 	)
 
 	inSuiteSetup = false
@@ -260,8 +259,7 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	suite := tm.GetSuite(suiteName)
 	tm.log.LogMessage("Running  Suite '%s'\n", suiteName)
 
-	length := len(suite.GetTestCases())
-	go tm.endTestHandler(suiteName, chReport, chComplete, length)
+	go tm.endTestHandler(suiteName, chReport)
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -305,26 +303,50 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 
 	// Run Tests
 	inSuiteRuntests = true
-	if tm.testFlags != TcAll && tm.testFlags != TcSerial {
-		tm.tcRunner(suiteName, chReport)
-	} else {
-		count := 0
-		for _, tc := range tm.GetSuite(suiteName).GetTestCases() {
-			count++
-			if count >= length {
-				//fmt.Println("LAUNCHING LAST TEST")
+
+	done := make(chan int, 5)
+	finished := make(chan int)
+	testCount := len(suite.GetTestCases())
+
+	if tm.testFlags != TcSerial {
+
+		if tm.testFlags != TcAll {
+			guard = make(chan struct{}, tm.testFlags)
+		}
+
+		// Launch a go routine that will increment counter
+		// till last test case then senf message on finished channel
+		go func() {
+			completedTests := 0
+			for _ = range done {
+				completedTests++
+				if completedTests >= testCount {
+					break
+				}
 			}
-			tm.log.LogMessage("Running test '%s'", tc.Name())
-			if tm.testFlags == TcAll {
-				go tm.Run(suiteName, tc, chReport)
-			} else {
-				tm.Run(suiteName, tc, chReport)
-			}
+			finished <- 1
+		}()
+
+	}
+
+	for _, tc := range tm.GetSuite(suiteName).GetTestCases() {
+		tm.log.LogMessage("Running test '%s'", tc.Name())
+		if tm.testFlags == TcAll {
+			go tm.launchTest(suiteName, tc, done, chReport)
+		} else if tm.testFlags == TcSerial {
+			tm.Run(suiteName, tc, chReport)
+		} else {
+			guard <- struct{}{}
+			go tm.launchTestWithGuard(suiteName, tc, guard, done, chReport)
 		}
 	}
 
-	// wait for all tests complete
-	_ = <-chComplete
+	if tm.testFlags != TcSerial {
+		_ = <-finished
+	}
+
+	close(chReport)
+
 	// Suite Teardown()
 	inSuiteTeardown = true
 	if status, msg, err := suite.Teardown(); err == nil {
@@ -341,26 +363,20 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	}
 }
 
-func (tm *TestManager) tcRunner(suiteName string, chReport chan testResult) {
-	maxTests := tm.testFlags
-	guard := make(chan struct{}, maxTests)
-	suite := tm.GetSuite(suiteName)
-	for _, tc := range suite.GetTestCases() {
-		guard <- struct{}{}
-		tm.log.LogMessage("Running test '%s'\n", tc.Name())
-		go tm.launchTest(suiteName, tc, guard, chReport)
-	}
+func (tm *TestManager) launchTest(suiteName string, testcase Tester, done chan int, chReport chan testResult) {
+	tm.Run(suiteName, testcase, chReport)
+	done <- 1
 }
 
-func (tm *TestManager) launchTest(suiteName string, testcase Tester, guard chan struct{}, chReport chan testResult) {
+func (tm *TestManager) launchTestWithGuard(suiteName string, testcase Tester, guard chan struct{}, done chan int, chReport chan testResult) {
 	tm.Run(suiteName, testcase, chReport)
 	<-guard
+	done <- 1
 }
 
-func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult, chComplete chan int, length int) {
+func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult) {
 	var result testResult
 	//fmt.Printf("LENGTH=%d\n", length)
-	count := 0
 	for result = range chResult {
 		//fmt.Printf("COUNT=%d\n", count)
 
@@ -385,13 +401,8 @@ func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult
 			tm.report.testSetupError(suiteName, result)
 		}
 
-		count++
-		if count >= length {
-			break
-		}
 	}
 
-	chComplete <- 1
 }
 
 func (tm *TestManager) RunAll() {
