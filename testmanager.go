@@ -238,6 +238,7 @@ func (tm *TestManager) RunTest(suiteName string, testName string) {
 	tm.Run(suiteName, tc, nil)
 }
 
+// RunSuite will start a suite in it's own goroutine and wait for results
 func (tm *TestManager) RunSuite(suiteName string) int {
 	chSuiteResult := make(chan int)
 	go tm.runSuite(suiteName, chSuiteResult)
@@ -246,10 +247,10 @@ func (tm *TestManager) RunSuite(suiteName string) int {
 }
 
 func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
-	var (
-		inSuiteSetup, inSuiteTeardown, inSuiteRuntests bool
-		guard                                          chan struct{}
-	)
+	inSuiteSetup := false
+	inSuiteTeardown := false
+	inSuiteRuntests := false
+	var guard chan struct{}
 
 	inSuiteSetup = false
 	inSuiteTeardown = false
@@ -259,7 +260,7 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	suite := tm.GetSuite(suiteName)
 	tm.log.LogMessage("Running  Suite '%s'\n", suiteName)
 
-	go tm.endTestHandler(suiteName, chReport)
+	go tm.testResultHandler(suiteName, chReport)
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -308,14 +309,18 @@ func (tm *TestManager) runSuite(suiteName string, chSuiteResults chan int) {
 	finished := make(chan int)
 	testCount := len(suite.GetTestCases())
 
+	// Setup to run tests in parallel
+	// create guard chan to throttle tests and launch goroutine
+	// that returns <- finished when all tests complete
 	if tm.testFlags != TcSerial {
 
+		// .testFlags is number of test cases to run concurrently
 		if tm.testFlags != TcAll {
 			guard = make(chan struct{}, tm.testFlags)
 		}
 
-		// Launch a go routine that will increment counter
-		// till last test case then senf message on finished channel
+		// Launch a go routine to wait for last test then
+		//then send message on finished channel
 		go func() {
 			completedTests := 0
 			for _ = range done {
@@ -374,7 +379,7 @@ func (tm *TestManager) launchTestWithGuard(suiteName string, testcase Tester, gu
 	done <- 1
 }
 
-func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult) {
+func (tm *TestManager) testResultHandler(suiteName string, chResult chan testResult) {
 	var result testResult
 	//fmt.Printf("LENGTH=%d\n", length)
 	for result = range chResult {
@@ -405,6 +410,7 @@ func (tm *TestManager) endTestHandler(suiteName string, chResult chan testResult
 
 }
 
+// RunAll will run all testplans and all suites
 func (tm *TestManager) RunAll() {
 	chSuiteResults := make(chan int)
 	chComplete := make(chan int)
@@ -568,15 +574,15 @@ func (tm *TestManager) AddSuite(suite Suite) {
 }
 
 func (tm *TestManager) GetLogger() *logger.GoQALog {
-	return tm.log // g.logChannel
+	return tm.log
 }
 
-//  ========= functions to call reporter interface API
-
+// addGenerator adds a report generator for manager
 func (tm *TestManager) addGenerator(gen ReportWriter) {
 	tm.generators[gen.Name()] = gen
 }
 
+// managerStatistics will call the PerformManagerStatistics() interface for each report generator
 func (tm *TestManager) managerStatistics(name, msg string) {
 	//fmt.Printf("In->managerStatistics()  %p\n", tm.log)
 	genCount := len(tm.generators)
@@ -592,6 +598,8 @@ func (tm *TestManager) managerStatistics(name, msg string) {
 	}
 }
 
+// NewManager will create a new manager and call Init()
+// return the TestManager object
 func NewManager(stream io.Writer, reporter ReportWriter, suiteFlags int, testFlags int) (tm TestManager) {
 	tm = TestManager{}
 	tm.suiteFlags = suiteFlags
