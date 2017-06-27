@@ -76,8 +76,8 @@ func (r *DefaultRegister) GetSuite(suiteName string, suiteClass string, tm *Test
 type XMLParam struct {
 	Name    string `xml:"name,attr"`
 	Type    string `xml:"type,attr"`
-	Value   string `xml:"value,attr"`
 	Comment string `xml:"comment,attr"`
+	Value   string `xml:",chardata"`
 }
 
 // XMLTestCase defines test case

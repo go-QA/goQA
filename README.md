@@ -183,22 +183,22 @@ There is a working example `goQA/Examples/example_RunFromXML.go`
    <TestSuite name="suite1">
     <Param name='Domain' type='string'>github.com/go-QA/goQA</Param>
      <TestCase name="test1">
-      <Param name='MaxTime' type='int' value='300' comment='Set Max Tme to run test'/>
-      <Param name='val1' type='float' value='111.111' comment='float value'/>
-      <Param name='val2' type='int' value='550' comment="val1 is integer"/>
-      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+      <Param name='MaxTime' type='int' comment='Set Max Tme to run test'>300</Param>
+      <Param name='val1' type='float' comment='float value'>111.111</Param>
+      <Param name='val2' type='int' comment="val2 is integer">550</Param>
+      <Param name='val3' type='string' comment='val3 is string'>hello there</Param>
     </TestCase>
      <TestCase name="test2">
-      <Param name='MaxTime' type='int' value='3040' comment='Set Max Tme to run test'/>
-      <Param name='val1' type='float' value='1141.111' comment='float value'/>
-      <Param name='val2' type='int' value='5504' comment="val1 is integer"/>
-      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+      <Param name='MaxTime' type='int' comment='Set Max Tme to run test'>3040</Param>
+      <Param name='val1' type='float' comment='float value'>1141.111</Param>
+      <Param name='val2' type='int' comment="val2 is integer">5504</Param>
+      <Param name='val3' type='string' comment='val3 is string'>hello there</Param>
     </TestCase>
       <TestCase name="test3">
-      <Param name='MaxTime' type='int' value='3005' comment='Set Max Tme to run test'/>
-      <Param name='val1' type='float' value='1151.111' comment='float value'/>
-      <Param name='val2' type='int' value='5505' comment="val1 is integer"/>
-      <Param name='val2' type='string' value='hello there' comment='val2 is string'/>
+      <Param name='MaxTime' type='int' comment='Set Max Tme to run test'>30005</Param>
+      <Param name='val1' type='float' comment='float value'>1151.111</Param>
+      <Param name='val2' type='int'  comment="val2 is integer">5505</Param>
+      <Param name='val3' type='string' comment='val3 is string'>hello there</Param>
     </TestCase>
   </TestSuite>
 </TestManager>
