@@ -55,12 +55,12 @@ func (err *TestError) Create(params *Parameters, mes string) {
 	err.params = params
 	//err.message = mes
 	runtime.Stack(err.stack[:], false)
-	err.message = fmt.Sprintf("ERROR::%s\n", mes)
-	err.message = fmt.Sprint("%sSTACK::%s\n", err.message, err.stack[:])
+	mes = fmt.Sprintf("ERROR::%s\n", mes)
+	mes += fmt.Sprintf("STACK::%s\n", err.stack[:])
 	if err.params.Count() > 0 {
-		mes = fmt.Sprintf("%s\nPARMETERS::\n", err.message)
+		mes += "\nPARMETERS::\n"
 		for name, param := range err.params.params {
-			mes = fmt.Sprintf("\t%s name: %s, value: %v, comment: %s\n", mes, name, param.value, param.comment)
+			mes += fmt.Sprintf("\tname: %s, value: %v, comment: %s\n", name, param.value, param.comment)
 		}
 	}
 	err.message = mes
